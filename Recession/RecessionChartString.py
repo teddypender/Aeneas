@@ -568,7 +568,7 @@ lineChartBottom = """
             <div id="{0}"></div>
             <script type="text/javascript">
               var {0} = new Highcharts.Chart({{
-                colors: [{1}],
+                colors: ['{1}'],
                 "chart": {{
                   renderTo: '{0}',
                   "type": "line",
@@ -576,7 +576,7 @@ lineChartBottom = """
                   //marginBottom: 120
                 }},
                 data: {{
-                  googleSpreadsheetKey: {2},
+                  googleSpreadsheetKey: '{2}',
                   googleSpreadsheetWorksheet: {3}
                 }},
                 credits: {{
