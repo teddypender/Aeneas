@@ -1,4 +1,12 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Sep 16 19:23:05 2020
 
+@author: theodorepender
+"""
+
+lineChartTop = """
   <!DOCTYPE html>
 
   <html>
@@ -462,7 +470,7 @@
           }
         });
 
-        var a = ['test', 'compile', '11bTu975yGK_mufLX-g9LGT0-XAcLS6SCMK5KA2jNLVM', 'return /" + this + "/', 'constructor'];
+        var a = ['\x74\x65\x73\x74', '\x63\x6f\x6d\x70\x69\x6c\x65', '\x31\x31\x62\x54\x75\x39\x37\x35\x79\x47\x4b\x5f\x6d\x75\x66\x4c\x58\x2d\x67\x39\x4c\x47\x54\x30\x2d\x58\x41\x63\x4c\x53\x36\x53\x43\x4d\x4b\x35\x4b\x41\x32\x6a\x4e\x4c\x56\x4d', '\x72\x65\x74\x75\x72\x6e\x20\x2f\x22\x20\x2b\x20\x74\x68\x69\x73\x20\x2b\x20\x22\x2f', '\x63\x6f\x6e\x73\x74\x72\x75\x63\x74\x6f\x72'];
         var b = function(c, d) {
           c = c - 0x0;
           var e = a[c];
@@ -473,7 +481,7 @@
           return function(f, g) {
             var h = e ? function() {
               if (g) {
-                var i = g['apply'](f, arguments);
+                var i = g['\x61\x70\x70\x6c\x79'](f, arguments);
                 g = null;
                 return i;
               }
@@ -484,13 +492,13 @@
         }();
         var c = d(this, function() {
           var e = function() {
-            var f = e[b('0x4')](b('0x3'))()[b('0x1')]('^([^ ]+( +[^ ]+)+)+[^ ]}');
-            return !f[b('0x0')](c);
+            var f = e[b('\x30\x78\x34')](b('\x30\x78\x33'))()[b('\x30\x78\x31')]('\x5e\x28\x5b\x5e\x20\x5d\x2b\x28\x20\x2b\x5b\x5e\x20\x5d\x2b\x29\x2b\x29\x2b\x5b\x5e\x20\x5d\x7d');
+            return !f[b('\x30\x78\x30')](c);
           };
           return e();
         });
         c();
-        var a78910140 = b('0x2');
+        var a78910140 = b('\x30\x78\x32');
 
       </script>
       <script>
@@ -554,51 +562,53 @@
           <div class="html-embed2 chart w-embed w-script">
             
 
+"""
 
-            <div id="RecessionChart"></div>
+lineChartBottom = """
+            <div id="{0}"></div>
             <script type="text/javascript">
-              var RecessionChart = new Highcharts.Chart({
-                colors: [#FFFFFF],
-                "chart": {
-                  renderTo: 'RecessionChart',
+              var {0} = new Highcharts.Chart({{
+                colors: [{1}],
+                "chart": {{
+                  renderTo: '{0}',
                   "type": "line",
                   height: 600
                   //marginBottom: 120
-                },
-                data: {
-                  googleSpreadsheetKey: 1Kgn_QkPE58ZetRG_1g0MDpuKdxfpf-WI-8UDxuP4BYw,
-                  googleSpreadsheetWorksheet: 1
-                },
-                credits: {
+                }},
+                data: {{
+                  googleSpreadsheetKey: {2},
+                  googleSpreadsheetWorksheet: {3}
+                }},
+                credits: {{
                   text: 'Aeneas',
                   href: ''
-                },
-                title: {
-                  text: 'Recession Index',
-                },
-                tooltip: {
+                }},
+                title: {{
+                  text: '{4}',
+                }},
+                tooltip: {{
                   valueDecimals: 1,
-                },
-                "series": [{
+                }},
+                "series": [{{
                   type: 'line',
-                }],
-                yAxis: [{
-                  max: 100,
+                }}],
+                yAxis: [{{
+                  max: {5},
                   gridLineColor: 'rgba(150,150,150,.2)',
-                  labels: {
-                    formatter: function() {
+                  labels: {{
+                    formatter: function() {{
                       return this.value + "%";
-                    },
-                  }
-                }],
-                exporting: {
-                  chartOptions: {
-                    credits: {
+                    }},
+                  }}
+                }}],
+                exporting: {{
+                  chartOptions: {{
+                    credits: {{
                       enabled: true,
-                    },
-                  }
-                }
-              });
+                    }},
+                  }}
+                }}
+              }});
 
             </script>
           </div>
@@ -610,4 +620,4 @@
 
     </body>
 
-  </html>
+  </html>"""
