@@ -621,3 +621,61 @@ lineChartBottom = """
     </body>
 
   </html>"""
+  
+lineChartBottom_ = """
+            <div id="{0}"></div>
+            <script type="text/javascript">
+              var {0} = new Highcharts.Chart({{
+                colors: ['{1}'],
+                "chart": {{
+                  renderTo: '{0}',
+                  "type": "line",
+                  height: 600
+                  //marginBottom: 120
+                }},
+                credits: {{
+                  text: 'Aeneas',
+                  href: ''
+                }},
+                title: {{
+                  text: '{4}',
+                }},
+                tooltip: {{
+                  valueDecimals: 1,
+                }},
+                "series": [{{
+                  type: 'line',
+                }}],
+                series: [{{
+                    name: '{2}',
+                    data: {3}
+                }}],
+                yAxis: [{{
+                  max: {5},
+                  gridLineColor: 'rgba(150,150,150,.2)',
+                  labels: {{
+                    formatter: function() {{
+                      return this.value + "%";
+                    }},
+                  }}
+                }}],
+                exporting: {{
+                  chartOptions: {{
+                    credits: {{
+                      enabled: true,
+                    }},
+                  }}
+                }}
+              }});
+
+            </script>
+          </div>
+
+        </div>
+      </div>
+
+
+
+    </body>
+
+  </html>"""
