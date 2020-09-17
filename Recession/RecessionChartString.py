@@ -650,6 +650,10 @@ lineChartBottom_ = """
                     name: '{2}',
                     data: {3}
                 }}],
+                xAxis: {{
+                type: 'datetime',
+                ordinal: true
+                }},
                 yAxis: [{{
                   max: {5},
                   gridLineColor: 'rgba(150,150,150,.2)',
