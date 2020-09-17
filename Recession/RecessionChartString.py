@@ -165,7 +165,7 @@ lineChartTop = """
           colors: ['#F58212', '#FE9F01', '#FFFDD3', '#FFF3A5', '#7789BF', '#9A77CF', '#EC4176', '#FFFFFF'],
           chart: {
             animation: {
-              duration: 1000
+              duration: 5000
             },
             backgroundColor: 'transparent',
             spacing: [25, 5, 25, 5],
