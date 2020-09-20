@@ -1024,7 +1024,7 @@ honeyCombChartBottom = """
                   renderTo: '{0}',
                   "type": "tilemap",
                    inverted: true,
-                   height: '80%'
+                   height: '65%'
                   //height: 600
 
               }},
