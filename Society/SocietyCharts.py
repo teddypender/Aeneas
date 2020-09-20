@@ -657,6 +657,328 @@ lineChartBottom_ = """
   
   
   
+honeyCombChartTop = """
+  <!DOCTYPE html>
+
+  <html>
+
+    <head>
+      <meta charset="utf-8" />
+      <meta content="width=device-width, initial-scale=1" name="viewport" />
+
+      <script src="https://code.highcharts.com/highcharts.js"></script>
+      <script src="https://code.highcharts.com/highcharts-more.js"></script>
+      <script src="https://code.highcharts.com/modules/heatmap.js"></script>
+      <script src="https://code.highcharts.com/modules/tilemap.js"></script>
+      <script src="https://code.highcharts.com/modules/data.js"></script>
+      <script src="https://code.highcharts.com/modules/exporting.js"></script>
+      <script src="https://code.highcharts.com/modules/export-data.js"></script>
+      <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5e8cdaa59dee0c0012ab3b91&product=inline-share-buttons&cms=website' async='async'></script> 
+
+      <style>
+        .truncate {
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+
+        .hs-input[type=text],
+        .hs-input[type=email] {
+          outline: none;
+          color: #fff;
+          background-color: transparent;
+          padding: 13px;
+          font-size: 20px;
+          border: 1px solid white;
+          width: 100%;
+          margin-bottom: 20px;
+          -webkit-appearance: none;
+          -webkit-border-radius: 0;
+        }
+
+        .inputs-list {
+          list-style-type: none;
+          padding: 0;
+        }
+
+        .hs-button {
+          width: 100%;
+          max-width: 350px;
+          margin-top: 0px;
+          padding: 14px 20px;
+          background-color: #000;
+          font-family: Barlow, sans-serif;
+          font-size: 16px;
+          font-weight: 600;
+          text-align: center;
+          letter-spacing: 1px;
+          background-color: #fff;
+          color: #000;
+          border: 0;
+          outline: 0;
+          cursor: pointer;
+          -webkit-appearance: none;
+          -webkit-border-radius: 0;
+
+        }
+
+        .hs-form-field label {
+          color: #fff;
+        }
+
+        .hs-firstname label,
+        .hs-lastname label,
+        .hs-email label {
+          display: none;
+        }
+
+        .hs-job_function {
+          margin-bottom: 20px;
+        }
+
+        .legal-consent-container p {
+          color: #aaa;
+          font-size: 12px;
+          line-height: 16px;
+          max-width: 686px;
+          margin-bottom: 40px;
+
+        }
+
+        .legal-consent-container .hs-form-booleancheckbox-display>span {
+          line-height: 10px;
+        }
+
+        .legal-consent-container .hs-form-booleancheckbox-display p {
+          font-size: 16px;
+          color: #fff;
+        }
+
+        .cookie-reset-container {
+          font-size: 11px !important;
+          color: #aaa;
+          margin-top: -20px;
+        }
+
+        .cookie-reset-container a {
+          text-decoration: underline;
+          color: #aaa;
+        }
+
+        .hs_error_rollup,
+        .hs-form-required {
+          color: #f2545b;
+        }
+
+        .hs-form-required {
+          font-size: 20px;
+        }
+
+        .hs-form-field label {
+          font-weight: normal;
+        }
+
+        .submitted-message {
+          color: #eee;
+          font-size: 18px;
+        }
+
+        .hs-firstname .hs-error-msgs.inputs-list,
+        .hs-lastname .hs-error-msgs.inputs-list,
+        .hs-email .hs-error-msgs.inputs-list {
+          display: none !important;
+        }
+
+        .highcharts-title {
+          display: none;
+        }
+
+        .highcharts-container .logo {
+          display: none;
+        }
+
+        .share-button {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          color: #fff;
+          padding-right: 10px !important;
+          font-weight: bold;
+          margin-top: 10px;
+          min-width: 120px;
+        }
+
+        body.subscribe-page a.subscribe {
+          display: none;
+        }
+
+      </style>
+
+      <script>
+        Highcharts.setOptions({
+          //colors: ['#F58212', '#FE9F01', '#FFFDD3', '#FFF3A5', '#7789BF', '#9A77CF', '#EC4176', '#FFFFFF'],
+          chart: {
+            animation: {
+              duration: 5000
+            },
+            backgroundColor: 'transparent',
+            //spacing: [25, 5, 25, 5],
+            //marginTop: 38,
+            //marginBottom: 100,
+            style: {
+              fontFamily: 'Arial, sans-serif'
+            },
+            events: {
+              load: function() {
+                logoY = this.chartHeight - 69;
+                this.renderer.image('https://raw.githubusercontent.com/midnight-labs/midnight-labs.github.io/master/style/moonwhite.png', //https://www.flaticon.com/free-icon/moon_2530874?term=full moon&page=1&position=3#
+                  10, logoY, 50, 50).addClass('logo').add();
+              }
+            }
+          },
+          title: {
+            y: -6,
+            style: {
+              color: '#fff',
+              fontFamily: 'Barlow, sans-serif',
+              fontWeight: '600',
+              fontSize: '16px'
+            },
+            align: 'left'
+          },
+          credits: {
+            style: {
+              color: '#666',
+              fontSize: '11px',
+              cursor: 'arrow'
+            },
+            position: {
+              y: -8,
+            }
+          },
+          
+          exporting: {
+            scale: 3,
+            buttons: {
+              contextButton: {
+                enabled: true,
+                menuItems: [{
+                  text: 'Download CSV',
+                  onclick: function() {
+                    this.downloadCSV();
+                    ga('send', 'event', 'Download', 'CSV', this.options.title.text);
+                  }
+                }, {
+                  text: 'Download PNG',
+                  onclick: function() {
+                    this.exportChart({
+                      type: 'image/png'
+                    });
+                    ga('send', 'event', 'Download', 'PNG', this.options.title.text);
+                  }
+                }],
+                align: 'right',
+                verticalAlign: 'top',
+                symbol: 'url(https://raw.githubusercontent.com/midnight-labs/midnight-labs.github.io/master/style/down-arrow.png)',
+                height: 22,
+                width: 22,
+                y: -25,
+                symbolStroke: '#aaa',
+                symbolFill: 'transparent',
+                theme: {
+                  fill: 'transparent',
+                  states: {
+                    hover: {
+                      fill: '#333'
+                    },
+                    select: {
+                      fill: '#111'
+                    }
+                  }
+                },
+
+              },
+            },
+            menuItemDefinitions: {
+              'downloadPNG': {
+                text: 'Download PNG'
+              },
+              'downloadSVG': {
+                text: 'Download SVG'
+              },
+              'downloadCSV': {
+                text: 'Download CSV'
+              }
+            },
+            csv: {
+              dateFormat: '%Y-%m-%d'
+            },
+            xlsx: {
+              worksheet: {
+                autoFitColumns: true,
+                categoryColumnTitle: 'Month',
+                dateFormat: 'yyyy-mm',
+                name: 'Export XLSX Test'
+              },
+              workbook: {
+                fileProperties: {
+                  Author: "File Author",
+                  Company: "File Company",
+                  CreatedDate: new Date(Date.now())
+                }
+              }
+            },
+            "chartOptions": {
+              "title": {
+                "style": {
+                  "color": '#888'
+                }
+              },
+              credits: {
+                enabled: false,
+              },
+              "chart": {
+                "backgroundColor": '#232323',
+                spacing: [30, 15, 35, 15],
+                marginTop: 45
+
+              },
+              "legend": {
+                "itemStyle": {
+                  "color": "#666",
+                  fontWeight: '600',
+                }
+              },
+            },
+          },
+          responsive: {
+            rules: [{
+              condition: {
+                maxWidth: 500
+              },
+              chartOptions: {
+                chart: {
+                  height: null,
+                  marginBottom: undefined,
+                  spacing: [25, 5, 25, 5],
+
+                }
+              }
+            }]
+          }
+        });
+
+
+      </script>
+    </head>
+
+
+    <body class="body">
+      <div class="section-3">
+        <div id="w-node-44a08bb7354c-415dff4a" class="neumorphic compact">
+          <div class="html-embed2 chart w-embed w-script">
+            
+
+"""
 
 honeyCombChartBottom = """
             <div id="{0}"></div>
@@ -755,7 +1077,7 @@ honeyCombChartBottom = """
   
 honeyCombData = """
 {{
-        name: '',
+        name: '{0}',
         data: [{{
             'hc-a2': 'AL',
             name: 'Alabama',

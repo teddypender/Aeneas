@@ -107,12 +107,12 @@ asianMultiple           = SocietyCharts.multiple.format(raceMultiples[4])
 
 
 
-brutalityMapByState = SocietyCharts.lineChartTop + SocietyCharts.honeyCombChartBottom.format('PoliceBrutalityMap', 'Police Brutality Map', SocietyCharts.honeyCombData)
+brutalityMapByState = SocietyCharts.honeyCombChartTop + SocietyCharts.honeyCombChartBottom.format('PoliceBrutalityMap', 'Police Brutality Map', SocietyCharts.honeyCombData.format('Name'))
 
 
 
 fileNames   = ['PoliceBrutalityRateTimeSeries', 'blackRateMultiple', 'hispanicRateMultiple', 'nativeAmericanRateMultiple', 'pacificIslanderRateMultiple', 'asianRateMultiple', 'brutalityMap']
-htmlStrings = [killingRateByRace, blackMultiple, hispanickMultiple, nativeAmericanMultiple, pacificIslanderMultiple, asianMultiple]
+htmlStrings = [killingRateByRace, blackMultiple, hispanickMultiple, nativeAmericanMultiple, pacificIslanderMultiple, asianMultiple, brutalityMapByState]
 #write to HTML Files
 for file, stringChart in zip(fileNames, htmlStrings):
     with open(file + '.html', "w") as text_file:
