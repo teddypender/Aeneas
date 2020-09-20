@@ -45,12 +45,38 @@ killingsPerRace['KillingsPerMillion'] = [x / racePopulationEst[y] for x,y in zip
 killingsPerRaceTimeSeries = pd.DataFrame(df.groupby(['Victim\'s race','Date of Incident (month/day/year)']).apply(lambda x : len(df[(df['Victim\'s race'] == x['Victim\'s race'].iloc[0]) & (df['Date of Incident (month/day/year)'] <= x['Date of Incident (month/day/year)'].iloc[0])]))).rename({0 : 'Count'}, axis = 1).reset_index()
 killingsPerRaceTimeSeries['KillingsPerMillion'] = [x / racePopulationEst[y] for x,y in zip(killingsPerRaceTimeSeries['Count'], killingsPerRaceTimeSeries['Victim\'s race'])]
 
-blackKilling           = [[int(x * 1000),y] for x,y in zip((killingsPerRaceTimeSeries[killingsPerRaceTimeSeries['Victim\'s race'] == 'Black']['Date of Incident (month/day/year)'] - dt.datetime(1970,1,1)).dt.total_seconds(),killingsPerRaceTimeSeries[killingsPerRaceTimeSeries['Victim\'s race'] == 'Black']['KillingsPerMillion'])]
-hispanicKilling        = [[int(x * 1000),y] for x,y in zip((killingsPerRaceTimeSeries[killingsPerRaceTimeSeries['Victim\'s race'] == 'Hispanic']['Date of Incident (month/day/year)'] - dt.datetime(1970,1,1)).dt.total_seconds(),killingsPerRaceTimeSeries[killingsPerRaceTimeSeries['Victim\'s race'] == 'Hispanic']['KillingsPerMillion'])]
-nativeAmericanKilling  = [[int(x * 1000),y] for x,y in zip((killingsPerRaceTimeSeries[killingsPerRaceTimeSeries['Victim\'s race'] == 'Native American']['Date of Incident (month/day/year)'] - dt.datetime(1970,1,1)).dt.total_seconds(),killingsPerRaceTimeSeries[killingsPerRaceTimeSeries['Victim\'s race'] == 'Native American']['KillingsPerMillion'])]
-pacificIslanderKilling = [[int(x * 1000),y] for x,y in zip((killingsPerRaceTimeSeries[killingsPerRaceTimeSeries['Victim\'s race'] == 'Pacific Islander']['Date of Incident (month/day/year)'] - dt.datetime(1970,1,1)).dt.total_seconds(),killingsPerRaceTimeSeries[killingsPerRaceTimeSeries['Victim\'s race'] == 'Pacific Islander']['KillingsPerMillion'])]
-AsianKilling           = [[int(x * 1000),y] for x,y in zip((killingsPerRaceTimeSeries[killingsPerRaceTimeSeries['Victim\'s race'] == 'Asian']['Date of Incident (month/day/year)'] - dt.datetime(1970,1,1)).dt.total_seconds(),killingsPerRaceTimeSeries[killingsPerRaceTimeSeries['Victim\'s race'] == 'Asian']['KillingsPerMillion'])]
-whiteKilling           = [[int(x * 1000),y] for x,y in zip((killingsPerRaceTimeSeries[killingsPerRaceTimeSeries['Victim\'s race'] == 'White']['Date of Incident (month/day/year)'] - dt.datetime(1970,1,1)).dt.total_seconds(),killingsPerRaceTimeSeries[killingsPerRaceTimeSeries['Victim\'s race'] == 'White']['KillingsPerMillion'])]
+blackPerMillionTimeSeries = killingsPerRaceTimeSeries[killingsPerRaceTimeSeries['Victim\'s race'] == 'Black'].set_index('Date of Incident (month/day/year)')
+idx = pd.date_range(min(blackPerMillionTimeSeries.index), dt.datetime.today())
+blackPerMillionTimeSeries = blackPerMillionTimeSeries.reindex(idx, fill_value=np.nan).ffill().reset_index().rename({'index' : 'Date of Incident (month/day/year)'}, axis = 1)
+
+hispanicPerMillionTimeSeries = killingsPerRaceTimeSeries[killingsPerRaceTimeSeries['Victim\'s race'] == 'Hispanic'].set_index('Date of Incident (month/day/year)')
+idx = pd.date_range(min(hispanicPerMillionTimeSeries.index), dt.datetime.today())
+hispanicPerMillionTimeSeries = hispanicPerMillionTimeSeries.reindex(idx, fill_value=np.nan).ffill().reset_index().rename({'index' : 'Date of Incident (month/day/year)'}, axis = 1)
+
+nativeAmericanPerMillionTimeSeries = killingsPerRaceTimeSeries[killingsPerRaceTimeSeries['Victim\'s race'] == 'Native American'].set_index('Date of Incident (month/day/year)')
+idx = pd.date_range(min(nativeAmericanPerMillionTimeSeries.index), dt.datetime.today())
+nativeAmericanPerMillionTimeSeries = nativeAmericanPerMillionTimeSeries.reindex(idx, fill_value=np.nan).ffill().reset_index().rename({'index' : 'Date of Incident (month/day/year)'}, axis = 1)
+
+pacificIslanderPerMillionTimeSeries = killingsPerRaceTimeSeries[killingsPerRaceTimeSeries['Victim\'s race'] == 'Pacific Islander'].set_index('Date of Incident (month/day/year)')
+idx = pd.date_range(min(pacificIslanderPerMillionTimeSeries.index), dt.datetime.today())
+pacificIslanderPerMillionTimeSeries = pacificIslanderPerMillionTimeSeries.reindex(idx, fill_value=np.nan).ffill().reset_index().rename({'index' : 'Date of Incident (month/day/year)'}, axis = 1)
+
+asianPerMillionTimeSeries = killingsPerRaceTimeSeries[killingsPerRaceTimeSeries['Victim\'s race'] == 'Asian'].set_index('Date of Incident (month/day/year)')
+idx = pd.date_range(min(asianPerMillionTimeSeries.index), dt.datetime.today())
+asianPerMillionTimeSeries = asianPerMillionTimeSeries.reindex(idx, fill_value=np.nan).ffill().reset_index().rename({'index' : 'Date of Incident (month/day/year)'}, axis = 1)
+
+whitePerMillionTimeSeries = killingsPerRaceTimeSeries[killingsPerRaceTimeSeries['Victim\'s race'] == 'White'].set_index('Date of Incident (month/day/year)')
+idx = pd.date_range(min(whitePerMillionTimeSeries.index), dt.datetime.today()))
+whitePerMillionTimeSeries = whitePerMillionTimeSeries.reindex(idx, fill_value=np.nan).ffill().reset_index().rename({'index' : 'Date of Incident (month/day/year)'}, axis = 1)
+
+
+
+blackKilling           = [[int(x * 1000),y] for x,y in zip((blackPerMillionTimeSeries['Date of Incident (month/day/year)'] - dt.datetime(1970,1,1)).dt.total_seconds(),blackPerMillionTimeSeries['KillingsPerMillion'])]
+hispanicKilling        = [[int(x * 1000),y] for x,y in zip((hispanicPerMillionTimeSeries['Date of Incident (month/day/year)'] - dt.datetime(1970,1,1)).dt.total_seconds(),hispanicPerMillionTimeSeries['KillingsPerMillion'])]
+nativeAmericanKilling  = [[int(x * 1000),y] for x,y in zip((nativeAmericanPerMillionTimeSeries['Date of Incident (month/day/year)'] - dt.datetime(1970,1,1)).dt.total_seconds(),nativeAmericanPerMillionTimeSeries['KillingsPerMillion'])]
+pacificIslanderKilling = [[int(x * 1000),y] for x,y in zip((pacificIslanderPerMillionTimeSeries['Date of Incident (month/day/year)'] - dt.datetime(1970,1,1)).dt.total_seconds(),pacificIslanderPerMillionTimeSeries['KillingsPerMillion'])]
+AsianKilling           = [[int(x * 1000),y] for x,y in zip((asianPerMillionTimeSeries['Date of Incident (month/day/year)'] - dt.datetime(1970,1,1)).dt.total_seconds(),asianPerMillionTimeSeries['KillingsPerMillion'])]
+whiteKilling           = [[int(x * 1000),y] for x,y in zip((whitePerMillionTimeSeries['Date of Incident (month/day/year)'] - dt.datetime(1970,1,1)).dt.total_seconds(),whitePerMillionTimeSeries['KillingsPerMillion'])]
 
 
 lineChartData = SocietyCharts.lineSeriesData.format('Black', blackKilling, 
