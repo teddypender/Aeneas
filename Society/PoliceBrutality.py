@@ -7,15 +7,20 @@ Created on Thu Sep 17 17:51:34 2020
 """
 import numpy as np
 import pandas as pd
+from git import Repo
 import requests
 from bs4 import BeautifulSoup
 import datetime as dt
 import SocietyCharts
 
-urlPV    = r'https://mappingpoliceviolence.org/s/MPVDatasetDownload.xlsx'
-urlWiki  = r'https://en.wikipedia.org/wiki/Race_and_ethnicity_in_the_United_States'
-urlUSPop = r'https://www.census.gov/popclock/print.php?component=pop_on_date&image=https://www.census.gov/images/census-logo-whiteBG.png' #r'https://www.census.gov/popclock/'
-# ----------------- Data
+# ----------------- URLs ----------------- #
+urlPV          = r'https://mappingpoliceviolence.org/s/MPVDatasetDownload.xlsx'
+urlWiki        = r'https://en.wikipedia.org/wiki/Race_and_ethnicity_in_the_United_States'
+urlUSPop       = r'https://www.census.gov/popclock/print.php?component=pop_on_date&image=https://www.census.gov/images/census-logo-whiteBG.png' #r'https://www.census.gov/popclock/'
+urlUSStatePop  = r'https://en.wikipedia.org/wiki/List_of_states_and_territories_of_the_United_States_by_population'
+urlUSStateRace = r'https://www.governing.com/gov-data/census/state-minority-population-data-estimates.html'
+
+# ----------------- Data ----------------- #
 
 websiteText     = requests.get(urlUSPop).text
 soupPopulation  = BeautifulSoup(websiteText,'lxml')
@@ -93,14 +98,20 @@ lineChartData = SocietyCharts.lineSeriesData.format('Black', blackKillingCumulat
                                                     'Asian', AsianKillingCumulative, 
                                                     'White', whiteKillingCumulative)
 
-killingRateByRace       = SocietyCharts.lineChartTop + SocietyCharts.lineChartBottom_.format('killingRateByRace', '#FFFFFF', lineChartData, 'Rate of Killing by Race (Per Million)', 75)
+killingRateByRace       = SocietyCharts.lineChartTop + SocietyCharts.lineChartBottom_.format('killingRateByRace', '#FFFFFF', lineChartData, 'Rate of Killing by Race (Per Million)', max(killingsPerRaceTimeSeries['KillingsPerMillionCumulative'] * 1.1))
 blackMultiple           = SocietyCharts.multiple.format(raceMultiples[0])
 hispanickMultiple       = SocietyCharts.multiple.format(raceMultiples[1])
 nativeAmericanMultiple  = SocietyCharts.multiple.format(raceMultiples[2])
 pacificIslanderMultiple = SocietyCharts.multiple.format(raceMultiples[3])
 asianMultiple           = SocietyCharts.multiple.format(raceMultiples[4])
 
-fileNames   = ['PoliceBrutalityRateTimeSeries', 'blackRateMultiple', 'hispanicRateMultiple', 'nativeAmericanRateMultiple', 'pacificIslanderRateMultiple', 'asianRateMultiple']
+
+
+brutalityMapByState = SocietyCharts.lineChartTop + SocietyCharts.honeyCombChartBottom.format('PoliceBrutalityMap', 'Police Brutality Map', SocietyCharts.honeyCombData)
+
+
+
+fileNames   = ['PoliceBrutalityRateTimeSeries', 'blackRateMultiple', 'hispanicRateMultiple', 'nativeAmericanRateMultiple', 'pacificIslanderRateMultiple', 'asianRateMultiple', 'brutalityMap']
 htmlStrings = [killingRateByRace, blackMultiple, hispanickMultiple, nativeAmericanMultiple, pacificIslanderMultiple, asianMultiple]
 #write to HTML Files
 for file, stringChart in zip(fileNames, htmlStrings):
@@ -108,5 +119,18 @@ for file, stringChart in zip(fileNames, htmlStrings):
         text_file.write(stringChart)
 
 
+# https://stackoverflow.com/questions/41836988/git-push-via-gitpython
+# PATH_OF_GIT_REPO = r'path\to\your\project\folder\.git'  # make sure .git folder is properly configured
+# COMMIT_MESSAGE = 'comment from python script'
 
+# def git_push():
+#     try:
+#         repo = Repo(PATH_OF_GIT_REPO)
+#         repo.git.add(update=True)
+#         repo.index.commit(COMMIT_MESSAGE)
+#         origin = repo.remote(name='origin')
+#         origin.push()
+#     except:
+#         print('Some error occured while pushing the code')    
 
+# git_push()

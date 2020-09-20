@@ -1,34 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Sep 19 20:03:05 2020
 
-@author: theodorepender
-"""
-
-multiple = """
-<!DOCTYPE html>
-    <html>
-        <head>
-            <link href='https://fonts.googleapis.com/css?family=Barlow' rel='stylesheet'>
-                <style>
-                    body {{
-                        font-family: 'Barlow';
-                        font-size: 90px;
-                        background-color: transparent;
-                        color: rgb(253, 85, 113)
-                            }}
-                </style>
-        </head>
-        <body>
-            <p>{:.2f}x</p>
-        </body>
-    </html>
-
-
-"""
-
-lineChartTop = """
   <!DOCTYPE html>
 
   <html>
@@ -492,7 +462,7 @@ lineChartTop = """
           }
         });
 
-        var a = ['\x74\x65\x73\x74', '\x63\x6f\x6d\x70\x69\x6c\x65', '\x31\x31\x62\x54\x75\x39\x37\x35\x79\x47\x4b\x5f\x6d\x75\x66\x4c\x58\x2d\x67\x39\x4c\x47\x54\x30\x2d\x58\x41\x63\x4c\x53\x36\x53\x43\x4d\x4b\x35\x4b\x41\x32\x6a\x4e\x4c\x56\x4d', '\x72\x65\x74\x75\x72\x6e\x20\x2f\x22\x20\x2b\x20\x74\x68\x69\x73\x20\x2b\x20\x22\x2f', '\x63\x6f\x6e\x73\x74\x72\x75\x63\x74\x6f\x72'];
+        var a = ['test', 'compile', '11bTu975yGK_mufLX-g9LGT0-XAcLS6SCMK5KA2jNLVM', 'return /" + this + "/', 'constructor'];
         var b = function(c, d) {
           c = c - 0x0;
           var e = a[c];
@@ -503,7 +473,7 @@ lineChartTop = """
           return function(f, g) {
             var h = e ? function() {
               if (g) {
-                var i = g['\x61\x70\x70\x6c\x79'](f, arguments);
+                var i = g['apply'](f, arguments);
                 g = null;
                 return i;
               }
@@ -514,13 +484,13 @@ lineChartTop = """
         }();
         var c = d(this, function() {
           var e = function() {
-            var f = e[b('\x30\x78\x34')](b('\x30\x78\x33'))()[b('\x30\x78\x31')]('\x5e\x28\x5b\x5e\x20\x5d\x2b\x28\x20\x2b\x5b\x5e\x20\x5d\x2b\x29\x2b\x29\x2b\x5b\x5e\x20\x5d\x7d');
-            return !f[b('\x30\x78\x30')](c);
+            var f = e[b('0x4')](b('0x3'))()[b('0x1')]('^([^ ]+( +[^ ]+)+)+[^ ]}');
+            return !f[b('0x0')](c);
           };
           return e();
         });
         c();
-        var a78910140 = b('\x30\x78\x32');
+        var a78910140 = b('0x2');
 
       </script>
       <script>
@@ -570,190 +540,78 @@ lineChartTop = """
           <div class="html-embed2 chart w-embed w-script">
             
 
-"""
-  
-lineSeriesData = """
-                    {{
-                    name: '{0}',
-                    data: {1}
-                }}, {{
-                    name: '{2}',
-                    data: {3}
-                }}, {{
-                    name: '{4}',
-                    data: {5}
-                }}, {{
-                    name: '{6}',
-                    data: {7}
-                }}, {{
-                    name: '{8}',
-                    data: {9}
-                }}, {{
-                    name: '{10}',
-                    data: {11}
-                }}
-                """
-  
-lineChartBottom_ = """
-            <div id="{0}"></div>
+
+            <div id="PoliceBrutalityMap"></div>
             <script type="text/javascript">
-              var {0} = new Highcharts.Chart({{
-                //colors: ['{1}'],
-                "chart": {{
-                  renderTo: '{0}',
-                  "type": "line",
-                  height: 600
-                  //marginBottom: 120
-                }},
-                credits: {{
-                  text: 'Aeneas',
-                  href: ''
-                }},
-                title: {{
-                  text: '{3}',
-                }},
-                tooltip: {{
-                  valueDecimals: 1,
-                }},
-                "series": [{{
-                  type: 'line',
-                }}],
-                
-                series: [{2}],
-                
-                xAxis: {{
-                type: 'datetime',
-                ordinal: true
-                }},
-                yAxis: [{{
-                  max: {4},
-                  gridLineColor: 'rgba(150,150,150,.2)',
-                  labels: {{
-                    formatter: function() {{
-                      return this.value + "";
-                    }},
-                  }}
-                }}],
-                exporting: {{
-                  chartOptions: {{
-                    credits: {{
-                      enabled: true,
-                    }},
-                  }}
-                }}
-              }});
+              var PoliceBrutalityMap = new Highcharts.Chart({
 
-            </script>
-          </div>
-
-        </div>
-      </div>
-
-
-
-    </body>
-
-  </html>"""
-  
-  
-  
-
-honeyCombChartBottom = """
-            <div id="{0}"></div>
-            <script type="text/javascript">
-              var {0} = new Highcharts.Chart({{
-
-                 "chart": {{
-                  renderTo: '{0}',
+                 "chart": {
+                  renderTo: 'PoliceBrutalityMap',
                   "type": "tilemap",
                   height: 600
 
-              }},
-                credits: {{
+              },
+                credits: {
                   text: 'Aeneas',
                   href: ''
-                }},
-                title: {{
-                  text: '{1}',
-                }},
-                tooltip: {{
+                },
+                title: {
+                  text: 'Police Brutality Map',
+                },
+                tooltip: {
                   headerFormat: '',
-                  pointFormat: 'The population of <b> {{point.name}}</b> is <b>{{point.value}}</b>'
-                }},
+                  pointFormat: 'The population of <b> {point.name}</b> is <b>{point.value}</b>'
+                },
                 
-                point: {{
-                    valueDescriptionFormat: '{{index}}. {{xDescription}}, {{point.value}}.'
-                }},
+                point: {
+                    valueDescriptionFormat: '{index}. {xDescription}, {point.value}.'
+                },
             
-                xAxis: {{
+                xAxis: {
                     visible: false
-                }},
+                },
             
-                yAxis: {{
+                yAxis: {
                     visible: false
-                }},
+                },
                 
-                colorAxis: {{
-                    dataClasses: [{{
+                colorAxis: {
+                    dataClasses: [{
                         from: 0,
                         to: 1000000,
                         color: '#F9EDB3',
                         name: '< 1M'
-                    }}, {{
+                    }, {
                         from: 1000000,
                         to: 5000000,
                         color: '#FFC428',
                         name: '1M - 5M'
-                    }}, {{
+                    }, {
                         from: 5000000,
                         to: 20000000,
                         color: '#FF7987',
                         name: '5M - 20M'
-                    }}, {{
+                    }, {
                         from: 20000000,
                         color: '#FF2371',
                         name: '> 20M'
-                    }}]
-                }},
+                    }]
+                },
                         
-                plotOptions: {{
-                    series: {{
-                        dataLabels: {{
+                plotOptions: {
+                    series: {
+                        dataLabels: {
                             enabled: true,
-                            format: '{{point.hc-a2}}',
+                            format: '{point.hc-a2}',
                             color: '#000000',
-                            style: {{
+                            style: {
                                 textOutline: false
-                            }}
-                        }}
-                    }}
-                }},
+                            }
+                        }
+                    }
+                },
               
-                series: [{2}],
-                
-                
-                exporting: {{
-                  chartOptions: {{
-                    credits: {{
-                      enabled: true,
-                    }},
-                  }}
-                }}
-              }});
-
-            </script>
-          </div>
-
-        </div>
-      </div>
-
-
-
-    </body>
-
-  </html>"""
-  
-honeyCombData = """
+                series: [
 {{
         name: '',
         data: [{{
@@ -1115,21 +973,26 @@ honeyCombData = """
             value: 584153
         }}]
     }}
-"""
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+],
+                
+                
+                exporting: {
+                  chartOptions: {
+                    credits: {
+                      enabled: true,
+                    },
+                  }
+                }
+              });
+
+            </script>
+          </div>
+
+        </div>
+      </div>
+
+
+
+    </body>
+
+  </html>
