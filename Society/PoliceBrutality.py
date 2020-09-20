@@ -58,9 +58,9 @@ lineChartData = SocietyCharts.lineSeriesData.format('Black', blackKilling,
                              'Native American', nativeAmericanKilling, 
                              'Pacific Islander', pacificIslanderKilling, 
                              'Asian', AsianKilling, 
-                             'White', blackKilling)
+                             'White', whiteKilling)
 
-killingRateByRace = SocietyCharts.lineChartTop + SocietyCharts.lineChartBottom_.format('killingRateByRace', '#FFFFFF', lineChartData, 'Rate of Killing by Race (Per Million)', 300)
+killingRateByRace = SocietyCharts.lineChartTop + SocietyCharts.lineChartBottom_.format('killingRateByRace', '#FFFFFF', lineChartData, 'Rate of Killing by Race (Per Million)', 75)
 
 
 fileNames   = ['PoliceBrutalityRateTimeSeries']
