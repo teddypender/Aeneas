@@ -15,6 +15,7 @@ multiple = """
                     body {{
                         font-family: 'Barlow';
                         font-size: 22px;
+                        background-color: transparent;
                         color: rgb(253, 85, 113)
                             }}
                 </style>
