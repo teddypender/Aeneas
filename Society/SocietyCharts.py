@@ -12,7 +12,7 @@ multiple = """
         <head>
             <link href='https://fonts.googleapis.com/css?family=Barlow' rel='stylesheet'>
                 <style>
-                    body {{}
+                    body {{
                         font-family: 'Barlow';
                         font-size: 22px;
                         color: rgb(253, 85, 113)

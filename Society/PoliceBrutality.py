@@ -66,7 +66,7 @@ idx = pd.date_range(min(asianPerMillionTimeSeries.index), dt.datetime.today())
 asianPerMillionTimeSeries = asianPerMillionTimeSeries.reindex(idx, fill_value=np.nan).ffill().reset_index().rename({'index' : 'Date of Incident (month/day/year)'}, axis = 1)
 
 whitePerMillionTimeSeries = killingsPerRaceTimeSeries[killingsPerRaceTimeSeries['Victim\'s race'] == 'White'].set_index('Date of Incident (month/day/year)')
-idx = pd.date_range(min(whitePerMillionTimeSeries.index), dt.datetime.today()))
+idx = pd.date_range(min(whitePerMillionTimeSeries.index), dt.datetime.today())
 whitePerMillionTimeSeries = whitePerMillionTimeSeries.reindex(idx, fill_value=np.nan).ffill().reset_index().rename({'index' : 'Date of Incident (month/day/year)'}, axis = 1)
 
 
@@ -78,6 +78,7 @@ pacificIslanderKilling = [[int(x * 1000),y] for x,y in zip((pacificIslanderPerMi
 AsianKilling           = [[int(x * 1000),y] for x,y in zip((asianPerMillionTimeSeries['Date of Incident (month/day/year)'] - dt.datetime(1970,1,1)).dt.total_seconds(),asianPerMillionTimeSeries['KillingsPerMillion'])]
 whiteKilling           = [[int(x * 1000),y] for x,y in zip((whitePerMillionTimeSeries['Date of Incident (month/day/year)'] - dt.datetime(1970,1,1)).dt.total_seconds(),whitePerMillionTimeSeries['KillingsPerMillion'])]
 
+raceMultiples          = [round(x[-1][1] / whiteKilling[-1][1], 2) for x in [blackKilling, hispanicKilling, nativeAmericanKilling, pacificIslanderKilling, AsianKilling]]
 
 lineChartData = SocietyCharts.lineSeriesData.format('Black', blackKilling, 
                              'Hispanic', hispanicKilling,
@@ -86,11 +87,15 @@ lineChartData = SocietyCharts.lineSeriesData.format('Black', blackKilling,
                              'Asian', AsianKilling, 
                              'White', whiteKilling)
 
-killingRateByRace = SocietyCharts.lineChartTop + SocietyCharts.lineChartBottom_.format('killingRateByRace', '#FFFFFF', lineChartData, 'Rate of Killing by Race (Per Million)', 75)
+killingRateByRace       = SocietyCharts.lineChartTop + SocietyCharts.lineChartBottom_.format('killingRateByRace', '#FFFFFF', lineChartData, 'Rate of Killing by Race (Per Million)', 75)
+blackMultiple           = SocietyCharts.multiple.format(raceMultiples[0])
+hispanickMultiple       = SocietyCharts.multiple.format(raceMultiples[1])
+nativeAmericanMultiple  = SocietyCharts.multiple.format(raceMultiples[2])
+pacificIslanderMultiple = SocietyCharts.multiple.format(raceMultiples[3])
+asianMultiple           = SocietyCharts.multiple.format(raceMultiples[4])
 
-
-fileNames   = ['PoliceBrutalityRateTimeSeries']
-htmlStrings = [killingRateByRace]
+fileNames   = ['PoliceBrutalityRateTimeSeries', 'blackRateMultiple', 'hispanicRateMultiple', 'nativeAmericanRateMultiple', 'pacificIslanderRateMultiple', 'asianRateMultiple']
+htmlStrings = [killingRateByRace, blackMultiple, hispanickMultiple, nativeAmericanMultiple, pacificIslanderMultiple, asianMultiple]
 #write to HTML Files
 for file, stringChart in zip(fileNames, htmlStrings):
     with open(file + '.html', "w") as text_file:
