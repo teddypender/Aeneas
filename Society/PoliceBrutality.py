@@ -35,7 +35,7 @@ raceBreakout = {'White' : 63.4,
                 'Unknown race' : np.nan}
 
 #Google Source: 
-USPopulation = 330310075 /1e6
+USPopulation = 330310075 / 1e6
  
 racePopulationEst = {k : USPopulation * (v / 100) for k,v in raceBreakout.items()}
 
@@ -43,7 +43,7 @@ killingsPerRace = pd.DataFrame(df.groupby('Victim\'s race').apply(lambda x : len
 killingsPerRace['KillingsPerMillion'] = [x / racePopulationEst[y] for x,y in zip(killingsPerRace['Count'], killingsPerRace['Victim\'s race'])]
 
 killingsPerRaceTimeSeries = pd.DataFrame(df.groupby(['Victim\'s race','Date of Incident (month/day/year)']).apply(lambda x : len(df[(df['Victim\'s race'] == x['Victim\'s race'].iloc[0]) & (df['Date of Incident (month/day/year)'] <= x['Date of Incident (month/day/year)'].iloc[0])]))).rename({0 : 'Count'}, axis = 1).reset_index()
-killingsPerRaceTimeSeries['KillingsPerMillion'] = [x / racePopulationEst[y] for x,y in zip(killingsPerRaceTimeSeries['Count'], killingsPerRaceTimeSeries['Victim\'s race'])]
+killingsPerRaceTimeSeries['KillingsPerMillion'] = [x for x,y in zip(killingsPerRaceTimeSeries['Count'], killingsPerRaceTimeSeries['Victim\'s race'])]
 
 blackPerMillionTimeSeries = killingsPerRaceTimeSeries[killingsPerRaceTimeSeries['Victim\'s race'] == 'Black'].set_index('Date of Incident (month/day/year)')
 idx = pd.date_range(min(blackPerMillionTimeSeries.index), dt.datetime.today())

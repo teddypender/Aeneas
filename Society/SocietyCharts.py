@@ -274,7 +274,7 @@ lineChartTop = """
           tooltip: {
             shared: true,
             valueDecimals: 1,
-            valueSuffix: "%",
+            valueSuffix: "",
             animation: true,
             hideDelay: 0,
             backgroundColor: 'rgba(0,0,0,.85)',
