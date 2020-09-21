@@ -16,7 +16,8 @@ multiple = """
                         font-family: 'Barlow';
                         font-size: 90px;
                         background-color: transparent;
-                        color: rgb(253, 85, 113)
+                        color: rgb(253, 85, 113);
+                        transform: translate(0%, -100%);
                             }}
                 </style>
         </head>
@@ -1024,7 +1025,7 @@ honeyCombChartBottom = """
                   renderTo: '{0}',
                   "type": "tilemap",
                    inverted: true,
-                   height: '65%'
+                   height: '70%'
                   //height: 600
 
               }},

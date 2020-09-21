@@ -18,16 +18,16 @@ urlPV          = r'https://mappingpoliceviolence.org/s/MPVDatasetDownload.xlsx'
 urlWiki        = r'https://en.wikipedia.org/wiki/Race_and_ethnicity_in_the_United_States'
 urlUSPop       = r'https://www.census.gov/popclock/print.php?component=pop_on_date&image=https://www.census.gov/images/census-logo-whiteBG.png' #r'https://www.census.gov/popclock/'
 urlUSStatePop  = r'https://en.wikipedia.org/wiki/List_of_states_and_territories_of_the_United_States_by_population'
-urlUSStateRace = r'https://www.governing.com/gov-data/census/state-minority-population-data-estimates.html'
-
+urlUSStateRace = r'https://worldpopulationreview.com/states/states-by-race'
+urlRacePop     = r'https://worldpopulationreview.com/79594026-c853-48bd-a21b-64d49a3273e3'
 # ----------------- Data ----------------- #
 
-websiteText     = requests.get(urlUSPop).text
+websiteText     = requests.get(urlUSStateRace).text
 soupPopulation  = BeautifulSoup(websiteText,'lxml')
-USPopulationLoc = soupPopulation.find('span',{'class':'pop-count'})
+USPopulationLoc = soupPopulation.findAll('table')[1]
+dfStateRacePct  = pd.read_html(str(USPopulationLoc))[0]
 
-df          = pd.read_excel(urlPV)
-
+df              = pd.read_excel(urlPV)
 
 #Wikipedia Source: urlWiki 
 raceBreakout = {'White' : 63.4,
@@ -74,6 +74,11 @@ asianPerMillionTimeSeries = asianPerMillionTimeSeries.reindex(idx, fill_value=np
 whitePerMillionTimeSeries = killingsPerRaceTimeSeries[killingsPerRaceTimeSeries['Victim\'s race'] == 'White'].set_index('Date of Incident (month/day/year)')
 idx = pd.date_range(min(whitePerMillionTimeSeries.index), dt.datetime.today())
 whitePerMillionTimeSeries = whitePerMillionTimeSeries.reindex(idx, fill_value=np.nan).ffill().reset_index().rename({'index' : 'Date of Incident (month/day/year)'}, axis = 1)
+
+killingsPerRaceState = pd.DataFrame(df.groupby(['State','Victim\'s race']).apply(lambda x : len(x))).rename({0 : 'Count'}, axis = 1).reset_index()
+
+
+
 
 blackKillingCumulative           = [[int(x * 1000),y] for x,y in zip((blackPerMillionTimeSeries['Date of Incident (month/day/year)'] - dt.datetime(1970,1,1)).dt.total_seconds(),blackPerMillionTimeSeries['KillingsPerMillionCumulative'])]
 hispanicKillingCumulative        = [[int(x * 1000),y] for x,y in zip((hispanicPerMillionTimeSeries['Date of Incident (month/day/year)'] - dt.datetime(1970,1,1)).dt.total_seconds(),hispanicPerMillionTimeSeries['KillingsPerMillionCumulative'])]
