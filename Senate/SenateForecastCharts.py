@@ -324,53 +324,7 @@ histogramChartTop = """
             }
           },
           xAxis: {
-            min: Date.UTC(2017, 1, 1),
-            plotBands: [{
-                color: 'grey', // Color value
-                from: Date.UTC(1957, 7, 1), // Start of the plot band
-                to: Date.UTC(1958, 3, 1) // End of the plot band
-              },
-              {
-                color: 'grey', // Color value
-                from: Date.UTC(1960, 3, 1), // Start of the plot band
-                to: Date.UTC(1961, 1, 1) // End of the plot band
-              },
-              {
-                color: 'grey', // Color value
-                from: Date.UTC(1969, 11, 1), // Start of the plot band
-                to: Date.UTC(1970, 10, 1) // End of the plot band
-              },
-              {
-                color: 'grey', // Color value
-                from: Date.UTC(1973, 10, 1), // Start of the plot band
-                to: Date.UTC(1975, 2, 1) // End of the plot band
-              },
-              {
-                color: 'grey', // Color value
-                from: Date.UTC(1980, 0, 1), // Start of the plot band
-                to: Date.UTC(1980, 6, 1) // End of the plot band
-              },
-              {
-                color: 'grey', // Color value
-                from: Date.UTC(1981, 6, 1), // Start of the plot band
-                to: Date.UTC(1982, 10, 1) // End of the plot band
-              },
-              {
-                color: 'grey', // Color value
-                from: Date.UTC(1990, 6, 1), // Start of the plot band
-                to: Date.UTC(1991, 2, 1) // End of the plot band
-              },
-              {
-                color: 'grey', // Color value
-                from: Date.UTC(2001, 2, 1), // Start of the plot band
-                to: Date.UTC(2001, 10, 1) // End of the plot band
-              },
-              {
-                color: 'grey', // Color value
-                from: Date.UTC(2007, 11, 1), // Start of the plot band
-                to: Date.UTC(2009, 5, 1) // End of the plot band
-              }
-            ],
+            min: 0,
             crosshair: {
               width: 1.5,
               color: 'rgba(255,255,255,.4)',
