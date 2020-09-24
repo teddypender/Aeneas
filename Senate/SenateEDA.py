@@ -201,8 +201,8 @@ stateWinningProbability = pd.concat([simulationsDataFrame[['State', 'Senator', '
 demWinPercentage = SenateForecastCharts.demWinPct.format(probabilityDemControl)
 repWinPercentage = SenateForecastCharts.repWinPct.format(probabilityRepControl)
 
-demHistogram     = SenateForecastCharts.histogramChartTop + SenateForecastCharts.histogramChartBottom_.format('DemHistogram', [str(k) for k in demProbabilities.keys()], [v for v in demProbabilities.values()], '#3F52B9')
-repHistogram     = SenateForecastCharts.histogramChartTop + SenateForecastCharts.histogramChartBottom_.format('DemHistogram', [str(k) for k in demProbabilities.keys()], [v for v in demProbabilities.values()], '#DE3947')
+demHistogram     = SenateForecastCharts.histogramChartTop + SenateForecastCharts.histogramChartBottom_.format('DemHistogram', [str(k) for k in demProbabilities.keys()], [v * 100 for v in demProbabilities.values()], '#3F52B9')
+repHistogram     = SenateForecastCharts.histogramChartTop + SenateForecastCharts.histogramChartBottom_.format('DemHistogram', [str(k) for k in demProbabilities.keys()], [v * 100 for v in demProbabilities.values()], '#DE3947')
 
 
 fileNames   = ['demWinPercentage', 'repWinPercentage', 'demHistogram', 'repHistogram']

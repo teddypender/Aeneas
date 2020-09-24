@@ -623,6 +623,7 @@ histogramChartBottom_ = """
                       crosshair: true
                     }},
                     yAxis: {{
+                      gridLineWidth: 0,
                       min: 0,
                       title: {{
                         text: ''
@@ -630,8 +631,8 @@ histogramChartBottom_ = """
                     }},
                     tooltip: {{
                       headerFormat: '<span style="font-size:10px">{{point.key}}</span><table>',
-                      pointFormat: '<tr><td style="color:{{series.color}};padding:0">{{series.name}}: </td>' +
-                        '<td style="padding:0"><b>{{point.y:.1f}} mm</b></td></tr>',
+                      pointFormat: '<tr><td style="color:{{series.color}};padding:0">{{series.name}} Seats: </td>' +
+                        '<td style="padding:0"><b>{{point.y:.3f}} %</b></td></tr>',
                       footerFormat: '</table>',
                       shared: true,
                       useHTML: true
@@ -645,7 +646,7 @@ histogramChartBottom_ = """
                       }}
                     }},
                     series: [{{
-                      name: 'Data',
+                      name: 'Probability',
                       data: {2} //[49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 124.1, 95.6, 54.4]
                   
                     }}],
