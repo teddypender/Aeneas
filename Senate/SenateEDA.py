@@ -193,9 +193,16 @@ stateWinningProbability = pd.concat([simulationsDataFrame[['State', 'Senator', '
 # ------------------------------- Write Charts ------------------------------- #
 
 demWinPercentage = SenateForecastCharts.demWinPct.format(probabilityDemControl)
-repWinPercentage = SenateForecastCharts.RepWinPct.format(probabilityRepControl)
+repWinPercentage = SenateForecastCharts.repWinPct.format(probabilityRepControl)
 
 
+fileNames   = ['demWinPercentage', 'repWinPercentage']
+htmlStrings = [demWinPercentage, repWinPercentage]
+
+#write to HTML Files
+for file, stringChart in zip(fileNames, htmlStrings):
+    with open(file + '.html', "w") as text_file:
+        text_file.write(stringChart)
 
 
 
