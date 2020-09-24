@@ -20,6 +20,75 @@ urlUSPop       = r'https://www.census.gov/popclock/print.php?component=pop_on_da
 urlUSStatePop  = r'https://en.wikipedia.org/wiki/List_of_states_and_territories_of_the_United_States_by_population'
 urlUSStateRace = r'https://worldpopulationreview.com/states/states-by-race'
 urlRacePop     = r'https://worldpopulationreview.com/79594026-c853-48bd-a21b-64d49a3273e3'
+
+# ----------------- Mapping ----------------- #
+usStateAb = {
+    'Alabama': 'AL',
+    'Alaska': 'AK',
+    'American Samoa': 'AS',
+    'Arizona': 'AZ',
+    'Arkansas': 'AR',
+    'California': 'CA',
+    'Colorado': 'CO',
+    'Connecticut': 'CT',
+    'Delaware': 'DE',
+    'District of Columbia': 'DC',
+    'Florida': 'FL',
+    'Georgia': 'GA',
+    'Guam': 'GU',
+    'Hawaii': 'HI',
+    'Idaho': 'ID',
+    'Illinois': 'IL',
+    'Indiana': 'IN',
+    'Iowa': 'IA',
+    'Kansas': 'KS',
+    'Kentucky': 'KY',
+    'Louisiana': 'LA',
+    'Maine': 'ME',
+    'Maryland': 'MD',
+    'Massachusetts': 'MA',
+    'Michigan': 'MI',
+    'Minnesota': 'MN',
+    'Mississippi': 'MS',
+    'Missouri': 'MO',
+    'Montana': 'MT',
+    'Nebraska': 'NE',
+    'Nevada': 'NV',
+    'New Hampshire': 'NH',
+    'New Jersey': 'NJ',
+    'New Mexico': 'NM',
+    'New York': 'NY',
+    'North Carolina': 'NC',
+    'North Dakota': 'ND',
+    'Northern Mariana Islands':'MP',
+    'Ohio': 'OH',
+    'Oklahoma': 'OK',
+    'Oregon': 'OR',
+    'Pennsylvania': 'PA',
+    'Puerto Rico': 'PR',
+    'Rhode Island': 'RI',
+    'South Carolina': 'SC',
+    'South Dakota': 'SD',
+    'Tennessee': 'TN',
+    'Texas': 'TX',
+    'Utah': 'UT',
+    'Vermont': 'VT',
+    'Virgin Islands': 'VI',
+    'Virginia': 'VA',
+    'Washington': 'WA',
+    'West Virginia': 'WV',
+    'Wisconsin': 'WI',
+    'Wyoming': 'WY'
+}
+
+columnMap = {
+    'Hispanic (of any race)' : 'Hispanic',
+    'Non-Hispanic White' : 'White',
+       'Non-Hispanic Black' : 'Black', 
+       'Non-Hispanic Asian' : 'Asian',
+       'Non-Hispanic American Indian' : 'Native American'
+    }
+
 # ----------------- Data ----------------- #
 
 websiteText     = requests.get(urlUSStateRace).text
@@ -27,7 +96,16 @@ soupPopulation  = BeautifulSoup(websiteText,'lxml')
 USPopulationLoc = soupPopulation.findAll('table')[1]
 dfStateRacePct  = pd.read_html(str(USPopulationLoc))[0]
 
-df              = pd.read_excel(urlPV)
+dfStateRacePct['State'] = [usStateAb[x] for x in dfStateRacePct['State'] ]
+
+for col in [x for x in dfStateRacePct.columns if x != 'State']:
+    dfStateRacePct[col] = [float(x.replace('%', '')) for x in dfStateRacePct[col]]
+
+dfStateRacePct.rename(columnMap, axis = 1, inplace = True)
+dfStateRacePct['Pacific Islander'] = 100 - dfStateRacePct.sum(axis = 1)
+dfStateRacePct['Unknown race'] = np.nan
+
+df = pd.read_excel(urlPV)
 
 #Wikipedia Source: urlWiki 
 raceBreakout = {'White' : 63.4,
@@ -76,9 +154,10 @@ idx = pd.date_range(min(whitePerMillionTimeSeries.index), dt.datetime.today())
 whitePerMillionTimeSeries = whitePerMillionTimeSeries.reindex(idx, fill_value=np.nan).ffill().reset_index().rename({'index' : 'Date of Incident (month/day/year)'}, axis = 1)
 
 killingsPerRaceState = pd.DataFrame(df.groupby(['State','Victim\'s race']).apply(lambda x : len(x))).rename({0 : 'Count'}, axis = 1).reset_index()
+killingsPerRaceState['ratePerPctPopulation']        = [x / dfStateRacePct.set_index('State').to_dict()[r][s] if dfStateRacePct.set_index('State').to_dict()[r][s] != 0 else np.nan for x,r,s in zip(killingsPerRaceState['Count'],killingsPerRaceState['Victim\'s race'],killingsPerRaceState['State'])]
+killingsPerRaceState['ratePerPctPopulationVsWhite'] = [x / killingsPerRaceState[(killingsPerRaceState['Victim\'s race'] == 'White') & (killingsPerRaceState['State'] == s)]['ratePerPctPopulation'].iloc[0] if len(killingsPerRaceState[(killingsPerRaceState['Victim\'s race'] == 'White') & (killingsPerRaceState['State'] == s)]) > 0 else np.nan for x,s in zip(killingsPerRaceState['ratePerPctPopulation'] , killingsPerRaceState['State'])]
 
-
-
+blackKillingsPerRaceState = killingsPerRaceState[killingsPerRaceState['Victim\'s race'] == 'Black']
 
 blackKillingCumulative           = [[int(x * 1000),y] for x,y in zip((blackPerMillionTimeSeries['Date of Incident (month/day/year)'] - dt.datetime(1970,1,1)).dt.total_seconds(),blackPerMillionTimeSeries['KillingsPerMillionCumulative'])]
 hispanicKillingCumulative        = [[int(x * 1000),y] for x,y in zip((hispanicPerMillionTimeSeries['Date of Incident (month/day/year)'] - dt.datetime(1970,1,1)).dt.total_seconds(),hispanicPerMillionTimeSeries['KillingsPerMillionCumulative'])]
@@ -112,12 +191,63 @@ asianMultiple           = SocietyCharts.multiple.format(raceMultiples[4])
 
 
 
-brutalityMapByState = SocietyCharts.honeyCombChartTop + SocietyCharts.honeyCombChartBottom.format('PoliceBrutalityMap', 'Police Brutality Map', SocietyCharts.honeyCombData.format('Name'))
+blackBbrutalityMapByState = SocietyCharts.honeyCombChartTop + SocietyCharts.honeyCombChartBottom.format('PoliceBrutalityMap', 'Police Brutality Map', SocietyCharts.honeyCombData.format(blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'AL']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'AK']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'AZ']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'AR']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'CA']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'CO']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'CT']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'DE']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'DC']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'FL']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'GA']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'HI']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'ID']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'IL']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'IN']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'IA']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'KS']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'KY']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'LA']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'ME']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'MD']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'MA']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'MI']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'MN']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'MS']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'MO']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        np.nan,#blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'MT']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'NE']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'NV']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        np.nan,#blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'NH']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'NJ']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'NM']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'NY']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'NC']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        np.nan,#blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'ND']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'OH']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'OK']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'OR']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'PA']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'RI']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'SC']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        np.nan,#blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'SD']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'TN']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'TX']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'UT']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        np.nan,#blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'VT']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'VA']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'WA']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'WV']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'WI']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                        np.nan#blackKillingsPerRaceState[blackKillingsPerRaceState['State'] == 'WY']['ratePerPctPopulationVsWhite'].iloc[0], 
+                                                                                                                                                                                       ))
 
 
 
-fileNames   = ['PoliceBrutalityRateTimeSeries', 'blackRateMultiple', 'hispanicRateMultiple', 'nativeAmericanRateMultiple', 'pacificIslanderRateMultiple', 'asianRateMultiple', 'brutalityMap']
-htmlStrings = [killingRateByRace, blackMultiple, hispanickMultiple, nativeAmericanMultiple, pacificIslanderMultiple, asianMultiple, brutalityMapByState]
+fileNames   = ['PoliceBrutalityRateTimeSeries', 'blackRateMultiple', 'hispanicRateMultiple', 'nativeAmericanRateMultiple', 'pacificIslanderRateMultiple', 'asianRateMultiple', 'blackBrutalityMap']
+htmlStrings = [killingRateByRace, blackMultiple, hispanickMultiple, nativeAmericanMultiple, pacificIslanderMultiple, asianMultiple, blackBbrutalityMapByState]
 #write to HTML Files
 for file, stringChart in zip(fileNames, htmlStrings):
     with open(file + '.html', "w") as text_file:

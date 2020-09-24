@@ -1115,364 +1115,364 @@ honeyCombChartBottom = """
   
 honeyCombData = """
 {{
-        name: '{0}',
+        name: '',
         data: [{{
             'hc-a2': 'AL',
             name: 'Alabama',
             region: 'South',
             x: 6,
             y: 7,
-            value: 4849377
+            value: {0}
         }}, {{
             'hc-a2': 'AK',
             name: 'Alaska',
             region: 'West',
             x: 0,
             y: 0,
-            value: 737732
+            value: {1}
         }}, {{
             'hc-a2': 'AZ',
             name: 'Arizona',
             region: 'West',
             x: 5,
             y: 3,
-            value: 6745408
+            value: {2}
         }}, {{
             'hc-a2': 'AR',
             name: 'Arkansas',
             region: 'South',
             x: 5,
             y: 6,
-            value: 2994079
+            value: {3}
         }}, {{
             'hc-a2': 'CA',
             name: 'California',
             region: 'West',
             x: 5,
             y: 2,
-            value: 39250017
+            value: {4}
         }}, {{
             'hc-a2': 'CO',
             name: 'Colorado',
             region: 'West',
             x: 4,
             y: 3,
-            value: 5540545
+            value: {5}
         }}, {{
             'hc-a2': 'CT',
             name: 'Connecticut',
             region: 'Northeast',
             x: 3,
             y: 11,
-            value: 3596677
+            value: {6}
         }}, {{
             'hc-a2': 'DE',
             name: 'Delaware',
             region: 'South',
             x: 4,
             y: 9,
-            value: 935614
+            value: {7}
         }}, {{
             'hc-a2': 'DC',
             name: 'District of Columbia',
             region: 'South',
             x: 4,
             y: 10,
-            value: 7288000
+            value: {8}
         }}, {{
             'hc-a2': 'FL',
             name: 'Florida',
             region: 'South',
             x: 8,
             y: 8,
-            value: 20612439
+            value: {9}
         }}, {{
             'hc-a2': 'GA',
             name: 'Georgia',
             region: 'South',
             x: 7,
             y: 8,
-            value: 10310371
+            value: {10}
         }}, {{
             'hc-a2': 'HI',
             name: 'Hawaii',
             region: 'West',
             x: 8,
             y: 0,
-            value: 1419561
+            value: {11}
         }}, {{
             'hc-a2': 'ID',
             name: 'Idaho',
             region: 'West',
             x: 3,
             y: 2,
-            value: 1634464
+            value: {12}
         }}, {{
             'hc-a2': 'IL',
             name: 'Illinois',
             region: 'Midwest',
             x: 3,
             y: 6,
-            value: 12801539
+            value: {13}
         }}, {{
             'hc-a2': 'IN',
             name: 'Indiana',
             region: 'Midwest',
             x: 3,
             y: 7,
-            value: 6596855
+            value: {14}
         }}, {{
             'hc-a2': 'IA',
             name: 'Iowa',
             region: 'Midwest',
             x: 3,
             y: 5,
-            value: 3107126
+            value: {15}
         }}, {{
             'hc-a2': 'KS',
             name: 'Kansas',
             region: 'Midwest',
             x: 5,
             y: 5,
-            value: 2904021
+            value: {16}
         }}, {{
             'hc-a2': 'KY',
             name: 'Kentucky',
             region: 'South',
             x: 4,
             y: 6,
-            value: 4413457
+            value: {17}
         }}, {{
             'hc-a2': 'LA',
             name: 'Louisiana',
             region: 'South',
             x: 6,
             y: 5,
-            value: 4649676
+            value: {18}
         }}, {{
             'hc-a2': 'ME',
             name: 'Maine',
             region: 'Northeast',
             x: 0,
             y: 11,
-            value: 1330089
+            value: {19}
         }}, {{
             'hc-a2': 'MD',
             name: 'Maryland',
             region: 'South',
             x: 4,
             y: 8,
-            value: 6016447
+            value: {20}
         }}, {{
             'hc-a2': 'MA',
             name: 'Massachusetts',
             region: 'Northeast',
             x: 2,
             y: 10,
-            value: 6811779
+            value: {21}
         }}, {{
             'hc-a2': 'MI',
             name: 'Michigan',
             region: 'Midwest',
             x: 2,
             y: 7,
-            value: 9928301
+            value: {22}
         }}, {{
             'hc-a2': 'MN',
             name: 'Minnesota',
             region: 'Midwest',
             x: 2,
             y: 4,
-            value: 5519952
+            value: {23}
         }}, {{
             'hc-a2': 'MS',
             name: 'Mississippi',
             region: 'South',
             x: 6,
             y: 6,
-            value: 2984926
+            value: {24}
         }}, {{
             'hc-a2': 'MO',
             name: 'Missouri',
             region: 'Midwest',
             x: 4,
             y: 5,
-            value: 6093000
+            value: {25}
         }}, {{
             'hc-a2': 'MT',
             name: 'Montana',
             region: 'West',
             x: 2,
             y: 2,
-            value: 1023579
+            value: {26}
         }}, {{
             'hc-a2': 'NE',
             name: 'Nebraska',
             region: 'Midwest',
             x: 4,
             y: 4,
-            value: 1881503
+            value: {27}
         }}, {{
             'hc-a2': 'NV',
             name: 'Nevada',
             region: 'West',
             x: 4,
             y: 2,
-            value: 2839099
+            value: {28}
         }}, {{
             'hc-a2': 'NH',
             name: 'New Hampshire',
             region: 'Northeast',
             x: 1,
             y: 11,
-            value: 1326813
+            value: {29}
         }}, {{
             'hc-a2': 'NJ',
             name: 'New Jersey',
             region: 'Northeast',
             x: 3,
             y: 10,
-            value: 8944469
+            value: {30}
         }}, {{
             'hc-a2': 'NM',
             name: 'New Mexico',
             region: 'West',
             x: 6,
             y: 3,
-            value: 2085572
+            value: {31}
         }}, {{
             'hc-a2': 'NY',
             name: 'New York',
             region: 'Northeast',
             x: 2,
             y: 9,
-            value: 19745289
+            value: {32}
         }}, {{
             'hc-a2': 'NC',
             name: 'North Carolina',
             region: 'South',
             x: 5,
             y: 9,
-            value: 10146788
+            value: {33}
         }}, {{
             'hc-a2': 'ND',
             name: 'North Dakota',
             region: 'Midwest',
             x: 2,
             y: 3,
-            value: 739482
+            value: {34}
         }}, {{
             'hc-a2': 'OH',
             name: 'Ohio',
             region: 'Midwest',
             x: 3,
             y: 8,
-            value: 11614373
+            value: {35}
         }}, {{
             'hc-a2': 'OK',
             name: 'Oklahoma',
             region: 'South',
             x: 6,
             y: 4,
-            value: 3878051
+            value: {36}
         }}, {{
             'hc-a2': 'OR',
             name: 'Oregon',
             region: 'West',
             x: 4,
             y: 1,
-            value: 3970239
+            value: {37}
         }}, {{
             'hc-a2': 'PA',
             name: 'Pennsylvania',
             region: 'Northeast',
             x: 3,
             y: 9,
-            value: 12784227
+            value: {38}
         }}, {{
             'hc-a2': 'RI',
             name: 'Rhode Island',
             region: 'Northeast',
             x: 2,
             y: 11,
-            value: 1055173
+            value: {39}
         }}, {{
             'hc-a2': 'SC',
             name: 'South Carolina',
             region: 'South',
             x: 6,
             y: 8,
-            value: 4832482
+            value: {40}
         }}, {{
             'hc-a2': 'SD',
             name: 'South Dakota',
             region: 'Midwest',
             x: 3,
             y: 4,
-            value: 853175
+            value: {41}
         }}, {{
             'hc-a2': 'TN',
             name: 'Tennessee',
             region: 'South',
             x: 5,
             y: 7,
-            value: 6651194
+            value: {42}
         }}, {{
             'hc-a2': 'TX',
             name: 'Texas',
             region: 'South',
             x: 7,
             y: 4,
-            value: 27862596
+            value: {43}
         }}, {{
             'hc-a2': 'UT',
             name: 'Utah',
             region: 'West',
             x: 5,
             y: 4,
-            value: 2942902
+            value: {44}
         }}, {{
             'hc-a2': 'VT',
             name: 'Vermont',
             region: 'Northeast',
             x: 1,
             y: 10,
-            value: 626011
+            value: {45}
         }}, {{
             'hc-a2': 'VA',
             name: 'Virginia',
             region: 'South',
             x: 5,
             y: 8,
-            value: 8411808
+            value: {46}
         }}, {{
             'hc-a2': 'WA',
             name: 'Washington',
             region: 'West',
             x: 2,
             y: 1,
-            value: 7288000
+            value: {47}
         }}, {{
             'hc-a2': 'WV',
             name: 'West Virginia',
             region: 'South',
             x: 4,
             y: 7,
-            value: 1850326
+            value: {48}
         }}, {{
             'hc-a2': 'WI',
             name: 'Wisconsin',
             region: 'Midwest',
             x: 2,
             y: 5,
-            value: 5778708
+            value: {49}
         }}, {{
             'hc-a2': 'WY',
             name: 'Wyoming',
             region: 'West',
             x: 3,
             y: 3,
-            value: 584153
+            value: {50}
         }}]
     }}
 """
