@@ -21,7 +21,7 @@ demWinPct = """
                 </style>
         </head>
         <body>
-            <p>{:.2f}%</p>
+            <p>{:.1f}%</p>
         </body>
     </html>
 
@@ -44,7 +44,7 @@ repWinPct = """
                 </style>
         </head>
         <body>
-            <p>{:.2f}%</p>
+            <p>{:.1f}%</p>
         </body>
     </html>
 
