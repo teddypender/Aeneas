@@ -574,7 +574,7 @@ histogramChartBottom_ = """
                     }},
                     xAxis: {{
                       categories: {1},
-                      crosshair: true
+                      crosshair: true,
                       title: {{
                         text: 'Number of Seats'
                       }}
@@ -587,7 +587,7 @@ histogramChartBottom_ = """
                       }}
                     }},
                     tooltip: {{
-                      headerFormat: '<span style="font-size:18px">{{point.key}}</span><table>',
+                      headerFormat: '<span style="font-size:18px">{{point.key}} Seats</span><table>',
                       pointFormat: '<tr><td style="color:{{series.color}};padding:0">{{series.name}}: </td>' +
                         '<td style="padding:0"><b>{{point.y:.2f}}%</b></td></tr>',
                       footerFormat: '</table>',
