@@ -201,12 +201,12 @@ stateWinningProbability = pd.concat([simulationsDataFrame[['State', 'Senator', '
 demWinPercentage = SenateForecastCharts.demWinPct.format(probabilityDemControl)
 repWinPercentage = SenateForecastCharts.repWinPct.format(probabilityRepControl)
 
-demHistogram     = SenateForecastCharts.histogramChartTop + SenateForecastCharts.histogramChartBottom_.froma('DemHistogram', [k for k in demProbabilities.keys()], [v for v in demProbabilities.values()], '#3F52B9')
-repHistogram     = SenateForecastCharts.histogramChartTop + SenateForecastCharts.histogramChartBottom_.froma('DemHistogram', [k for k in demProbabilities.keys()], [v for v in demProbabilities.values()], '#DE3947')
+demHistogram     = SenateForecastCharts.histogramChartTop + SenateForecastCharts.histogramChartBottom_.format('DemHistogram', [str(k) for k in demProbabilities.keys()], [v for v in demProbabilities.values()], '#3F52B9')
+repHistogram     = SenateForecastCharts.histogramChartTop + SenateForecastCharts.histogramChartBottom_.format('DemHistogram', [str(k) for k in demProbabilities.keys()], [v for v in demProbabilities.values()], '#DE3947')
 
 
-fileNames   = ['demWinPercentage', 'repWinPercentage']
-htmlStrings = [demWinPercentage, repWinPercentage]
+fileNames   = ['demWinPercentage', 'repWinPercentage', 'demHistogram', 'repHistogram']
+htmlStrings = [demWinPercentage, repWinPercentage, demHistogram, repHistogram]
 
 #write to HTML Files
 for file, stringChart in zip(fileNames, htmlStrings):
