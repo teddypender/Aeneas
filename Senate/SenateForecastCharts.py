@@ -575,12 +575,15 @@ histogramChartBottom_ = """
                     xAxis: {{
                       categories: {1},
                       crosshair: true
+                      title: {{
+                        text: 'Number of Seats'
+                      }}
                     }},
                     yAxis: {{
                       gridLineWidth: 0,
                       min: 0,
                       title: {{
-                        text: ''
+                        text: 'Probability (%)'
                       }}
                     }},
                     tooltip: {{
