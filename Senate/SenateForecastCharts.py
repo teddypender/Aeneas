@@ -619,7 +619,7 @@ histogramChartBottom_ = """
                       text: ''
                     }},
                     xAxis: {{
-                      categories: {1} //[  'Jan',  'Feb',  'Mar',  'Apr',  'May',  'Jun',  'Jul',  'Aug',  'Sep',  'Oct',  'Nov',  'Dec'],
+                      categories: {1},
                       crosshair: true
                     }},
                     yAxis: {{
