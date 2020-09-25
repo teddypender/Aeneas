@@ -234,7 +234,7 @@ demTimSeriesProb = [[int(x * 1000),y] for x,y in zip((ModelTimeSeries['Modeldate
 repTimSeriesProb = [[int(x * 1000),y] for x,y in zip((ModelTimeSeries['Modeldate'] - datetime.datetime(1970,1,1)).dt.total_seconds(),ModelTimeSeries['probabilityRepControl'])]
 
 lineChartDataProbControl = SenateForecastCharts.lineSeriesData.format('Democrats', demTimSeriesProb, 'Republicans', repTimSeriesProb)
-senateProbControlChart   = SenateForecastCharts.lineChartTop + SenateForecastCharts.lineChartBottom_.format('probabilityControl', '#FFFFFF', lineChartDataProbControl, 'Probability of Winning Senate', 100, 'Date.UTC({0}, {1}, {2})'.format(min(ModelTimeSeries['Modeldate']).year, min(ModelTimeSeries['Modeldate']).year, min(ModelTimeSeries['Modeldate']).year))
+senateProbControlChart   = SenateForecastCharts.lineChartTop + SenateForecastCharts.lineChartBottom_.format('probabilityControl', '#FFFFFF', lineChartDataProbControl, 'Probability of Winning Senate', 100, 'Date.UTC({0}, {1}, {2})'.format(min(ModelTimeSeries['Modeldate']).year, min(ModelTimeSeries['Modeldate']).month - 1, min(ModelTimeSeries['Modeldate']).day))
 
 fileNames   = ['demWinPercentage', 'repWinPercentage', 'demHistogram', 'repHistogram', 'demExpectedSeats', 'repExpectedSeats', 'dem10thSeats', 'dem90thSeat', 'rep10thSeats', 'rep90thSeats', 'lineChartDataProbControl']
 htmlStrings = [demWinPercentage, repWinPercentage, demHistogram, repHistogram, demExpectedSeats, repExpectedSeats, dem10thSeats, dem90thSeats, rep10thSeats, rep90thSeats, senateProbControlChart]
