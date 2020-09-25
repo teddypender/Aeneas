@@ -1311,6 +1311,7 @@ lineChartBottom_ = """
                 }},
                 yAxis: [{{
                   max: {4},
+                  min: 0,
                   gridLineColor: 'rgba(150,150,150,.2)',
                   labels: {{
                     formatter: function() {{
