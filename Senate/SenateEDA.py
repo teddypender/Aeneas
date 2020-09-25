@@ -177,8 +177,10 @@ def createResults(senateResults, simulationsDataFrame):
     senRepSort = senateResults['REP'].unique()
     senRepSort.sort()
     
-    demProbabilities = {k : len(senateResults[senateResults.DEM == k]) / len(senateResults) for k in senDemSort}
-    remProbabilities = {k : len(senateResults[senateResults.REP == k]) / len(senateResults) for k in senRepSort}
+    totalSeats = [x for x in range(min(min(senRepSort), min(senDemSort)), max(max(senRepSort), max(senDemSort)))]
+    
+    demProbabilities = {k : len(senateResults[senateResults.DEM == k]) / len(senateResults) for k in totalSeats}
+    repProbabilities = {k : len(senateResults[senateResults.REP == k]) / len(senateResults) for k in totalSeats}
     
     demExpSeats, dem10thSeats, dem90thSeats = senateResults.mean()[['DEM']].iloc[0], senateResults.quantile([0.1])[['DEM']].iloc[0][0], senateResults.quantile([0.9])[['DEM']].iloc[0][0]
     repExpSeats, rep10thSeats, rep90thSeats = senateResults.mean()[['REP']].iloc[0], senateResults.quantile([0.1])[['REP']].iloc[0][0], senateResults.quantile([0.9])[['REP']].iloc[0][0]
@@ -195,7 +197,7 @@ def createResults(senateResults, simulationsDataFrame):
         
     stateWinningProbability = pd.concat([simulationsDataFrame[['State', 'Senator', 'candidate_party']], pd.DataFrame(winsList, columns = ['DEM Win', 'REP Win'])], axis = 1)
 
-    return demProbabilities, remProbabilities, demExpSeats, dem10thSeats, dem90thSeats, repExpSeats, rep10thSeats, rep90thSeats, probabilityDemControl, probabilityRepControl, stateWinningProbability
+    return demProbabilities, repProbabilities, demExpSeats, dem10thSeats, dem90thSeats, repExpSeats, rep10thSeats, rep90thSeats, probabilityDemControl, probabilityRepControl, stateWinningProbability
 
 def runModelTimeSeries(senatedf, senatedfAll, pollratingsDict, pollratingsDictBias, pollratingsDictErro, normalPolls = True, nSimulations = 100, nDaysBack = 30):
     results = []
