@@ -210,11 +210,11 @@ def runModelTimeSeries(senatedf, senatedfAll, pollratingsDict, pollratingsDictBi
     return ModelTimeSeries
 
 
-senateResults, simulationsDataFrame = simulateSenate(senatedf, senatedfAll, pollratingsDict, pollratingsDictBias, pollratingsDictErro, normalPolls = True, nSimulations = 1000)
+senateResults, simulationsDataFrame = simulateSenate(senatedf, senatedfAll, pollratingsDict, pollratingsDictBias, pollratingsDictErro, normalPolls = True, nSimulations = 10000)
 
 demProbabilities, remProbabilities, demExpSeats, dem10thSeats, dem90thSeats, repExpSeats, rep10thSeats, rep90thSeats, probabilityDemControl, probabilityRepControl, stateWinningProbability = createResults(senateResults, simulationsDataFrame)
 
-ModelTimeSeries = runModelTimeSeries(senatedf, senatedfAll, pollratingsDict, pollratingsDictBias, pollratingsDictErro, nSimulations = 100, nDaysBack = 30)
+ModelTimeSeries = runModelTimeSeries(senatedf, senatedfAll, pollratingsDict, pollratingsDictBias, pollratingsDictErro, nSimulations = 1000, nDaysBack = 60)
 
 # ------------------------------- Write Charts ------------------------------- #
 
