@@ -179,6 +179,8 @@ senRepSort.sort()
 demProbabilities = {k : len(senateResults[senateResults.DEM == k]) / len(senateResults) for k in senDemSort}
 remProbabilities = {k : len(senateResults[senateResults.REP == k]) / len(senateResults) for k in senRepSort}
 
+demExpSeats = senateResults.mean()[['DEM']].iloc[0]
+repExpSeats = senateResults.mean()[['REP']].iloc[0]
 
 probabilityDemControl = senateResultsTuples[senateResultsTuples.Democrat > 50].probability.sum()
 probabilityRepControl = senateResultsTuples[senateResultsTuples.Republican >= 50].probability.sum()
@@ -200,6 +202,9 @@ stateWinningProbability = pd.concat([simulationsDataFrame[['State', 'Senator', '
 
 demWinPercentage = SenateForecastCharts.demWinPct.format(probabilityDemControl)
 repWinPercentage = SenateForecastCharts.repWinPct.format(probabilityRepControl)
+
+demExpectedSeats = SenateForecastCharts.demWinPct.format(demExpSeats)
+repExpectedSeats = SenateForecastCharts.repWinPct.format(repExpSeats)
 
 demHistogram     = SenateForecastCharts.histogramChartTop + SenateForecastCharts.histogramChartBottom_.format('DemHistogram', [str(k) for k in demProbabilities.keys()], [v * 100 for v in demProbabilities.values()], '#3F52B9')
 repHistogram     = SenateForecastCharts.histogramChartTop + SenateForecastCharts.histogramChartBottom_.format('DemHistogram', [str(k) for k in demProbabilities.keys()], [v * 100 for v in demProbabilities.values()], '#DE3947')
