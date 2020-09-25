@@ -997,7 +997,7 @@ lineChartTop = """
             }
           },
           xAxis: {
-            min: Date.UTC(2017, 1, 1),
+            min: Date.UTC(2020, 8, 24),
             plotBands: [{
                 color: 'grey', // Color value
                 from: Date.UTC(1957, 7, 1), // Start of the plot band
