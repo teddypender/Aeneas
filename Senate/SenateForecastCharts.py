@@ -5,6 +5,28 @@ Created on Thu Sep 24 18:45:21 2020
 
 @author: theodorepender
 """
+lastUpdated = """
+<!DOCTYPE html>
+    <html>
+        <head>
+            <link href='https://fonts.googleapis.com/css?family=Barlow' rel='stylesheet'>
+                <style>
+                    body {{
+                        font-family: 'Barlow';
+                        font-size: 60px;
+                        background-color: transparent;
+                        color: rgb(255, 255, 255);
+                        transform: translate(0%, -100%);
+                            }}
+                </style>
+        </head>
+        <body>
+            <p>Last Updated at: {0}</p>
+        </body>
+    </html>
+
+
+"""
 demWinPct = """
 <!DOCTYPE html>
     <html>
