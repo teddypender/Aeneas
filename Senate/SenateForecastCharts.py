@@ -997,7 +997,7 @@ lineChartTop = """
             }
           },
           xAxis: {
-            min: Date.UTC(2020, 8, 24),
+            min: Date.UTC(2020, 7, 24),
             plotBands: [{
                 color: 'grey', // Color value
                 from: Date.UTC(1957, 7, 1), // Start of the plot band
@@ -1306,6 +1306,7 @@ lineChartBottom_ = """
                 series: [{2}],
                 
                 xAxis: {{
+                min: {5},
                 type: 'datetime',
                 ordinal: true
                 }},
