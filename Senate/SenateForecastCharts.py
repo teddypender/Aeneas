@@ -13,7 +13,7 @@ demWinPct = """
                 <style>
                     body {{
                         font-family: 'Barlow';
-                        font-size: 180px;
+                        font-size: 270px;
                         background-color: transparent;
                         color: rgb(63, 82, 185);
                         transform: translate(0%, -100%);
@@ -36,7 +36,7 @@ repWinPct = """
                 <style>
                     body {{
                         font-family: 'Barlow';
-                        font-size: 180px;
+                        font-size: 270px;
                         background-color: transparent;
                         color: rgb(222, 57, 71);
                         transform: translate(0%, -100%);
