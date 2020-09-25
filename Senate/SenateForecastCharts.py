@@ -880,7 +880,7 @@ lineChartTop = """
 
       <script>
         Highcharts.setOptions({
-          colors: ['#F58212', '#FE9F01', '#FFFDD3', '#FFF3A5', '#7789BF', '#9A77CF', '#EC4176', '#FFFFFF'],
+          colors: ['#3F52B9', '#DE3947', '#FFFDD3', '#FFF3A5', '#7789BF', '#9A77CF', '#EC4176', '#FFFFFF'],
           chart: {
             animation: {
               duration: 5000
