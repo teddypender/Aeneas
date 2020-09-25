@@ -39,6 +39,7 @@ senatedf['number_people']   = (senatedf['pct'] / 100) * senatedf['sample_size']
 senatedf['date_difference'] = [(datetime.datetime.today() - parser.parse(x)).days + 1 for x in senatedf['end_date']]
 senatedf                    = senatedf[(senatedf.cycle == 2020) & (senatedf.date_difference < 365) & (senatedf.race_id != 7781)]
 senatedf                    = senatedf[senatedf.candidate_party.isin(['DEM', 'REP'])]
+senatedf['end_date']        = [parser.parse(x) for x in senatedf['end_date']]
 
 # ---------------------------------- Create Prior Distribution ---------------------------------- #
 
@@ -196,9 +197,24 @@ def createResults(senateResults, simulationsDataFrame):
 
     return demProbabilities, remProbabilities, demExpSeats, dem10thSeats, dem90thSeats, repExpSeats, rep10thSeats, rep90thSeats, probabilityDemControl, probabilityRepControl, stateWinningProbability
 
+def runModelTimeSeries(senatedf, senatedfAll, pollratingsDict, pollratingsDictBias, pollratingsDictErro, normalPolls = True, nSimulations = 100, nDaysBack = 30):
+    results = []
+    for i in range(0,nDaysBack):
+        from_date = max(senatedf['end_date']) - datetime.timedelta(i)
+        print("Running Model as of {0}".format(from_date))
+        senateResults, simulationsDataFrame = simulateSenate(senatedf, senatedfAll, pollratingsDict, pollratingsDictBias, pollratingsDictErro, nSimulations = 100)
+        _, _, demExpSeats, dem10thSeats, dem90thSeats, repExpSeats, rep10thSeats, rep90thSeats, probabilityDemControl, probabilityRepControl, _ = createResults(senateResults, simulationsDataFrame)
+        results.append([from_date, demExpSeats, dem10thSeats, dem90thSeats, repExpSeats, rep10thSeats, rep90thSeats, probabilityDemControl, probabilityRepControl])
+    
+    ModelTimeSeries = pd.DataFrame(results, columns = ['Modeldate', 'demExpSeats', 'dem10thSeats', 'dem90thSeats', 'repExpSeats', 'rep10thSeats', 'rep90thSeats', 'probabilityDemControl', 'probabilityRepControl'])
+    return ModelTimeSeries
+
+
 senateResults, simulationsDataFrame = simulateSenate(senatedf, senatedfAll, pollratingsDict, pollratingsDictBias, pollratingsDictErro, normalPolls = True, nSimulations = 1000)
 
 demProbabilities, remProbabilities, demExpSeats, dem10thSeats, dem90thSeats, repExpSeats, rep10thSeats, rep90thSeats, probabilityDemControl, probabilityRepControl, stateWinningProbability = createResults(senateResults, simulationsDataFrame)
+
+ModelTimeSeries = runModelTimeSeries(senatedf, senatedfAll, pollratingsDict, pollratingsDictBias, pollratingsDictErro, nSimulations = 100, nDaysBack = 30)
 
 # ------------------------------- Write Charts ------------------------------- #
 
@@ -208,12 +224,18 @@ repWinPercentage = SenateForecastCharts.repWinPct.format(probabilityRepControl)
 demExpectedSeats = SenateForecastCharts.demMeanSeats.format(demExpSeats)
 repExpectedSeats = SenateForecastCharts.repMeanSeats.format(repExpSeats)
 
+dem10thSeats, dem90thSeats = SenateForecastCharts.demNthSeats.format(dem10thSeats), SenateForecastCharts.demNthSeats.format(dem90thSeats)
+rep10thSeats, rep90thSeats = SenateForecastCharts.repNthSeats.format(rep10thSeats), SenateForecastCharts.repNthSeats.format(rep90thSeats)
+
 demHistogram     = SenateForecastCharts.histogramChartTop + SenateForecastCharts.histogramChartBottom_.format('DemHistogram', [str(k) for k in demProbabilities.keys()], [v * 100 for v in demProbabilities.values()], '#3F52B9')
 repHistogram     = SenateForecastCharts.histogramChartTop + SenateForecastCharts.histogramChartBottom_.format('DemHistogram', [str(k) for k in demProbabilities.keys()], [v * 100 for v in demProbabilities.values()], '#DE3947')
 
+lineChartDataProbControl = SenateForecastCharts.lineSeriesData.format('Democrats', list(ModelTimeSeries['probabilityDemControl']), 'Republicans', list(ModelTimeSeries['probabilityDemControl']))
+senateProbControlChart   = SenateForecastCharts.lineChartTop + SenateForecastCharts.lineChartBottom_.format('probabilityControl', '#FFFFFF', lineChartDataProbControl, 'Probability of Winning Senate', 100)
 
-fileNames   = ['demWinPercentage', 'repWinPercentage', 'demHistogram', 'repHistogram', 'demExpectedSeats', 'repExpectedSeats']
-htmlStrings = [demWinPercentage, repWinPercentage, demHistogram, repHistogram, demExpectedSeats, repExpectedSeats]
+
+fileNames   = ['demWinPercentage', 'repWinPercentage', 'demHistogram', 'repHistogram', 'demExpectedSeats', 'repExpectedSeats', 'dem10thSeats', 'dem90thSeat', 'rep10thSeats', 'rep90thSeats', 'lineChartDataProbControl']
+htmlStrings = [demWinPercentage, repWinPercentage, demHistogram, repHistogram, demExpectedSeats, repExpectedSeats, dem10thSeats, dem90thSeats, rep10thSeats, rep90thSeats, senateProbControlChart]
 
 #write to HTML Files
 for file, stringChart in zip(fileNames, htmlStrings):
