@@ -13,7 +13,7 @@ lastUpdated = """
                 <style>
                     body {{
                         font-family: 'Barlow';
-                        font-size: 60px;
+                        font-size: 40px;
                         background-color: transparent;
                         color: rgb(255, 255, 255);
                         transform: translate(0%, -100%);
@@ -35,7 +35,7 @@ demWinPct = """
                 <style>
                     body {{
                         font-family: 'Barlow';
-                        font-size: 270px;
+                        font-size: 100%;
                         background-color: transparent;
                         color: rgb(63, 82, 185);
                         transform: translate(0%, -100%);
@@ -58,7 +58,7 @@ repWinPct = """
                 <style>
                     body {{
                         font-family: 'Barlow';
-                        font-size: 270px;
+                        font-size: 135px;
                         background-color: transparent;
                         color: rgb(222, 57, 71);
                         transform: translate(0%, -100%);
