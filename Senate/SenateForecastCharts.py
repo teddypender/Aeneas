@@ -35,7 +35,7 @@ demWinPct = """
                 <style>
                     body {{
                         font-family: 'Barlow';
-                        font-size: 100%;
+                        font-size: 135px;
                         background-color: transparent;
                         color: rgb(63, 82, 185);
                         transform: translate(0%, -100%);
