@@ -229,11 +229,54 @@ seatProbabilities['Incumbent Party Candidate'] = [pd.DataFrame(senatedf[(senated
 seatProbabilities['Incumbent Party Candidate'] = [x if y != 'David Perdue' else 'David Perdue' for x,y in zip(seatProbabilities['Incumbent Party Candidate'],seatProbabilities['Senator'])]
 seatProbabilities['ChallengeParty'] = ['DEM' if p == 'REP' else 'REP' for p in seatProbabilities['candidate_party']]
 seatProbabilities['Challenging Party Candidate'] = [pd.DataFrame(senatedf[(senatedf.candidate_party == p) & (senatedf.state == s) & (senatedf.cycle == 2020)]['candidate_name'].value_counts()).index[0] if len(senatedf[(senatedf.candidate_party == p) & (senatedf.state == s) & (senatedf.cycle == 2020)]['candidate_name'].value_counts()) > 0 else 'Low Polling Candidate' for p,s in zip(seatProbabilities['ChallengeParty'], seatProbabilities['State'])]
-seatProbabilities = seatProbabilities[['State', 'Incumbent Party Candidate', 'Challenging Party Candidate', 'DEM Win', 'REP Win']].rename({'DEM Win' : 'Democratic Party Win Probability', 
-                                                                                                                                           'REP Win' : 'Republican Party Win Probability'}, axis = 1)
+seatProbabilities['Challenging Party Candidate'] = [x if y != 'David Perdue' else 'Jon Ossoff' for x,y in zip(seatProbabilities['Challenging Party Candidate'],seatProbabilities['Senator'])]
+seatProbabilities = seatProbabilities[['State', 'Incumbent Party Candidate', 'Challenging Party Candidate', 'DEM Win', 'REP Win']].rename({'DEM Win' : 'Democratic Party Win Probability', 'REP Win' : 'Republican Party Win Probability'}, axis = 1)
+
+seatProbabilities.sort_values('Democratic Party Win Probability', inplace = True)
 seatProbabilities.set_index(['State', 'Incumbent Party Candidate', 'Challenging Party Candidate'], inplace = True)
 
+seatProbHTML = seatProbabilities.to_html(index = True)
+firstEdit = """<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>"""
+firstReplace = """<table cellpadding="0" cellspacing="1" border="0" class="heat-map" id="heat-map-3">
+        <thead>
+          <tr>
+            <th class="first">"""
+secondEdit = """</th>
+      <th>Republican"""
+secondReplace = """</th>
+            <th class="last">Republican"""
+            
+thirdEdit = """<thead>
+          <tr>
+            <th class="first"></th>
+      <th></th>
+      <th></th>
+      <th>Democratic Party Win Probability</th>
+            <th class="last">Republican Party Win Probability</th>
+    </tr>
+    <tr>
+      <th>State</th>
+      <th>Incumbent Party Candidate</th>
+      <th>Challenging Party Candidate</th>
+      <th></th>
+      <th></th>
+    </tr>"""
 
+thirdReplace = """<thead>
+          <tr>
+            <th class="first">State</th>
+      <th class="first">Incumbent Party Candidate</th>
+      <th class="first">Challenging Party Candidate</th>
+      <th class="first">Democratic Party Win Probability</th>
+            <th class="first">Republican Party Win Probability</th>
+    </tr>"""
+
+seatProbHTML = seatProbHTML.replace(firstEdit, firstReplace)
+seatProbHTML = seatProbHTML.replace(secondEdit, secondReplace)
+seatProbHTML = seatProbHTML.replace(thirdEdit, thirdReplace)
 # ------------------------------- Write Charts ------------------------------- #
 
 lastUpdated = SenateForecastCharts.lastUpdated.format(datetime.datetime.now().strftime("%m/%d/%Y, %H:%M%p"))
@@ -256,8 +299,10 @@ repTimSeriesProb = [[int(x),y] for x,y in zip(modelDates,repSeries)]
 lineChartDataProbControl = SenateForecastCharts.lineSeriesData.format('Democrats', demTimSeriesProb, 'Republicans', repTimSeriesProb)
 senateProbControlChart   = SenateForecastCharts.lineChartTop + SenateForecastCharts.lineChartBottom_.format('probabilityControl', '#FFFFFF', lineChartDataProbControl, 'Probability of Winning Senate', 100, 'Date.UTC({0}, {1}, {2})'.format(min(ModelTimeSeries['Modeldate'] + datetime.timedelta(8)).year, min(ModelTimeSeries['Modeldate'] + datetime.timedelta(8)).month - 1, min(ModelTimeSeries['Modeldate'] + datetime.timedelta(8)).day))
 
-fileNames   = ['lastUpdated', 'demWinPercentage', 'repWinPercentage', 'demHistogram', 'repHistogram', 'demExpectedSeats', 'repExpectedSeats', 'dem10thSeats', 'dem90thSeat', 'rep10thSeats', 'rep90thSeats', 'lineChartDataProbControl']
-htmlStrings = [lastUpdated, demWinPercentage, repWinPercentage, demHistogram, repHistogram, demExpectedSeats, repExpectedSeats, dem10thSeats, dem90thSeats, rep10thSeats, rep90thSeats, senateProbControlChart]
+seatProbsTable = SenateForecastCharts.heatMapTableTop + SenateForecastCharts.heatMapTableBottom.format(seatProbHTML)
+
+fileNames   = ['lastUpdated', 'demWinPercentage', 'repWinPercentage', 'demHistogram', 'repHistogram', 'demExpectedSeats', 'repExpectedSeats', 'dem10thSeats', 'dem90thSeat', 'rep10thSeats', 'rep90thSeats', 'lineChartDataProbControl', 'seatProbsTable']
+htmlStrings = [lastUpdated, demWinPercentage, repWinPercentage, demHistogram, repHistogram, demExpectedSeats, repExpectedSeats, dem10thSeats, dem90thSeats, rep10thSeats, rep90thSeats, senateProbControlChart, seatProbsTable]
 
 #write to HTML Files
 for file, stringChart in zip(fileNames, htmlStrings):
