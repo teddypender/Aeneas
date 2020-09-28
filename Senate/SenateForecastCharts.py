@@ -1577,7 +1577,7 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
   </head>
 
   <body>
-    <div style="width:700px; margin:0 auto;">
+    <div style="width:100%; height:100%; align-self: center; margin:0 auto;">
       <!--<h2 class="text-center">jQuery Demo: Create A Data Heat Map</h2>-->
      """
 heatMapTableBottom = """
