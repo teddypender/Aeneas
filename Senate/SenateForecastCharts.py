@@ -1394,9 +1394,9 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
     xg = 104;
     xb = 172;
     
-    zr = 255;
-    zg = 255;
-    zb = 255;
+    zr = 150;
+    zg = 150;
+    zb = 150;
    
     yr = 250;
     yg = 90;
@@ -1434,7 +1434,8 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
     		red = parseInt((zr + (( pos * (wr - zr)) / (n-1))).toFixed(0));
     		green = parseInt((zg + (( pos * (wg - zg)) / (n-1))).toFixed(0));
     		blue = parseInt((zb + (( pos * (wb - zb)) / (n-1))).toFixed(0));
-    		clr = 'rgb('+red+','+green+','+blue+')'
+            alpha = pos / 100; //parseFloat(Math.round((val/max)));
+    		clr = 'rgba('+red+','+green+','+blue+', '+alpha+')'
 		$(this).css({backgroundColor:clr});
 	});
 });
