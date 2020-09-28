@@ -218,9 +218,9 @@ demProbabilities, repProbabilities, demExpSeats, dem10thSeats, dem90thSeats, rep
 
 ModelTimeSeries = runModelTimeSeries(senatedf, senatedfAll, pollratingsDict, pollratingsDictBias, pollratingsDictErro, nSimulations = 1000, nDaysBack = 60)
 
-modelDates = (ModelTimeSeries['Modeldate'] - datetime.datetime(1970,1,1)).dt.total_seconds()
-demSeries  = ModelTimeSeries['probabilityDemControl'].rolling(7).mean()[8:]
-repSeries  = ModelTimeSeries['probabilityRepControl'].rolling(7).mean()[8:]
+modelDates = list(1000 * (ModelTimeSeries['Modeldate'] - datetime.datetime(1970,1,1)).dt.total_seconds())[::-1][8:] #last day is actually beginngin day of forecast
+demSeries  = list(ModelTimeSeries['probabilityDemControl'][::-1].reset_index(drop = True).rolling(7).mean())[8:]
+repSeries  = list(ModelTimeSeries['probabilityRepControl'][::-1].reset_index(drop = True).rolling(7).mean())[8:]
 
 # ------------------------------- Write Charts ------------------------------- #
 
@@ -238,8 +238,8 @@ rep10thSeats, rep90thSeats = SenateForecastCharts.repNthSeats.format(rep10thSeat
 demHistogram     = SenateForecastCharts.histogramChartTop + SenateForecastCharts.histogramChartBottom_.format('DemHistogram', [str(k) for k in demProbabilities.keys()], [v * 100 for v in demProbabilities.values()], '#3F52B9')
 repHistogram     = SenateForecastCharts.histogramChartTop + SenateForecastCharts.histogramChartBottom_.format('RepHistogram', [str(k) for k in repProbabilities.keys()], [v * 100 for v in repProbabilities.values()], '#DE3947')
 
-demTimSeriesProb = [[int(x * 1000),y] for x,y in zip((ModelTimeSeries['Modeldate'][8:][::-1] - datetime.datetime(1970,1,1)).dt.total_seconds(),ModelTimeSeries['probabilityDemControl'][::-1].rolling(7).mean()[8:])]
-repTimSeriesProb = [[int(x * 1000),y] for x,y in zip((ModelTimeSeries['Modeldate'][8:][::-1] - datetime.datetime(1970,1,1)).dt.total_seconds(),ModelTimeSeries['probabilityRepControl'][::-1].rolling(7).mean()[8:])]
+demTimSeriesProb = [[int(x),y] for x,y in zip(modelDates,demSeries)]
+repTimSeriesProb = [[int(x),y] for x,y in zip(modelDates,repSeries)]
 
 lineChartDataProbControl = SenateForecastCharts.lineSeriesData.format('Democrats', demTimSeriesProb, 'Republicans', repTimSeriesProb)
 senateProbControlChart   = SenateForecastCharts.lineChartTop + SenateForecastCharts.lineChartBottom_.format('probabilityControl', '#FFFFFF', lineChartDataProbControl, 'Probability of Winning Senate', 100, 'Date.UTC({0}, {1}, {2})'.format(min(ModelTimeSeries['Modeldate'] + datetime.timedelta(8)).year, min(ModelTimeSeries['Modeldate'] + datetime.timedelta(8)).month - 1, min(ModelTimeSeries['Modeldate'] + datetime.timedelta(8)).day))
