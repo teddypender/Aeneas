@@ -230,9 +230,9 @@ seatProbabilities['Incumbent Party Candidate'] = [x if y != 'David Perdue' else 
 seatProbabilities['ChallengeParty'] = ['DEM' if p == 'REP' else 'REP' for p in seatProbabilities['candidate_party']]
 seatProbabilities['Challenging Party Candidate'] = [pd.DataFrame(senatedf[(senatedf.candidate_party == p) & (senatedf.state == s) & (senatedf.cycle == 2020)]['candidate_name'].value_counts()).index[0] if len(senatedf[(senatedf.candidate_party == p) & (senatedf.state == s) & (senatedf.cycle == 2020)]['candidate_name'].value_counts()) > 0 else 'Low Polling Candidate' for p,s in zip(seatProbabilities['ChallengeParty'], seatProbabilities['State'])]
 seatProbabilities['Challenging Party Candidate'] = [x if y != 'David Perdue' else 'Jon Ossoff' for x,y in zip(seatProbabilities['Challenging Party Candidate'],seatProbabilities['Senator'])]
-seatProbabilities = seatProbabilities[['State', 'Incumbent Party Candidate', 'Challenging Party Candidate', 'DEM Win', 'REP Win']].rename({'DEM Win' : 'Democratic Party Win Probability', 'REP Win' : 'Republican Party Win Probability'}, axis = 1)
+seatProbabilities = seatProbabilities[['State', 'Incumbent Party Candidate', 'Challenging Party Candidate', 'DEM Win', 'REP Win']].rename({'DEM Win' : 'Democratic Party Win Probability (%)', 'REP Win' : 'Republican Party Win Probability (%)'}, axis = 1)
 
-seatProbabilities.sort_values('Democratic Party Win Probability', inplace = True)
+seatProbabilities.sort_values('Democratic Party Win Probability (%)', ascending = False, inplace = True)
 seatProbabilities.set_index(['State', 'Incumbent Party Candidate', 'Challenging Party Candidate'], inplace = True)
 
 seatProbHTML = seatProbabilities.to_html(index = True)
@@ -254,8 +254,8 @@ thirdEdit = """<thead>
             <th class="first"></th>
       <th></th>
       <th></th>
-      <th>Democratic Party Win Probability</th>
-            <th class="last">Republican Party Win Probability</th>
+      <th>Democratic Party Win Probability (%)</th>
+            <th class="last">Republican Party Win Probability (%)</th>
     </tr>
     <tr>
       <th>State</th>
@@ -270,8 +270,8 @@ thirdReplace = """<thead>
             <th class="first">State</th>
       <th class="first">Incumbent Party Candidate</th>
       <th class="first">Challenging Party Candidate</th>
-      <th class="first">Democratic Party Win Probability</th>
-            <th class="first">Republican Party Win Probability</th>
+      <th class="first">Democratic Party Win Probability (%)</th>
+            <th class="first">Republican Party Win Probability (%)</th>
     </tr>"""
 
 seatProbHTML = seatProbHTML.replace(firstEdit, firstReplace)
