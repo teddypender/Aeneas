@@ -1436,7 +1436,13 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
     		red = parseInt((wr + (( pos * (zr - wr)) / (n-1))).toFixed(0));
     		green = parseInt((wg + (( pos * (zg - wg)) / (n-1))).toFixed(0));
     		blue = parseInt((wb + (( pos * (zb - wb)) / (n-1))).toFixed(0));
-            alpha = parseFloat(val/25);
+            if (val < 50){
+                    alpha = parseFloat(val/25);
+                    }
+            else {
+                alpha = parseFloat((100-val)/25);
+                }
+            
     		clr = 'rgba('+red+','+green+','+blue+', '+alpha+')'
 		$(this).css({backgroundColor:clr});
 	});
