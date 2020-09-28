@@ -1503,7 +1503,7 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
       }
 
       .wrap {
-        width: 700px;
+        width: 800px;
         margin: 0 auto;
       }
 
@@ -1515,7 +1515,7 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
       .heat-map {
         border: none; //1px solid rgba(150,150,150,.2);
         margin: 0 auto 20px auto;
-        width: 750px;
+        width: 800px;
       }
 
       .heat-map tr th {
