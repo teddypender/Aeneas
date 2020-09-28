@@ -1406,7 +1406,7 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
     wg = 188;
     wb = 22;
 
-    n = 50;
+    n = 100;
 	
 	// add classes to cells based on nearest 10 value
 	/*
@@ -1434,7 +1434,7 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
     		red = parseInt((zr + (( pos * (wr - zr)) / (n-1))).toFixed(0));
     		green = parseInt((zg + (( pos * (wg - zg)) / (n-1))).toFixed(0));
     		blue = parseInt((zb + (( pos * (wb - zb)) / (n-1))).toFixed(0));
-            alpha = pos / 100; //parseFloat(Math.round((val/max)));
+            alpha = parseFloat(val/25);
     		clr = 'rgba('+red+','+green+','+blue+', '+alpha+')'
 		$(this).css({backgroundColor:clr});
 	});
@@ -1551,7 +1551,7 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
         border-right: none; //1px solid rgba(150,150,150,.2);
         border-bottom: none; //1px solid rgba(150,150,150,.2);
         text-align : center;
-        color: #000;
+        color: #fff;
         font-size: 13px;
       }
 
