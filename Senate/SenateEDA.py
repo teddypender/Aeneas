@@ -222,6 +222,18 @@ modelDates = list(1000 * (ModelTimeSeries['Modeldate'] - datetime.datetime(1970,
 demSeries  = list(ModelTimeSeries['probabilityDemControl'][::-1].reset_index(drop = True).rolling(7).mean())[8:]
 repSeries  = list(ModelTimeSeries['probabilityRepControl'][::-1].reset_index(drop = True).rolling(7).mean())[8:]
 
+stateWinningProbability['TermUp'] = [senateBreakoutFull[(senateBreakoutFull.State == s) & (senateBreakoutFull.Senator == n)]['Term_up'].iloc[0] for s,n in zip(stateWinningProbability['State'], stateWinningProbability['Senator'])]
+seatProbabilities = stateWinningProbability[stateWinningProbability.TermUp == '2020']
+senatedf                       = senatedf[(senatedf.cycle == 2020) & (senatedf.date_difference < 365) & (senatedf.race_id != 7781)]
+seatProbabilities['Incumbent Party Candidate'] = [pd.DataFrame(senatedf[(senatedf.candidate_party == p) & (senatedf.state == s) & (senatedf.cycle == 2020)]['candidate_name'].value_counts()).index[0] if len(senatedf[(senatedf.candidate_party == p) & (senatedf.state == s) & (senatedf.cycle == 2020)]['candidate_name'].value_counts()) > 0 else n for p,s,n in zip(seatProbabilities['candidate_party'], seatProbabilities['State'], seatProbabilities['Senator'])]
+seatProbabilities['Incumbent Party Candidate'] = [x if y != 'David Perdue' else 'David Perdue' for x,y in zip(seatProbabilities['Incumbent Party Candidate'],seatProbabilities['Senator'])]
+seatProbabilities['ChallengeParty'] = ['DEM' if p == 'REP' else 'REP' for p in seatProbabilities['candidate_party']]
+seatProbabilities['Challenging Party Candidate'] = [pd.DataFrame(senatedf[(senatedf.candidate_party == p) & (senatedf.state == s) & (senatedf.cycle == 2020)]['candidate_name'].value_counts()).index[0] if len(senatedf[(senatedf.candidate_party == p) & (senatedf.state == s) & (senatedf.cycle == 2020)]['candidate_name'].value_counts()) > 0 else 'Low Polling Candidate' for p,s in zip(seatProbabilities['ChallengeParty'], seatProbabilities['State'])]
+seatProbabilities = seatProbabilities[['State', 'Incumbent Party Candidate', 'Challenging Party Candidate', 'DEM Win', 'REP Win']].rename({'DEM Win' : 'Democratic Party Win Probability', 
+                                                                                                                                           'REP Win' : 'Republican Party Win Probability'}, axis = 1)
+seatProbabilities.set_index(['State', 'Incumbent Party Candidate', 'Challenging Party Candidate'], inplace = True)
+
+
 # ------------------------------- Write Charts ------------------------------- #
 
 lastUpdated = SenateForecastCharts.lastUpdated.format(datetime.datetime.now().strftime("%m/%d/%Y, %H:%M%p"))
