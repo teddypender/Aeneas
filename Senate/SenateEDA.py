@@ -227,9 +227,11 @@ seatProbabilities = stateWinningProbability[stateWinningProbability.TermUp == '2
 senatedf                       = senatedf[(senatedf.cycle == 2020) & (senatedf.date_difference < 365) & (senatedf.race_id != 7781)]
 seatProbabilities['Incumbent Party Candidate'] = [pd.DataFrame(senatedf[(senatedf.candidate_party == p) & (senatedf.state == s) & (senatedf.cycle == 2020)]['candidate_name'].value_counts()).index[0] if len(senatedf[(senatedf.candidate_party == p) & (senatedf.state == s) & (senatedf.cycle == 2020)]['candidate_name'].value_counts()) > 0 else n for p,s,n in zip(seatProbabilities['candidate_party'], seatProbabilities['State'], seatProbabilities['Senator'])]
 seatProbabilities['Incumbent Party Candidate'] = [x if y != 'David Perdue' else 'David Perdue' for x,y in zip(seatProbabilities['Incumbent Party Candidate'],seatProbabilities['Senator'])]
+seatProbabilities['Incumbent Party Candidate'] = [x if y != 'Kelly Loeffler' else 'A Republican' for x,y in zip(seatProbabilities['Incumbent Party Candidate'],seatProbabilities['Senator'])]
 seatProbabilities['ChallengeParty'] = ['DEM' if p == 'REP' else 'REP' for p in seatProbabilities['candidate_party']]
 seatProbabilities['Challenging Party Candidate'] = [pd.DataFrame(senatedf[(senatedf.candidate_party == p) & (senatedf.state == s) & (senatedf.cycle == 2020)]['candidate_name'].value_counts()).index[0] if len(senatedf[(senatedf.candidate_party == p) & (senatedf.state == s) & (senatedf.cycle == 2020)]['candidate_name'].value_counts()) > 0 else 'Low Polling Candidate' for p,s in zip(seatProbabilities['ChallengeParty'], seatProbabilities['State'])]
 seatProbabilities['Challenging Party Candidate'] = [x if y != 'David Perdue' else 'Jon Ossoff' for x,y in zip(seatProbabilities['Challenging Party Candidate'],seatProbabilities['Senator'])]
+seatProbabilities['Challenging Party Candidate'] = [x if y != 'Kelly Loeffler' else 'A Democrat' for x,y in zip(seatProbabilities['Challenging Party Candidate'],seatProbabilities['Senator'])]
 seatProbabilities = seatProbabilities[['State', 'Incumbent Party Candidate', 'Challenging Party Candidate', 'DEM Win', 'REP Win']].rename({'DEM Win' : 'Democratic Party Win Probability (%)', 'REP Win' : 'Republican Party Win Probability (%)'}, axis = 1)
 
 seatProbabilities.sort_values('Democratic Party Win Probability (%)', ascending = False, inplace = True)
