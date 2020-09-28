@@ -1373,6 +1373,7 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
     <!-- <title>jQuery Tutorial Demo - Creating a data heat map</title> -->
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 
     <script type="text/JavaScript">
@@ -1501,6 +1502,16 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
       a {
         text-decoration: none;
       }
+      
+      a.export,
+      a.export:visited {
+          display: inline-block;
+          text-decoration: none;
+          color: #fff;
+          background-color: #ddd;
+          border: 1px solid #ccc;
+          padding: 8px;
+        }
 
       .text-center {
         text-align: center;
@@ -1586,6 +1597,7 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
   </head>
 
   <body>
+      
     <div style="width:100%; height:100%; align-self: center; margin:0 auto;">
       <!--<h2 class="text-center">jQuery Demo: Create A Data Heat Map</h2>-->
      """
