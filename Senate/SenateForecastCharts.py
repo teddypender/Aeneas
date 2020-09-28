@@ -1476,7 +1476,7 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
         background-color: transparent;
         color: #1f1f1f;
         font-family: 'Barlow';
-        font-size: 21px;
+        font-size: 16px;
         padding: 7px 0;
       }
       
@@ -1503,7 +1503,7 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
       }
 
       .wrap {
-        width: 1350px;
+        width: 700px;
         margin: 0 auto;
       }
 
@@ -1515,7 +1515,7 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
       .heat-map {
         border: none; //1px solid rgba(150,150,150,.2);
         margin: 0 auto 20px auto;
-        width: 1350px;
+        width: 750px;
       }
 
       .heat-map tr th {
@@ -1526,9 +1526,9 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
         border-top: none; //1px solid rgba(150,150,150,.2);
         border-left: none; //1px solid rgba(150,150,150,.2);
         text-shadow: none; //0 1px 0 rgba(150,150,150,.2);
-        font: bold 21px 'Barlow';
+        font: bold 13px 'Barlow';
         text-transform: capitalize;
-        color: #000;
+        color: #fff;
         background-color: rgba(150,150,150,.2); //#757477;
         background-image: -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
       }
@@ -1541,7 +1541,7 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
       .heat-map tr td.stats-title {
         border-left: none;
         text-align: center;
-        font-size: 28px;
+        font-size: 16px;
       }
 
       .heat-map tr td {
@@ -1551,7 +1551,7 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
         border-bottom: none; //1px solid rgba(150,150,150,.2);
         text-align : center;
         color: #000;
-        font-size: 21px;
+        font-size: 13px;
       }
 
       tr.stats-row {
