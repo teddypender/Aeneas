@@ -15,10 +15,10 @@ function wordCloud(selector) {
 
     //Construct the word cloud's SVG element
     var svg = d3.select(selector).append("svg")
-        .attr("width", 1200)
+        .attr("width", 1600)
         .attr("height", 500)
         .append("g")
-        .attr("transform", "translate(600,250)");
+        .attr("transform", "translate(800,250)");
 
 
     //Draw the word cloud
