@@ -375,7 +375,7 @@ tippingPointStatesdfTable = tippingPointStatesdfTable.replace(firstEdit, firstRe
 tippingPointStatesdfTable = tippingPointStatesdfTable.replace(secondEdit, secondReplace)
 tippingPointStatesdfTable = tippingPointStatesdfTable.replace(thirdEdit, thirdReplace)
 
-tippingProbsTable = PresidentialCharts.heatMapTableTop + PresidentialCharts.heatMapTableBottom.format(tippingPointStatesdfTable)
+tippingProbsTable = PresidentialCharts.heatMapTableTopTip + PresidentialCharts.heatMapTableBottom.format(tippingPointStatesdfTable)
 
 fileNames   = ['lastUpdated', 'wordCloud', 'demHistogram', 'repHistogram', 'demExpectedEC', 'repExpectedEC', 'demWinPercentage', 'repWinPercentage', 'dem10thEC', 'dem90thEC', 'rep10thEC', 'rep90thEC', 'tippingProbsTable']
 htmlStrings = [lastUpdated, ChartTest, demHistogram, repHistogram, demExpectedEC, repExpectedEC, demWinPercentage, repWinPercentage, dem10thEC, dem90thEC, rep10thEC, rep90thEC, tippingProbsTable]

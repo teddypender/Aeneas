@@ -1760,41 +1760,22 @@ heatMapTableTopTip = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     yg = 90;
     yb = 80;
     
-    wr = 222;
-    wg = 75;
-    wb = 29;
+    wr = 63;
+    wg = 82;
+    wb = 185;
     
     //(242, 121, 9)
 
-    n = 25;
+    n = 100;
 	
 	// add classes to cells based on nearest 10 value
-	/*
 	$('#heat-map-3 tbody td').not('.stats-title').each(function(){
 		var val = parseInt($(this).text());
 		var pos = parseInt((Math.round((val/max)*100)).toFixed(0));
-		if (val < 50) {
-    		red = parseInt((xr + (( pos * (zr - xr)) / (n-1))).toFixed(0));
-    		green = parseInt((xg + (( pos * (zg - xg)) / (n-1))).toFixed(0));
-    		blue = parseInt((xb + (( pos * (zb - xb)) / (n-1))).toFixed(0));
-    		clr = 'rgb('+red+','+green+','+blue+')'
-    		}
-    	else {
-        	red = parseInt((zr + (( (pos - 50) * (yr - zr)) / (n-1))).toFixed(0));
-    		green = parseInt((zg + (( (pos - 50) * (yg - zg)) / (n-1))).toFixed(0));
-    		blue = parseInt((zb + (( (pos - 50) * (yb - zb)) / (n-1))).toFixed(0));
-    		clr = 'rgb('+red+','+green+','+blue+')'
-    	};
-		$(this).css({backgroundColor:clr});
-	});
-	*/
-	$('#heat-map-3 tbody td').not('.stats-title').each(function(){
-		var val = parseInt($(this).text());
-		var pos = parseInt((Math.round((val/max)*100)).toFixed(0));
-    		red = parseInt((wr + (( pos * (zr - wr)) / (n-1))).toFixed(0));
-    		green = parseInt((wg + (( pos * (zg - wg)) / (n-1))).toFixed(0));
-    		blue = parseInt((wb + (( pos * (zb - wb)) / (n-1))).toFixed(0));
-            if (val < 25){
+    		red = parseInt((zr + (( pos * (wr - zr)) / (n-1))).toFixed(0));
+    		green = parseInt((zg + (( pos * (wg - zg)) / (n-1))).toFixed(0));
+    		blue = parseInt((zb + (( pos * (wb - zb)) / (n-1))).toFixed(0));
+            if (val < 50){
                     alpha = parseFloat(val/12.5);
                     }
             else {
@@ -1880,7 +1861,7 @@ heatMapTableTopTip = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
       }
 
       .wrap {
-        width: 900px;
+        width: 700px;
         margin: 0 auto;
       }
 
@@ -1892,7 +1873,7 @@ heatMapTableTopTip = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
       .heat-map {
         border: none; //1px solid rgba(150,150,150,.2);
         margin: 0 auto 20px auto;
-        width: 900px;
+        width: 700px;
       }
 
       .heat-map tr th {
@@ -1903,7 +1884,7 @@ heatMapTableTopTip = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         border-top: none; //1px solid rgba(150,150,150,.2);
         border-left: none; //1px solid rgba(150,150,150,.2);
         text-shadow: none; //0 1px 0 rgba(150,150,150,.2);
-        font: bold 13px 'Barlow';
+        font: bold 24px 'Barlow';
         text-transform: capitalize;
         color: #fff;
         background-color: rgba(150,150,150,.2); //#757477;
@@ -1918,7 +1899,7 @@ heatMapTableTopTip = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
       .heat-map tr td.stats-title {
         border-left: none;
         text-align: center;
-        font-size: 16px;
+        font-size: 24px;
       }
 
       .heat-map tr td {
@@ -1928,7 +1909,7 @@ heatMapTableTopTip = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         border-bottom: none; //1px solid rgba(150,150,150,.2);
         text-align : center;
         color: #fff;
-        font-size: 13px;
+        font-size: 18px;
       }
 
       tr.stats-row {
