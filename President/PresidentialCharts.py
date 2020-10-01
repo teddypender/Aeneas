@@ -207,7 +207,7 @@ demMeanSeats = """
                 </style>
         </head>
         <body>
-            <p>{:.1f}</p>
+            <p>{:.0f}</p>
         </body>
     </html>
 
@@ -230,7 +230,7 @@ repMeanSeats = """
                 </style>
         </head>
         <body>
-            <p>{:.1f}</p>
+            <p>{:.0f}</p>
         </body>
     </html>
 
@@ -254,7 +254,7 @@ demNthSeats = """
                 </style>
         </head>
         <body>
-            <p>{:.1f}</p>
+            <p>{:.0f}</p>
         </body>
     </html>
 
@@ -277,7 +277,7 @@ repNthSeats = """
                 </style>
         </head>
         <body>
-            <p>{:.1f}</p>
+            <p>{:.0f}</p>
         </body>
     </html>
 
