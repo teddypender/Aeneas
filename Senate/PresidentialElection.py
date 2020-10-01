@@ -324,8 +324,8 @@ repProbabilities = {k : len(electoralDF[electoralDF.REP == k]) / len(electoralDF
 
 lastUpdated      = PresidentialCharts.lastUpdated.format(datetime.datetime.now().strftime("%m/%d/%Y, %H:%M%p"))
 
-demWinPercentage = PresidentialCharts.demWinPct.format(demChanceOfWinning)
-repWinPercentage = PresidentialCharts.repWinPct.format(repChanceOfWinning)
+demWinPercentage = PresidentialCharts.demWinPct.format(demChanceOfWinning * 100)
+repWinPercentage = PresidentialCharts.repWinPct.format(repChanceOfWinning * 100)
 
 demExpectedEC    = PresidentialCharts.demMeanSeats.format(demMedianEC)
 repExpectedEC    = PresidentialCharts.repMeanSeats.format(repMedianEC)
@@ -336,6 +336,45 @@ rep10thEC, rep90thEC = PresidentialCharts.repNthSeats.format(repLowerBoundEC), P
 ChartTest        = PresidentialCharts.wordChart + PresidentialCharts.wordChartData.format(wordCloudD, wordsMap, max([collections.Counter(wordCorpus)[k] for k in [x[0] for x in words]])) + PresidentialCharts.wordChartBottom
 demHistogram     = PresidentialCharts.histogramChartTop + PresidentialCharts.histogramChartBottom_.format('DemHistogram', [str(k) for k in demProbabilities.keys()], [v * 100 for v in demProbabilities.values()], '#3F52B9')
 repHistogram     = PresidentialCharts.histogramChartTop + PresidentialCharts.histogramChartBottom_.format('RepHistogram', [str(k) for k in repProbabilities.keys()], [v * 100 for v in repProbabilities.values()], '#DE3947')
+
+
+tippingPointStatesdfTable = tippingPointStatesdf.reset_index().rename({'index' : 'State', 'probabilityTip' : 'Tipping Point Probability'}, axis = 1).set_index(['State'])[['Tipping Point Probability']].iloc[0:11]
+
+tippingPointStatesdfTable = tippingPointStatesdfTable.to_html(index = True)
+firstEdit = """<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>"""
+firstReplace = """<table cellpadding="0" cellspacing="1" border="0" class="heat-map" id="heat-map-3">
+        <thead>
+          <tr>
+            <th class="first">"""
+            
+secondEdit = """</th>
+      <th>Tipping Point Probability"""
+secondReplace = """</th>
+            <th class="last">Tipping Point Probability"""
+            
+thirdEdit = """<thead>
+          <tr>
+            <th class="first"></th>
+            <th class="last">Tipping Point Probability</th>
+    </tr>
+    <tr>
+      <th>State</th>
+      <th></th>
+    </tr>"""
+
+thirdReplace = """<thead>
+          <tr>
+            <th class="first">State</th>
+            <th class="last">Tipping Point Probability (%)</th>
+    </tr>"""
+
+tippingPointStatesdfTable = tippingPointStatesdfTable.replace(firstEdit, firstReplace)
+tippingPointStatesdfTable = tippingPointStatesdfTable.replace(secondEdit, secondReplace)
+tippingPointStatesdfTable = tippingPointStatesdfTable.replace(thirdEdit, thirdReplace)
+
 
 fileNames   = ['lastUpdated', 'wordCloud', 'demHistogram', 'repHistogram', 'demExpectedEC', 'repExpectedEC', 'demWinPercentage', 'repWinPercentage', 'dem10thEC', 'dem90thEC', 'rep10thEC', 'rep90thEC']
 htmlStrings = [lastUpdated, ChartTest, demHistogram, repHistogram, demExpectedEC, repExpectedEC, demWinPercentage, repWinPercentage, dem10thEC, dem90thEC, rep10thEC, rep90thEC]
