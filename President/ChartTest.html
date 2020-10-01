@@ -8,9 +8,6 @@
   <link href='https://fonts.googleapis.com/css?family=Barlow' rel='stylesheet'>
   <script>
 
-//Simple animated example of d3-cloud - https://github.com/jasondavies/d3-cloud
-//Based on https://github.com/jasondavies/d3-cloud/blob/master/examples/simple.html
-
 // Encapsulate the word cloud functionality
 function wordCloud(selector) {
 
@@ -28,14 +25,14 @@ function wordCloud(selector) {
     function draw(words) {
         var cloud = svg.selectAll("g text")
                         .data(words, function(d) { return d.text; })
+        var colorSet = ['#3f52b9', '#5e65c2', '#787acb', '#908fd4', '#a7a4dd', '#bdbae6', '#d3d1ee', '#e9e8f7', '#ffffff', '#de3947', '#e7585c', '#ee7271', '#f48b87', '#faa39e', '#fdbab6', '#ffd1ce', '#ffe8e6'];
 
         //Entering words
         cloud.enter()
             .append("text")
             .style("font-family", "Barlow")
-            .style("background-color", "transparent") //color: rgb(222, 57, 71)
-            .style("color", "rgb(222, 57, 71)") //rep = color: rgb(222, 57, 71), dem = rgb(63, 82, 185)
-            .style("fill", function(d, i) { return fill(i); })
+            .style("background-color", "transparent")
+            .style("fill", function(d, i) { return colorSet[Math.floor(Math.random() * colorSet.length)];})
             .attr("text-anchor", "middle")
             .attr('font-size', 1)
             .text(function(d) { return d.text; });
