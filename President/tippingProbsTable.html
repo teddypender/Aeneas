@@ -43,7 +43,7 @@
     
     //(242, 121, 9)
 
-    n = 100;
+    n = 25;
 	
 	// add classes to cells based on nearest 10 value
 	/*
@@ -71,11 +71,11 @@
     		red = parseInt((wr + (( pos * (zr - wr)) / (n-1))).toFixed(0));
     		green = parseInt((wg + (( pos * (zg - wg)) / (n-1))).toFixed(0));
     		blue = parseInt((wb + (( pos * (zb - wb)) / (n-1))).toFixed(0));
-            if (val < 50){
-                    alpha = parseFloat(val/25);
+            if (val < 25){
+                    alpha = parseFloat(val/12.5);
                     }
             else {
-                alpha = parseFloat((100-val)/25);
+                alpha = parseFloat((100-val)/12.5);
                 }
             
     		clr = 'rgba('+red+','+green+','+blue+', '+alpha+')'

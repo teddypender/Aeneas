@@ -1719,6 +1719,245 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
     <div style="width:100%; height:100%; align-self: center; margin:0 auto;">
       <!--<h2 class="text-center">jQuery Demo: Create A Data Heat Map</h2>-->
      """
+     
+
+heatMapTableTopTip = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="robots" content="all" />
+    <!-- <title>jQuery Tutorial Demo - Creating a data heat map</title> -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+
+    <script type="text/JavaScript">
+      $(document).ready(function(){
+	// Function to get the Max value in Array
+    Array.max = function( array ){
+        return Math.max.apply( Math, array );
+    };
+
+    // get all values
+    var counts= $('#heat-map-3 tbody td').not('.stats-title').map(function() {
+        return parseInt($(this).text());
+    }).get();
+	
+	// return max value
+	var max = Array.max(counts);
+	
+	xr = 87;
+    xg = 104;
+    xb = 172;
+    
+    zr = 150;
+    zg = 150;
+    zb = 150;
+   
+    yr = 250;
+    yg = 90;
+    yb = 80;
+    
+    wr = 222;
+    wg = 75;
+    wb = 29;
+    
+    //(242, 121, 9)
+
+    n = 25;
+	
+	// add classes to cells based on nearest 10 value
+	/*
+	$('#heat-map-3 tbody td').not('.stats-title').each(function(){
+		var val = parseInt($(this).text());
+		var pos = parseInt((Math.round((val/max)*100)).toFixed(0));
+		if (val < 50) {
+    		red = parseInt((xr + (( pos * (zr - xr)) / (n-1))).toFixed(0));
+    		green = parseInt((xg + (( pos * (zg - xg)) / (n-1))).toFixed(0));
+    		blue = parseInt((xb + (( pos * (zb - xb)) / (n-1))).toFixed(0));
+    		clr = 'rgb('+red+','+green+','+blue+')'
+    		}
+    	else {
+        	red = parseInt((zr + (( (pos - 50) * (yr - zr)) / (n-1))).toFixed(0));
+    		green = parseInt((zg + (( (pos - 50) * (yg - zg)) / (n-1))).toFixed(0));
+    		blue = parseInt((zb + (( (pos - 50) * (yb - zb)) / (n-1))).toFixed(0));
+    		clr = 'rgb('+red+','+green+','+blue+')'
+    	};
+		$(this).css({backgroundColor:clr});
+	});
+	*/
+	$('#heat-map-3 tbody td').not('.stats-title').each(function(){
+		var val = parseInt($(this).text());
+		var pos = parseInt((Math.round((val/max)*100)).toFixed(0));
+    		red = parseInt((wr + (( pos * (zr - wr)) / (n-1))).toFixed(0));
+    		green = parseInt((wg + (( pos * (zg - wg)) / (n-1))).toFixed(0));
+    		blue = parseInt((wb + (( pos * (zb - wb)) / (n-1))).toFixed(0));
+            if (val < 25){
+                    alpha = parseFloat(val/12.5);
+                    }
+            else {
+                alpha = parseFloat((100-val)/12.5);
+                }
+            
+    		clr = 'rgba('+red+','+green+','+blue+', '+alpha+')'
+		$(this).css({backgroundColor:clr});
+	});
+});
+</script>
+    
+    <link href='https://fonts.googleapis.com/css?family=Barlow' rel='stylesheet'>
+
+    <style type="text/css">
+      blockquote,
+      img,
+      label,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      pre,
+      ul,
+      ol,
+      li,
+      dl,
+      dt,
+      dd,
+      form,
+      fieldset,
+      input,
+      th,
+      td {
+        border:  none; //1px solid rgba(150,150,150,.2); //0;
+        outline: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        height: 100%;
+        //background: #1B1A1C;
+        background-color: transparent;
+        color: #1f1f1f;
+        font-family: 'Barlow';
+        font-size: 16px;
+        padding: 7px 0;
+      }
+      
+      table {
+      background-color: rgba(150,150,150,0.2);
+      }
+
+      ul,
+      ol {
+        list-style: none;
+      }
+
+      a {
+        text-decoration: none;
+      }
+      
+      a.export,
+      a.export:visited {
+          display: inline-block;
+          text-decoration: none;
+          color: #fff;
+          background-color: #ddd;
+          border: 1px solid #ccc;
+          padding: 8px;
+        }
+
+      .text-center {
+        text-align: center;
+        padding: 10px 0;
+      }
+
+      h2 {
+        margin-bottom: 30px;
+      }
+
+      .wrap {
+        width: 900px;
+        margin: 0 auto;
+      }
+
+      .clear {
+        clear: both;
+      }
+
+      /* Tutorial CSS */
+      .heat-map {
+        border: none; //1px solid rgba(150,150,150,.2);
+        margin: 0 auto 20px auto;
+        width: 900px;
+      }
+
+      .heat-map tr th {
+        font-weight: 900;
+        padding: 5px 7px;
+        border-right: none; //1px solid rgba(150,150,150,.2);
+        border-bottom: none; //1px solid rgba(150,150,150,.2);
+        border-top: none; //1px solid rgba(150,150,150,.2);
+        border-left: none; //1px solid rgba(150,150,150,.2);
+        text-shadow: none; //0 1px 0 rgba(150,150,150,.2);
+        font: bold 13px 'Barlow';
+        text-transform: capitalize;
+        color: #fff;
+        background-color: rgba(150,150,150,.2); //#757477;
+        background-image: -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
+      }
+
+      .heat-map tr th.last {
+        border-right: none;
+      }
+
+      .heat-map tr th.first,
+      .heat-map tr td.stats-title {
+        border-left: none;
+        text-align: center;
+        font-size: 16px;
+      }
+
+      .heat-map tr td {
+        padding: 5px 7px;
+        /*border-top: 1px solid #fff; border-right: 1px solid #fff; */
+        border-right: none; //1px solid rgba(150,150,150,.2);
+        border-bottom: none; //1px solid rgba(150,150,150,.2);
+        text-align : center;
+        color: #fff;
+        font-size: 13px;
+      }
+
+      tr.stats-row {
+        text-align: right;
+      }
+
+      .heat-map tr.stats-row td.stats-title {
+        //text-align: center;
+        color: #000;
+        font-size: 28px;
+        text-shadow: none; //0 1px 0 #fff;
+        background: rgba(150,150,150,.2); //#757477;
+        border-top: none; //1px solid rgba(150,150,150,.2);
+        border-bottom: none; //1px solid rgba(150,150,150,.2);
+        border-right: none; //1px solid rgba(150,150,150,.2);
+      }
+
+      .heat-map tr.stats-row td.stats-title.last {
+        border-bottom: 1px solid rgba(150,150,150,.2);
+      }
+
+    </style>
+  </head>
+
+  <body>
+      
+    <div style="width:100%; height:100%; align-self: center; margin:0 auto;">
+      <!--<h2 class="text-center">jQuery Demo: Create A Data Heat Map</h2>-->
+     """
 heatMapTableBottom = """
       {0}
 
