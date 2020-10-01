@@ -1556,10 +1556,10 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
     		green = parseInt((wg + (( pos * (zg - wg)) / (n-1))).toFixed(0));
     		blue = parseInt((wb + (( pos * (zb - wb)) / (n-1))).toFixed(0));
             if (val < 50){
-                    alpha = parseFloat(val/25);
+                    alpha = parseFloat(val/50);
                     }
             else {
-                alpha = parseFloat((100-val)/25);
+                alpha = parseFloat((100-val)/50);
                 }
             
     		clr = 'rgba('+red+','+green+','+blue+', '+alpha+')'
@@ -1641,7 +1641,7 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
       }
 
       .wrap {
-        width: 900px;
+        width: 700px;
         margin: 0 auto;
       }
 
@@ -1653,7 +1653,7 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
       .heat-map {
         border: none; //1px solid rgba(150,150,150,.2);
         margin: 0 auto 20px auto;
-        width: 900px;
+        width: 700px;
       }
 
       .heat-map tr th {
@@ -1664,7 +1664,7 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
         border-top: none; //1px solid rgba(150,150,150,.2);
         border-left: none; //1px solid rgba(150,150,150,.2);
         text-shadow: none; //0 1px 0 rgba(150,150,150,.2);
-        font: bold 24px 'Barlow';
+        font: bold 18px 'Barlow';
         text-transform: capitalize;
         color: #fff;
         background-color: rgba(150,150,150,.2); //#757477;
@@ -1679,7 +1679,7 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
       .heat-map tr td.stats-title {
         border-left: none;
         text-align: center;
-        font-size: 24px;
+        font-size: 18px;
       }
 
       .heat-map tr td {
@@ -1689,7 +1689,7 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
         border-bottom: none; //1px solid rgba(150,150,150,.2);
         text-align : center;
         color: #fff;
-        font-size: 20px;
+        font-size: 15px;
       }
 
       tr.stats-row {
@@ -1699,7 +1699,7 @@ heatMapTableTop = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
       .heat-map tr.stats-row td.stats-title {
         //text-align: center;
         color: #000;
-        font-size: 28px;
+        font-size: 18px;
         text-shadow: none; //0 1px 0 #fff;
         background: rgba(150,150,150,.2); //#757477;
         border-top: none; //1px solid rgba(150,150,150,.2);

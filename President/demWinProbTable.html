@@ -72,10 +72,10 @@
     		green = parseInt((wg + (( pos * (zg - wg)) / (n-1))).toFixed(0));
     		blue = parseInt((wb + (( pos * (zb - wb)) / (n-1))).toFixed(0));
             if (val < 50){
-                    alpha = parseFloat(val/25);
+                    alpha = parseFloat(val/50);
                     }
             else {
-                alpha = parseFloat((100-val)/25);
+                alpha = parseFloat((100-val)/50);
                 }
             
     		clr = 'rgba('+red+','+green+','+blue+', '+alpha+')'
@@ -157,7 +157,7 @@
       }
 
       .wrap {
-        width: 900px;
+        width: 700px;
         margin: 0 auto;
       }
 
@@ -169,7 +169,7 @@
       .heat-map {
         border: none; //1px solid rgba(150,150,150,.2);
         margin: 0 auto 20px auto;
-        width: 900px;
+        width: 700px;
       }
 
       .heat-map tr th {
@@ -180,7 +180,7 @@
         border-top: none; //1px solid rgba(150,150,150,.2);
         border-left: none; //1px solid rgba(150,150,150,.2);
         text-shadow: none; //0 1px 0 rgba(150,150,150,.2);
-        font: bold 24px 'Barlow';
+        font: bold 18px 'Barlow';
         text-transform: capitalize;
         color: #fff;
         background-color: rgba(150,150,150,.2); //#757477;
@@ -195,7 +195,7 @@
       .heat-map tr td.stats-title {
         border-left: none;
         text-align: center;
-        font-size: 24px;
+        font-size: 18px;
       }
 
       .heat-map tr td {
@@ -205,7 +205,7 @@
         border-bottom: none; //1px solid rgba(150,150,150,.2);
         text-align : center;
         color: #fff;
-        font-size: 20px;
+        font-size: 15px;
       }
 
       tr.stats-row {
@@ -215,7 +215,7 @@
       .heat-map tr.stats-row td.stats-title {
         //text-align: center;
         color: #000;
-        font-size: 28px;
+        font-size: 18px;
         text-shadow: none; //0 1px 0 #fff;
         background: rgba(150,150,150,.2); //#757477;
         border-top: none; //1px solid rgba(150,150,150,.2);
@@ -238,14 +238,9 @@
       <table cellpadding="0" cellspacing="1" border="0" class="heat-map" id="heat-map-3">
         <thead>
           <tr>
-            <th class="first"></th>
+            <th class="first">State</th>
       <th>Biden Win Probability (%)</th>
             <th class="last">Trump Win Probability (%)</th>
-    </tr>
-    <tr>
-      <th>State</th>
-      <th></th>
-      <th></th>
     </tr>
   </thead>
   <tbody>

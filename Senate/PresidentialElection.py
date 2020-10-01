@@ -379,7 +379,7 @@ tippingProbsTable = PresidentialCharts.heatMapTableTopTip + PresidentialCharts.h
 dfdemWinProb = demWinProb.sort_values('DemWin', ascending = False)
 dfdemWinProb['RepWin'] = 100 - dfdemWinProb['DemWin']
 
-demWinProbTable = dfdemWinProb.rename({'DemWin' : 'Biden Win Probability (%)', 'RepWin' : 'Trump Win Probability (%)'}, axis = 1).set_index(['State'])
+demWinProbTable = dfdemWinProb.rename({'DemWin' : 'Biden Win Probability', 'RepWin' : 'Trump Win Probability'}, axis = 1).set_index(['State'])
 demWinProbTable = demWinProbTable.to_html(index = True)
 firstEdit = """<table border="1" class="dataframe">
   <thead>
@@ -410,8 +410,8 @@ thirdEdit = """<thead>
 thirdReplace = """<thead>
           <tr>
             <th class="first">State</th>
-      <th>Biden Win Probability</th>
-            <th class="last">Trump Win Probability</th>
+      <th>Biden Win Probability (%)</th>
+            <th class="last">Trump Win Probability (%)</th>
     </tr>"""
 
 demWinProbTable = demWinProbTable.replace(firstEdit, firstReplace)
