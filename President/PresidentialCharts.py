@@ -809,7 +809,7 @@ histogramChartBottom_ = """
                       categories: {1},
                       crosshair: true,
                       title: {{
-                        text: 'Number of Seats'
+                        text: 'Electoral College Votes'
                       }}
                     }},
                     yAxis: {{
@@ -862,7 +862,92 @@ histogramChartBottom_ = """
 
   </html>"""
   
-  
+histogramChartBottom_Stacked = """
+            <div id="{0}"></div>
+            <script type="text/javascript">
+              var {0} = new Highcharts.Chart({{
+                colors: ['{4}', '{5}'],
+                
+                "chart": {{
+                  renderTo: '{0}',
+                  "type": "column",
+                  height: 400
+                  //marginBottom: 120
+                }},
+                
+                credits: {{
+                  text: 'Aeneas',
+                  href: ''
+                }},
+                
+                title: {{
+                      text: 'Histogram using a column chart'
+                    }},
+                    subtitle: {{
+                      text: ''
+                    }},
+                    xAxis: {{
+                      categories: {1},
+                      crosshair: true,
+                      title: {{
+                        text: 'Electoral College Votes'
+                      }}
+                    }},
+                    yAxis: {{
+                      gridLineWidth: 0,
+                      min: 0,
+                      title: {{
+                        text: 'Probability (%)'
+                      }}
+                    }},
+                    tooltip: {{
+                      headerFormat: '<span style="font-size:18px">{{point.key}} Seats</span><table>',
+                      pointFormat: '<tr><td style="color:{{series.color}};padding:0">{{series.name}}: </td>' +
+                        '<td style="padding:0"><b>{{point.y:.1f}}%</b></td></tr>',
+                      footerFormat: '</table>',
+                      shared: true,
+                      useHTML: true
+                    }},
+                    plotOptions: {{
+                        series: {{
+                            stacking: 'normal'
+                        }},
+                      column: {{
+                        pointPadding: 0,
+                        borderWidth: 0,
+                        groupPadding: 0,
+                        shadow: false
+                      }}
+                    }},
+                    series: [{{
+                      name: 'Biden',
+                      data: {2} 
+                          }},
+                        {{
+                      name: 'Trump',
+                      data: {3} 
+                          }}],
+                
+                exporting: {{
+                  chartOptions: {{
+                    credits: {{
+                      enabled: true,
+                    }},
+                  }}
+                }}
+              }});
+
+            </script>
+          </div>
+
+        </div>
+      </div>
+
+
+
+    </body>
+
+  </html>"""
 
 lineChartTop = """
   <!DOCTYPE html>

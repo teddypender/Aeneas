@@ -336,6 +336,7 @@ rep10thEC, rep90thEC = PresidentialCharts.repNthSeats.format(repLowerBoundEC), P
 ChartTest        = PresidentialCharts.wordChart + PresidentialCharts.wordChartData.format(wordCloudD, wordsMap, max([collections.Counter(wordCorpus)[k] for k in [x[0] for x in words]])) + PresidentialCharts.wordChartBottom
 demHistogram     = PresidentialCharts.histogramChartTop + PresidentialCharts.histogramChartBottom_.format('DemHistogram', [str(k) for k in demProbabilities.keys()], [v * 100 for v in demProbabilities.values()], '#3F52B9')
 repHistogram     = PresidentialCharts.histogramChartTop + PresidentialCharts.histogramChartBottom_.format('RepHistogram', [str(k) for k in repProbabilities.keys()], [v * 100 for v in repProbabilities.values()], '#DE3947')
+bothHistogram    = PresidentialCharts.histogramChartTop + PresidentialCharts.histogramChartBottom_Stacked.format('BothHistogram', [str(k) for k in repProbabilities.keys()], [v * 100 for v in demProbabilities.values()], [v * 100 for v in repProbabilities.values()], '#3F52B9', '#DE3947')
 
 
 tippingPointStatesdfTable = tippingPointStatesdf.reset_index().rename({'index' : 'State', 'probabilityTip' : 'Tipping Point Probability'}, axis = 1).set_index(['State'])[['Tipping Point Probability']].iloc[0:11]
@@ -422,8 +423,8 @@ demWinProbTableHTML = PresidentialCharts.heatMapTableTop + PresidentialCharts.he
 
 # --------- Write HTML Files --------- #
 
-fileNames   = ['lastUpdated', 'wordCloud', 'demHistogram', 'repHistogram', 'demExpectedEC', 'repExpectedEC', 'demWinPercentage', 'repWinPercentage', 'dem10thEC', 'dem90thEC', 'rep10thEC', 'rep90thEC', 'tippingProbsTable', 'demWinProbTable']
-htmlStrings = [lastUpdated, ChartTest, demHistogram, repHistogram, demExpectedEC, repExpectedEC, demWinPercentage, repWinPercentage, dem10thEC, dem90thEC, rep10thEC, rep90thEC, tippingProbsTable, demWinProbTableHTML]
+fileNames   = ['lastUpdated', 'wordCloud', 'demHistogram', 'repHistogram', 'demExpectedEC', 'repExpectedEC', 'demWinPercentage', 'repWinPercentage', 'dem10thEC', 'dem90thEC', 'rep10thEC', 'rep90thEC', 'tippingProbsTable', 'demWinProbTable', 'bothHistogram']
+htmlStrings = [lastUpdated, ChartTest, demHistogram, repHistogram, demExpectedEC, repExpectedEC, demWinPercentage, repWinPercentage, dem10thEC, dem90thEC, rep10thEC, rep90thEC, tippingProbsTable, demWinProbTableHTML, bothHistogram]
 
 #write to HTML Files
 for file, stringChart in zip(fileNames, htmlStrings):
