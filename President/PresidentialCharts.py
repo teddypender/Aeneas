@@ -91,7 +91,7 @@ wordChartBottom = """
 // creating an array of words and computing a random size attribute.
 function getWords(i) {
     var w = words[i];
-    var s = 10 + wordMap[w];
+    var s = 80 + wordMap[w];
     return w
             .replace(/[!\.,:;\?]/g, '')
             .split('-')
