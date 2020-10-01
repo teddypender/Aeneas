@@ -340,7 +340,7 @@ bothHistogram    = PresidentialCharts.histogramChartTop + PresidentialCharts.his
 
 
 tippingPointStatesdfTable = tippingPointStatesdf.reset_index().rename({'index' : 'State', 'probabilityTip' : 'Tipping Point Probability'}, axis = 1).set_index(['State'])[['Tipping Point Probability']].iloc[0:11]
-tippingPointStatesdfTable = tippingPointStatesdfTable.to_html(index = True)
+tippingPointStatesdfTable = tippingPointStatesdfTable.round(2).to_html(index = True)
 firstEdit = """<table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
