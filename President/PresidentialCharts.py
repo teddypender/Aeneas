@@ -790,7 +790,7 @@ histogramChartBottom_ = """
                 "chart": {{
                   renderTo: '{0}',
                   "type": "column",
-                  height: 600
+                  height: 400
                   //marginBottom: 120
                 }},
                 
