@@ -339,7 +339,6 @@ repHistogram     = PresidentialCharts.histogramChartTop + PresidentialCharts.his
 
 
 tippingPointStatesdfTable = tippingPointStatesdf.reset_index().rename({'index' : 'State', 'probabilityTip' : 'Tipping Point Probability'}, axis = 1).set_index(['State'])[['Tipping Point Probability']].iloc[0:11]
-
 tippingPointStatesdfTable = tippingPointStatesdfTable.to_html(index = True)
 firstEdit = """<table border="1" class="dataframe">
   <thead>
@@ -377,8 +376,54 @@ tippingPointStatesdfTable = tippingPointStatesdfTable.replace(thirdEdit, thirdRe
 
 tippingProbsTable = PresidentialCharts.heatMapTableTopTip + PresidentialCharts.heatMapTableBottom.format(tippingPointStatesdfTable)
 
-fileNames   = ['lastUpdated', 'wordCloud', 'demHistogram', 'repHistogram', 'demExpectedEC', 'repExpectedEC', 'demWinPercentage', 'repWinPercentage', 'dem10thEC', 'dem90thEC', 'rep10thEC', 'rep90thEC', 'tippingProbsTable']
-htmlStrings = [lastUpdated, ChartTest, demHistogram, repHistogram, demExpectedEC, repExpectedEC, demWinPercentage, repWinPercentage, dem10thEC, dem90thEC, rep10thEC, rep90thEC, tippingProbsTable]
+dfdemWinProb = demWinProb
+dfdemWinProb['RepWin'] = 100 - dfdemWinProb['DemWin']
+
+demWinProbTable = dfdemWinProb.rename({'DemWin' : 'Biden Win Probability', 'RepWin' : 'Trump Win Probability'}, axis = 1).set_index(['State'])
+demWinProbTable = demWinProbTable.to_html(index = True)
+firstEdit = """<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>"""
+firstReplace = """<table cellpadding="0" cellspacing="1" border="0" class="heat-map" id="heat-map-3">
+        <thead>
+          <tr>
+            <th class="first">"""
+            
+secondEdit = """</th>
+      <th>Trump Win Probability"""
+secondReplace = """</th>
+            <th class="last">Trump Win Probability"""
+            
+thirdEdit = """<thead>
+          <tr>
+            <th class="first"></th>
+      <th>Biden Win Probability</th>
+            <th class="last">Trump Win Probability</th>
+    </tr>
+    <tr>
+      <th>State</th>
+      <th></th>
+      <th></th>
+    </tr>"""
+
+thirdReplace = """<thead>
+          <tr>
+            <th class="first">State</th>
+      <th>Biden Win Probability</th>
+            <th class="last">Trump Win Probability</th>
+    </tr>"""
+
+demWinProbTable = demWinProbTable.replace(firstEdit, firstReplace)
+demWinProbTable = demWinProbTable.replace(secondEdit, secondReplace)
+demWinProbTable = demWinProbTable.replace(thirdEdit, thirdReplace)
+
+demWinProbTable = PresidentialCharts.heatMapTableTop + PresidentialCharts.heatMapTableBottom.format(demWinProbTable)
+
+
+
+fileNames   = ['lastUpdated', 'wordCloud', 'demHistogram', 'repHistogram', 'demExpectedEC', 'repExpectedEC', 'demWinPercentage', 'repWinPercentage', 'dem10thEC', 'dem90thEC', 'rep10thEC', 'rep90thEC', 'tippingProbsTable', 'demWinProbTable']
+htmlStrings = [lastUpdated, ChartTest, demHistogram, repHistogram, demExpectedEC, repExpectedEC, demWinPercentage, repWinPercentage, dem10thEC, dem90thEC, rep10thEC, rep90thEC, tippingProbsTable, demWinProbTable]
 
 #write to HTML Files
 for file, stringChart in zip(fileNames, htmlStrings):

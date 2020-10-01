@@ -1,0 +1,534 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="robots" content="all" />
+    <!-- <title>jQuery Tutorial Demo - Creating a data heat map</title> -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+
+    <script type="text/JavaScript">
+      $(document).ready(function(){
+	// Function to get the Max value in Array
+    Array.max = function( array ){
+        return Math.max.apply( Math, array );
+    };
+
+    // get all values
+    var counts= $('#heat-map-3 tbody td').not('.stats-title').map(function() {
+        return parseInt($(this).text());
+    }).get();
+	
+	// return max value
+	var max = Array.max(counts);
+	
+	xr = 87;
+    xg = 104;
+    xb = 172;
+    
+    zr = 150;
+    zg = 150;
+    zb = 150;
+   
+    yr = 250;
+    yg = 90;
+    yb = 80;
+    
+    wr = 222;
+    wg = 75;
+    wb = 29;
+    
+    //(242, 121, 9)
+
+    n = 100;
+	
+	// add classes to cells based on nearest 10 value
+	/*
+	$('#heat-map-3 tbody td').not('.stats-title').each(function(){
+		var val = parseInt($(this).text());
+		var pos = parseInt((Math.round((val/max)*100)).toFixed(0));
+		if (val < 50) {
+    		red = parseInt((xr + (( pos * (zr - xr)) / (n-1))).toFixed(0));
+    		green = parseInt((xg + (( pos * (zg - xg)) / (n-1))).toFixed(0));
+    		blue = parseInt((xb + (( pos * (zb - xb)) / (n-1))).toFixed(0));
+    		clr = 'rgb('+red+','+green+','+blue+')'
+    		}
+    	else {
+        	red = parseInt((zr + (( (pos - 50) * (yr - zr)) / (n-1))).toFixed(0));
+    		green = parseInt((zg + (( (pos - 50) * (yg - zg)) / (n-1))).toFixed(0));
+    		blue = parseInt((zb + (( (pos - 50) * (yb - zb)) / (n-1))).toFixed(0));
+    		clr = 'rgb('+red+','+green+','+blue+')'
+    	};
+		$(this).css({backgroundColor:clr});
+	});
+	*/
+	$('#heat-map-3 tbody td').not('.stats-title').each(function(){
+		var val = parseInt($(this).text());
+		var pos = parseInt((Math.round((val/max)*100)).toFixed(0));
+    		red = parseInt((wr + (( pos * (zr - wr)) / (n-1))).toFixed(0));
+    		green = parseInt((wg + (( pos * (zg - wg)) / (n-1))).toFixed(0));
+    		blue = parseInt((wb + (( pos * (zb - wb)) / (n-1))).toFixed(0));
+            if (val < 50){
+                    alpha = parseFloat(val/25);
+                    }
+            else {
+                alpha = parseFloat((100-val)/25);
+                }
+            
+    		clr = 'rgba('+red+','+green+','+blue+', '+alpha+')'
+		$(this).css({backgroundColor:clr});
+	});
+});
+</script>
+    
+    <link href='https://fonts.googleapis.com/css?family=Barlow' rel='stylesheet'>
+
+    <style type="text/css">
+      blockquote,
+      img,
+      label,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      pre,
+      ul,
+      ol,
+      li,
+      dl,
+      dt,
+      dd,
+      form,
+      fieldset,
+      input,
+      th,
+      td {
+        border:  none; //1px solid rgba(150,150,150,.2); //0;
+        outline: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        height: 100%;
+        //background: #1B1A1C;
+        background-color: transparent;
+        color: #1f1f1f;
+        font-family: 'Barlow';
+        font-size: 16px;
+        padding: 7px 0;
+      }
+      
+      table {
+      background-color: rgba(150,150,150,0.2);
+      }
+
+      ul,
+      ol {
+        list-style: none;
+      }
+
+      a {
+        text-decoration: none;
+      }
+      
+      a.export,
+      a.export:visited {
+          display: inline-block;
+          text-decoration: none;
+          color: #fff;
+          background-color: #ddd;
+          border: 1px solid #ccc;
+          padding: 8px;
+        }
+
+      .text-center {
+        text-align: center;
+        padding: 10px 0;
+      }
+
+      h2 {
+        margin-bottom: 30px;
+      }
+
+      .wrap {
+        width: 900px;
+        margin: 0 auto;
+      }
+
+      .clear {
+        clear: both;
+      }
+
+      /* Tutorial CSS */
+      .heat-map {
+        border: none; //1px solid rgba(150,150,150,.2);
+        margin: 0 auto 20px auto;
+        width: 900px;
+      }
+
+      .heat-map tr th {
+        font-weight: 900;
+        padding: 5px 7px;
+        border-right: none; //1px solid rgba(150,150,150,.2);
+        border-bottom: none; //1px solid rgba(150,150,150,.2);
+        border-top: none; //1px solid rgba(150,150,150,.2);
+        border-left: none; //1px solid rgba(150,150,150,.2);
+        text-shadow: none; //0 1px 0 rgba(150,150,150,.2);
+        font: bold 13px 'Barlow';
+        text-transform: capitalize;
+        color: #fff;
+        background-color: rgba(150,150,150,.2); //#757477;
+        background-image: -moz-linear-gradient(center top, #F9F9F9, #ECECEC);
+      }
+
+      .heat-map tr th.last {
+        border-right: none;
+      }
+
+      .heat-map tr th.first,
+      .heat-map tr td.stats-title {
+        border-left: none;
+        text-align: center;
+        font-size: 16px;
+      }
+
+      .heat-map tr td {
+        padding: 5px 7px;
+        /*border-top: 1px solid #fff; border-right: 1px solid #fff; */
+        border-right: none; //1px solid rgba(150,150,150,.2);
+        border-bottom: none; //1px solid rgba(150,150,150,.2);
+        text-align : center;
+        color: #fff;
+        font-size: 13px;
+      }
+
+      tr.stats-row {
+        text-align: right;
+      }
+
+      .heat-map tr.stats-row td.stats-title {
+        //text-align: center;
+        color: #000;
+        font-size: 28px;
+        text-shadow: none; //0 1px 0 #fff;
+        background: rgba(150,150,150,.2); //#757477;
+        border-top: none; //1px solid rgba(150,150,150,.2);
+        border-bottom: none; //1px solid rgba(150,150,150,.2);
+        border-right: none; //1px solid rgba(150,150,150,.2);
+      }
+
+      .heat-map tr.stats-row td.stats-title.last {
+        border-bottom: 1px solid rgba(150,150,150,.2);
+      }
+
+    </style>
+  </head>
+
+  <body>
+      
+    <div style="width:100%; height:100%; align-self: center; margin:0 auto;">
+      <!--<h2 class="text-center">jQuery Demo: Create A Data Heat Map</h2>-->
+     
+      <table cellpadding="0" cellspacing="1" border="0" class="heat-map" id="heat-map-3">
+        <thead>
+          <tr>
+            <th class="first">State</th>
+      <th>Biden Win Probability</th>
+            <th class="last">Trump Win Probability</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>West Virginia</th>
+      <td>0.00</td>
+      <td>100.00</td>
+    </tr>
+    <tr>
+      <th>NE-3</th>
+      <td>0.00</td>
+      <td>100.00</td>
+    </tr>
+    <tr>
+      <th>Wyoming</th>
+      <td>0.01</td>
+      <td>99.99</td>
+    </tr>
+    <tr>
+      <th>Oklahoma</th>
+      <td>0.03</td>
+      <td>99.97</td>
+    </tr>
+    <tr>
+      <th>North Dakota</th>
+      <td>0.10</td>
+      <td>99.90</td>
+    </tr>
+    <tr>
+      <th>Alabama</th>
+      <td>0.24</td>
+      <td>99.76</td>
+    </tr>
+    <tr>
+      <th>Idaho</th>
+      <td>0.41</td>
+      <td>99.59</td>
+    </tr>
+    <tr>
+      <th>Utah</th>
+      <td>0.84</td>
+      <td>99.16</td>
+    </tr>
+    <tr>
+      <th>Kentucky</th>
+      <td>0.84</td>
+      <td>99.16</td>
+    </tr>
+    <tr>
+      <th>Tennessee</th>
+      <td>1.15</td>
+      <td>98.85</td>
+    </tr>
+    <tr>
+      <th>South Dakota</th>
+      <td>1.35</td>
+      <td>98.65</td>
+    </tr>
+    <tr>
+      <th>Nebraska</th>
+      <td>1.53</td>
+      <td>98.47</td>
+    </tr>
+    <tr>
+      <th>Indiana</th>
+      <td>3.03</td>
+      <td>96.97</td>
+    </tr>
+    <tr>
+      <th>Montana</th>
+      <td>4.77</td>
+      <td>95.23</td>
+    </tr>
+    <tr>
+      <th>Louisiana</th>
+      <td>5.65</td>
+      <td>94.35</td>
+    </tr>
+    <tr>
+      <th>Arkansas</th>
+      <td>5.80</td>
+      <td>94.20</td>
+    </tr>
+    <tr>
+      <th>Mississippi</th>
+      <td>6.34</td>
+      <td>93.66</td>
+    </tr>
+    <tr>
+      <th>Kansas</th>
+      <td>6.88</td>
+      <td>93.12</td>
+    </tr>
+    <tr>
+      <th>Missouri</th>
+      <td>8.81</td>
+      <td>91.19</td>
+    </tr>
+    <tr>
+      <th>South Carolina</th>
+      <td>9.63</td>
+      <td>90.37</td>
+    </tr>
+    <tr>
+      <th>NE-1</th>
+      <td>17.96</td>
+      <td>82.04</td>
+    </tr>
+    <tr>
+      <th>Alaska</th>
+      <td>18.94</td>
+      <td>81.06</td>
+    </tr>
+    <tr>
+      <th>Texas</th>
+      <td>19.89</td>
+      <td>80.11</td>
+    </tr>
+    <tr>
+      <th>Iowa</th>
+      <td>24.15</td>
+      <td>75.85</td>
+    </tr>
+    <tr>
+      <th>Georgia</th>
+      <td>29.07</td>
+      <td>70.93</td>
+    </tr>
+    <tr>
+      <th>Ohio</th>
+      <td>34.23</td>
+      <td>65.77</td>
+    </tr>
+    <tr>
+      <th>North Carolina</th>
+      <td>51.45</td>
+      <td>48.55</td>
+    </tr>
+    <tr>
+      <th>NE-2</th>
+      <td>53.94</td>
+      <td>46.06</td>
+    </tr>
+    <tr>
+      <th>Florida</th>
+      <td>55.24</td>
+      <td>44.76</td>
+    </tr>
+    <tr>
+      <th>ME-2</th>
+      <td>56.09</td>
+      <td>43.91</td>
+    </tr>
+    <tr>
+      <th>Nevada</th>
+      <td>58.04</td>
+      <td>41.96</td>
+    </tr>
+    <tr>
+      <th>Arizona</th>
+      <td>60.09</td>
+      <td>39.91</td>
+    </tr>
+    <tr>
+      <th>Wisconsin</th>
+      <td>66.18</td>
+      <td>33.82</td>
+    </tr>
+    <tr>
+      <th>New Hampshire</th>
+      <td>67.63</td>
+      <td>32.37</td>
+    </tr>
+    <tr>
+      <th>Pennsylvania</th>
+      <td>68.17</td>
+      <td>31.83</td>
+    </tr>
+    <tr>
+      <th>Michigan</th>
+      <td>72.59</td>
+      <td>27.41</td>
+    </tr>
+    <tr>
+      <th>Virginia</th>
+      <td>74.30</td>
+      <td>25.70</td>
+    </tr>
+    <tr>
+      <th>Colorado</th>
+      <td>74.35</td>
+      <td>25.65</td>
+    </tr>
+    <tr>
+      <th>Minnesota</th>
+      <td>82.23</td>
+      <td>17.77</td>
+    </tr>
+    <tr>
+      <th>Delaware</th>
+      <td>89.20</td>
+      <td>10.80</td>
+    </tr>
+    <tr>
+      <th>Maine</th>
+      <td>90.73</td>
+      <td>9.27</td>
+    </tr>
+    <tr>
+      <th>Oregon</th>
+      <td>91.89</td>
+      <td>8.11</td>
+    </tr>
+    <tr>
+      <th>Illinois</th>
+      <td>92.47</td>
+      <td>7.53</td>
+    </tr>
+    <tr>
+      <th>New Mexico</th>
+      <td>93.15</td>
+      <td>6.85</td>
+    </tr>
+    <tr>
+      <th>Rhode Island</th>
+      <td>93.66</td>
+      <td>6.34</td>
+    </tr>
+    <tr>
+      <th>New Jersey</th>
+      <td>95.20</td>
+      <td>4.80</td>
+    </tr>
+    <tr>
+      <th>Connecticut</th>
+      <td>98.12</td>
+      <td>1.88</td>
+    </tr>
+    <tr>
+      <th>Vermont</th>
+      <td>98.16</td>
+      <td>1.84</td>
+    </tr>
+    <tr>
+      <th>Washington</th>
+      <td>98.75</td>
+      <td>1.25</td>
+    </tr>
+    <tr>
+      <th>ME-1</th>
+      <td>99.29</td>
+      <td>0.71</td>
+    </tr>
+    <tr>
+      <th>California</th>
+      <td>99.68</td>
+      <td>0.32</td>
+    </tr>
+    <tr>
+      <th>New York</th>
+      <td>99.68</td>
+      <td>0.32</td>
+    </tr>
+    <tr>
+      <th>Maryland</th>
+      <td>99.94</td>
+      <td>0.06</td>
+    </tr>
+    <tr>
+      <th>Massachusetts</th>
+      <td>99.97</td>
+      <td>0.03</td>
+    </tr>
+    <tr>
+      <th>Hawaii</th>
+      <td>99.99</td>
+      <td>0.01</td>
+    </tr>
+    <tr>
+      <th>District of Columbia</th>
+      <td>100.00</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table>
+
+      <p class="clear text-center"><a></a></p>
+    </div>
+  </body>
+
+</html>
