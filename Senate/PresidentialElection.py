@@ -221,8 +221,8 @@ def simulateElectoralCollege(stateWinningProbdf, presidentHistory, weightsdf, st
         demHistory   = priorHistory[priorHistory.candidate_party == 'DEM']['pct'].iloc[0]
         repHistory   = priorHistory[priorHistory.candidate_party == 'REP']['pct'].iloc[0]
         
-        demSkew = 0 #((dem * 1) - (demHistory * 1))
-        repSkew = 0 if dem > rep else 1 #((rep * 1) - (repHistory * 1)) 
+        demSkew = -0.25 #((dem * 1) - (demHistory * 1))
+        repSkew = 0 if dem > rep else 0.75 #((rep * 1) - (repHistory * 1)) 
         
         # demscaled  = dem / (dem + rep) * 100
         # repscaled  = rep / (dem + rep) * 100
@@ -286,6 +286,24 @@ def tippingPointStates(electoralCollegeOutcomes, simulationsdf, stateWinningProb
     
     return dfCounts
 
+def runModelTimeSeries(stateList, dfPolls, presidentHistory, dflikelihoodMean, dflikelihoodStDev, model, n_steps, runs, nSimulations = 10000, nDaysBack = 10):
+    results = []
+    for i in range(0,nDaysBack):
+        from_date = max(dfPolls['end_date']) - datetime.timedelta(i)
+        print("Running Model as of {0}".format(from_date))
+        weightsdf          = stateDistributionWeights(stateList, dfPolls[dfPolls.end_date <= from_date], presidentHistory, dflikelihoodMean, dflikelihoodStDev, model, n_steps)
+        stateWinningProbdf = simulateElection(weightsdf, stateList, runs, n_steps, electoralCollege)
+        
+        electoralCollegeOutcomes, simulationsdf,demWinProb        = simulateElectoralCollege(stateWinningProbdf, presidentHistory, weightsdf, stateList, nSimulations, n_steps, electoralCollege)
+        # demLowerBoundEC, demMedianEC, demUpperBoundEC, demMeanEC  = pd.Series([x[0] for x in electoralCollegeOutcomes]).quantile(0.10), pd.Series([x[0] for x in electoralCollegeOutcomes]).quantile(0.50), pd.Series([x[0] for x in electoralCollegeOutcomes]).quantile(0.90), pd.Series([x[0] for x in electoralCollegeOutcomes]).mean()
+        # repLowerBoundEC, repMedianEC, repUpperBoundEC, repMeanEC  = pd.Series([x[1] for x in electoralCollegeOutcomes]).quantile(0.10), pd.Series([x[1] for x in electoralCollegeOutcomes]).quantile(0.50), pd.Series([x[1] for x in electoralCollegeOutcomes]).quantile(0.90), pd.Series([x[1] for x in electoralCollegeOutcomes]).mean()
+        
+        demChanceOfWinning = sum([1 if x[0] >= 270 else 0 for x in electoralCollegeOutcomes]) / len(electoralCollegeOutcomes)
+        repChanceOfWinning = sum([1 if x[1] >= 270 else 0 for x in electoralCollegeOutcomes]) / len(electoralCollegeOutcomes)
+        results.append([from_date, demChanceOfWinning, repChanceOfWinning])
+    
+    ModelTimeSeries = pd.DataFrame(results, columns = ['Modeldate', 'probabilityBidenWin', 'probabilityTrumpWin'])
+    return ModelTimeSeries
 
 # ---------------------------------- Main ---------------------------------- #
 n_steps      = 100
@@ -302,6 +320,8 @@ repLowerBoundEC, repMedianEC, repUpperBoundEC, repMeanEC  = pd.Series([x[1] for 
 
 demChanceOfWinning = sum([1 if x[0] >= 270 else 0 for x in electoralCollegeOutcomes]) / len(electoralCollegeOutcomes)
 repChanceOfWinning = sum([1 if x[1] >= 270 else 0 for x in electoralCollegeOutcomes]) / len(electoralCollegeOutcomes)
+
+ModelTimeSeries = runModelTimeSeries(stateList, dfPolls, presidentHistory, dflikelihoodMean, dflikelihoodStDev, model, n_steps, runs)
 
 tippingPointStatesdf  = tippingPointStates(electoralCollegeOutcomes, simulationsdf, demWinProb)
 words                 = [[x,y] if len(x.split()) == 1 else [x.split()[0] + ' ' + x.split()[1], y] for x,y in zip(tippingPointStatesdf.index[:10], tippingPointStatesdf['probabilityTip'][:10])]
