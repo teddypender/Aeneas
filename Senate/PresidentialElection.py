@@ -441,10 +441,22 @@ demWinProbTable = demWinProbTable.replace(thirdEdit, thirdReplace)
 
 demWinProbTableHTML = PresidentialCharts.heatMapTableTop + PresidentialCharts.heatMapTableBottom.format(demWinProbTable)
 
+
+modelDates = list(1000 * (ModelTimeSeries['Modeldate'] - datetime.datetime(1970,1,1)).dt.total_seconds())[::-1]
+demSeries  = list(ModelTimeSeries['probabilityBidenWin'][::-1].reset_index(drop = True).rolling(7).mean())
+repSeries  = list(ModelTimeSeries['probabilityTrumpWin'][::-1].reset_index(drop = True).rolling(7).mean())
+
+demTimSeriesProb = [[int(x),y] for x,y in zip(modelDates,demSeries)]
+repTimSeriesProb = [[int(x),y] for x,y in zip(modelDates,repSeries)]
+
+lineChartDataProbControl = PresidentialCharts.lineSeriesData.format('Biden', demTimSeriesProb, 'Trump', repTimSeriesProb)
+presidentProbabilChart   = PresidentialCharts.lineChartTop + PresidentialCharts.lineChartBottom_.format('probabilityWin', '#FFFFFF', lineChartDataProbControl, 'Probability of Presidential Election Winner', 100, 'Date.UTC({0}, {1}, {2})'.format(min(ModelTimeSeries['Modeldate'] + datetime.timedelta(8)).year, min(ModelTimeSeries['Modeldate'] + datetime.timedelta(8)).month - 1, min(ModelTimeSeries['Modeldate'] + datetime.timedelta(8)).day))
+
+
 # --------- Write HTML Files --------- #
 
-fileNames   = ['lastUpdated', 'wordCloud', 'demHistogram', 'repHistogram', 'demExpectedEC', 'repExpectedEC', 'demWinPercentage', 'repWinPercentage', 'dem10thEC', 'dem90thEC', 'rep10thEC', 'rep90thEC', 'tippingProbsTable', 'demWinProbTable', 'bothHistogram']
-htmlStrings = [lastUpdated, ChartTest, demHistogram, repHistogram, demExpectedEC, repExpectedEC, demWinPercentage, repWinPercentage, dem10thEC, dem90thEC, rep10thEC, rep90thEC, tippingProbsTable, demWinProbTableHTML, bothHistogram]
+fileNames   = ['lastUpdated', 'wordCloud', 'demHistogram', 'repHistogram', 'demExpectedEC', 'repExpectedEC', 'demWinPercentage', 'repWinPercentage', 'dem10thEC', 'dem90thEC', 'rep10thEC', 'rep90thEC', 'tippingProbsTable', 'demWinProbTable', 'bothHistogram', 'presidentProbabilChart']
+htmlStrings = [lastUpdated, ChartTest, demHistogram, repHistogram, demExpectedEC, repExpectedEC, demWinPercentage, repWinPercentage, dem10thEC, dem90thEC, rep10thEC, rep90thEC, tippingProbsTable, demWinProbTableHTML, bothHistogram, presidentProbabilChart]
 
 #write to HTML Files
 for file, stringChart in zip(fileNames, htmlStrings):
