@@ -376,7 +376,7 @@ tippingPointStatesdfTable = tippingPointStatesdfTable.replace(thirdEdit, thirdRe
 
 tippingProbsTable = PresidentialCharts.heatMapTableTopTip + PresidentialCharts.heatMapTableBottom.format(tippingPointStatesdfTable)
 
-dfdemWinProb = demWinProb
+dfdemWinProb = demWinProb.sort_values('DemWin', ascending = False)
 dfdemWinProb['RepWin'] = 100 - dfdemWinProb['DemWin']
 
 demWinProbTable = dfdemWinProb.rename({'DemWin' : 'Biden Win Probability', 'RepWin' : 'Trump Win Probability'}, axis = 1).set_index(['State'])
@@ -418,12 +418,12 @@ demWinProbTable = demWinProbTable.replace(firstEdit, firstReplace)
 demWinProbTable = demWinProbTable.replace(secondEdit, secondReplace)
 demWinProbTable = demWinProbTable.replace(thirdEdit, thirdReplace)
 
-demWinProbTable = PresidentialCharts.heatMapTableTop + PresidentialCharts.heatMapTableBottom.format(demWinProbTable)
+demWinProbTableHTML = PresidentialCharts.heatMapTableTop + PresidentialCharts.heatMapTableBottom.format(demWinProbTable)
 
-
+# --------- Write HTML Files --------- #
 
 fileNames   = ['lastUpdated', 'wordCloud', 'demHistogram', 'repHistogram', 'demExpectedEC', 'repExpectedEC', 'demWinPercentage', 'repWinPercentage', 'dem10thEC', 'dem90thEC', 'rep10thEC', 'rep90thEC', 'tippingProbsTable', 'demWinProbTable']
-htmlStrings = [lastUpdated, ChartTest, demHistogram, repHistogram, demExpectedEC, repExpectedEC, demWinPercentage, repWinPercentage, dem10thEC, dem90thEC, rep10thEC, rep90thEC, tippingProbsTable, demWinProbTable]
+htmlStrings = [lastUpdated, ChartTest, demHistogram, repHistogram, demExpectedEC, repExpectedEC, demWinPercentage, repWinPercentage, dem10thEC, dem90thEC, rep10thEC, rep90thEC, tippingProbsTable, demWinProbTableHTML]
 
 #write to HTML Files
 for file, stringChart in zip(fileNames, htmlStrings):
