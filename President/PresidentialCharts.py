@@ -1776,10 +1776,10 @@ heatMapTableTopTip = """<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     		green = parseInt((zg + (( pos * (wg - zg)) / (n-1))).toFixed(0));
     		blue = parseInt((zb + (( pos * (wb - zb)) / (n-1))).toFixed(0));
             if (val < 50){
-                    alpha = parseFloat(val/12.5);
+                    alpha = parseFloat(val/19.5);
                     }
             else {
-                alpha = parseFloat((100-val)/12.5);
+                alpha = parseFloat((100-val)/16.5);
                 }
             
     		clr = 'rgba('+red+','+green+','+blue+', '+alpha+')'
