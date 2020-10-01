@@ -443,8 +443,8 @@ demWinProbTableHTML = PresidentialCharts.heatMapTableTop + PresidentialCharts.he
 
 
 modelDates = list(1000 * (ModelTimeSeries['Modeldate'] - datetime.datetime(1970,1,1)).dt.total_seconds())[::-1]
-demSeries  = list(ModelTimeSeries['probabilityBidenWin'][::-1].reset_index(drop = True).rolling(7).mean())
-repSeries  = list(ModelTimeSeries['probabilityTrumpWin'][::-1].reset_index(drop = True).rolling(7).mean())
+demSeries  = list(ModelTimeSeries['probabilityBidenWin'][::-1].reset_index(drop = True))
+repSeries  = list(ModelTimeSeries['probabilityTrumpWin'][::-1].reset_index(drop = True))
 
 demTimSeriesProb = [[int(x),y] for x,y in zip(modelDates,demSeries)]
 repTimSeriesProb = [[int(x),y] for x,y in zip(modelDates,repSeries)]
