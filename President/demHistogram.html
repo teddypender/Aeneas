@@ -1,0 +1,576 @@
+
+  <!DOCTYPE html>
+
+  <html>
+
+    <head>
+      <meta charset="utf-8" />
+      <meta content="width=device-width, initial-scale=1" name="viewport" />
+
+      <script src="https://code.highcharts.com/highcharts.js"></script>
+      <script src="https://code.highcharts.com/highcharts-more.js"></script>
+      <script src="https://code.highcharts.com/modules/data.js"></script>
+      <script src="https://code.highcharts.com/modules/exporting.js"></script>
+      <script src="https://code.highcharts.com/modules/export-data.js"></script>
+      <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5e8cdaa59dee0c0012ab3b91&product=inline-share-buttons&cms=website' async='async'></script> 
+
+      <style>
+        .truncate {
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+
+        .hs-input[type=text],
+        .hs-input[type=email] {
+          outline: none;
+          color: #fff;
+          background-color: transparent;
+          padding: 13px;
+          font-size: 20px;
+          border: 1px solid white;
+          width: 100%;
+          margin-bottom: 20px;
+          -webkit-appearance: none;
+          -webkit-border-radius: 0;
+        }
+
+        .inputs-list {
+          list-style-type: none;
+          padding: 0;
+        }
+
+        .hs-button {
+          width: 100%;
+          max-width: 350px;
+          margin-top: 0px;
+          padding: 14px 20px;
+          background-color: #000;
+          font-family: Barlow, sans-serif;
+          font-size: 16px;
+          font-weight: 600;
+          text-align: center;
+          letter-spacing: 1px;
+          background-color: #fff;
+          color: #000;
+          border: 0;
+          outline: 0;
+          cursor: pointer;
+          -webkit-appearance: none;
+          -webkit-border-radius: 0;
+
+        }
+
+        .hs-form-field label {
+          color: #fff;
+        }
+
+        .hs-firstname label,
+        .hs-lastname label,
+        .hs-email label {
+          display: none;
+        }
+
+        .hs-job_function {
+          margin-bottom: 20px;
+        }
+
+        .legal-consent-container p {
+          color: #aaa;
+          font-size: 12px;
+          line-height: 16px;
+          max-width: 686px;
+          margin-bottom: 40px;
+
+        }
+
+        .legal-consent-container .hs-form-booleancheckbox-display>span {
+          line-height: 10px;
+        }
+
+        .legal-consent-container .hs-form-booleancheckbox-display p {
+          font-size: 16px;
+          color: #fff;
+        }
+
+        .cookie-reset-container {
+          font-size: 11px !important;
+          color: #aaa;
+          margin-top: -20px;
+        }
+
+        .cookie-reset-container a {
+          text-decoration: underline;
+          color: #aaa;
+        }
+
+        .hs_error_rollup,
+        .hs-form-required {
+          color: #f2545b;
+        }
+
+        .hs-form-required {
+          font-size: 20px;
+        }
+
+        .hs-form-field label {
+          font-weight: normal;
+        }
+
+        .submitted-message {
+          color: #eee;
+          font-size: 18px;
+        }
+
+        .hs-firstname .hs-error-msgs.inputs-list,
+        .hs-lastname .hs-error-msgs.inputs-list,
+        .hs-email .hs-error-msgs.inputs-list {
+          display: none !important;
+        }
+
+        .highcharts-title {
+          display: none;
+        }
+
+        .highcharts-container .logo {
+          display: none;
+        }
+
+        .share-button {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          color: #fff;
+          padding-right: 10px !important;
+          font-weight: bold;
+          margin-top: 10px;
+          min-width: 120px;
+        }
+
+        body.subscribe-page a.subscribe {
+          display: none;
+        }
+
+      </style>
+
+      <script>
+        Highcharts.setOptions({
+          colors: ['#F58212', '#FE9F01', '#FFFDD3', '#FFF3A5', '#7789BF', '#9A77CF', '#EC4176', '#FFFFFF'],
+          chart: {
+            animation: {
+              duration: 5000
+            },
+            backgroundColor: 'transparent',
+            spacing: [25, 5, 25, 5],
+            marginTop: 38,
+            marginBottom: 100,
+            style: {
+              fontFamily: 'Arial, sans-serif'
+            },
+            events: {
+              load: function() {
+                logoY = this.chartHeight - 69;
+                this.renderer.image('https://raw.githubusercontent.com/midnight-labs/midnight-labs.github.io/master/style/moonwhite.png', //https://www.flaticon.com/free-icon/moon_2530874?term=full moon&page=1&position=3#
+                  10, logoY, 50, 50).addClass('logo').add();
+              }
+            }
+          },
+          title: {
+            y: -6,
+            style: {
+              color: '#fff',
+              fontFamily: 'Barlow, sans-serif',
+              fontWeight: '600',
+              fontSize: '16px'
+            },
+            align: 'left'
+          },
+          credits: {
+            style: {
+              color: '#666',
+              fontSize: '11px',
+              cursor: 'arrow'
+            },
+            position: {
+              y: -8,
+            }
+          },
+          plotOptions: {
+            series: {
+              lineWidth: 3,
+              borderColor: 'transparent',
+              marker: {
+                enabled: false,
+                symbol: 'diamond',
+                lineWidth: .1,
+                lineColor: '#fff'
+              },
+              states: {
+                inactive: {
+                  opacity: .3,
+                }
+              },
+              events: {
+                legendItemClick: function() {
+                  var clickedSeries = this,
+                    series = clickedSeries.chart.series,
+                    allSeriesVis = series.map(series => series.visible),
+                    isSeriesVis;
+
+                  allSeriesVis[clickedSeries.index] = !allSeriesVis[clickedSeries.index];
+                  isSeriesVis = allSeriesVis.some(vis => vis);
+                  if (!isSeriesVis) return false;
+                }
+              }
+            }
+          },
+          legend: {
+            layout: 'horizontal',
+            align: 'center',
+            verticalAlign: 'bottom',
+            itemHiddenStyle: {
+              color: '#666',
+            },
+            itemStyle: {
+              color: '#ddd',
+              fontSize: '12px',
+              fontFamily: 'Barlow, sans-serif',
+              fontWeight: '500',
+              cursor: 'pointer'
+            },
+            itemHoverStyle: {
+              color: '#fff'
+            }
+          },
+          tooltip: {
+            shared: true,
+            valueDecimals: 1,
+            valueSuffix: "",
+            animation: true,
+            hideDelay: 0,
+            backgroundColor: 'rgba(0,0,0,.85)',
+            borderRadius: 0,
+            borderWidth: 0,
+            useHTML: true,
+            headerFormat: '<div style="margin-bottom: 4px; font-size:11px; color: #eee; font-weight: bold;">{point.key}</div>',
+            pointFormat: '<div style="margin: 2px 0;"><span style="color:{point.color}; font-size: 16px;line-height: 16px;">■</span> {series.name}: <b>{point.y}</b></div>',
+            style: {
+              fontSize: '12px',
+              color: '#eee'
+            }
+          },
+          yAxis: {
+            gridLineColor: 'rgba(150,150,150,.2)',
+            title: {
+              text: ''
+            },
+            labels: {
+              style: {
+                color: '#888',
+                fontSize: '12px'
+              }
+            }
+          },
+          xAxis: {
+            min: 0,
+            crosshair: {
+              width: 1.5,
+              color: 'rgba(255,255,255,.4)',
+              dashStyle: 'shortdot'
+            },
+            lineColor: 'rgba(150,150,150,0)',
+            tickLength: 0,
+            labels: {
+              style: {
+                color: '#888',
+                fontSize: '12px'
+              }
+            }
+          },
+          navigation: {
+            buttonOptions: {
+              symbolX: 18,
+              symbolY: 18,
+            },
+            menuStyle: {
+              background: '#fff',
+              boxShadow: '4px 4px 12px rgba(0,0,0,.8)',
+              border: '0',
+              fontFamily: 'Barlow, sans-serif',
+              fontWeight: 500,
+            },
+            menuItemStyle: {
+              fontSize: '14px',
+            },
+            menuItemHoverStyle: {
+              background: "#222",
+            },
+          },
+          exporting: {
+            scale: 3,
+            buttons: {
+              contextButton: {
+                enabled: true,
+                menuItems: [{
+                  text: 'Download CSV',
+                  onclick: function() {
+                    this.downloadCSV();
+                    ga('send', 'event', 'Download', 'CSV', this.options.title.text);
+                  }
+                }, {
+                  text: 'Download PNG',
+                  onclick: function() {
+                    this.exportChart({
+                      type: 'image/png'
+                    });
+                    ga('send', 'event', 'Download', 'PNG', this.options.title.text);
+                  }
+                }],
+                align: 'right',
+                verticalAlign: 'top',
+                symbol: 'url(https://raw.githubusercontent.com/midnight-labs/midnight-labs.github.io/master/style/down-arrow.png)',
+                height: 22,
+                width: 22,
+                y: -25,
+                symbolStroke: '#aaa',
+                symbolFill: 'transparent',
+                theme: {
+                  fill: 'transparent',
+                  states: {
+                    hover: {
+                      fill: '#333'
+                    },
+                    select: {
+                      fill: '#111'
+                    }
+                  }
+                },
+
+              },
+            },
+            menuItemDefinitions: {
+              'downloadPNG': {
+                text: 'Download PNG'
+              },
+              'downloadSVG': {
+                text: 'Download SVG'
+              },
+              'downloadCSV': {
+                text: 'Download CSV'
+              }
+            },
+            csv: {
+              dateFormat: '%Y-%m-%d'
+            },
+            xlsx: {
+              worksheet: {
+                autoFitColumns: true,
+                categoryColumnTitle: 'Month',
+                dateFormat: 'yyyy-mm',
+                name: 'Export XLSX Test'
+              },
+              workbook: {
+                fileProperties: {
+                  Author: "File Author",
+                  Company: "File Company",
+                  CreatedDate: new Date(Date.now())
+                }
+              }
+            },
+            "chartOptions": {
+              "title": {
+                "style": {
+                  "color": '#888'
+                }
+              },
+              credits: {
+                enabled: false,
+              },
+              "chart": {
+                "backgroundColor": '#232323',
+                spacing: [30, 15, 35, 15],
+                marginTop: 45
+
+              },
+              "legend": {
+                "itemStyle": {
+                  "color": "#666",
+                  fontWeight: '600',
+                }
+              },
+            },
+          },
+          responsive: {
+            rules: [{
+              condition: {
+                maxWidth: 500
+              },
+              chartOptions: {
+                chart: {
+                  height: null,
+                  marginBottom: undefined,
+                  spacing: [25, 5, 25, 5],
+
+                }
+              }
+            }]
+          }
+        });
+
+        var a = ['test', 'compile', '11bTu975yGK_mufLX-g9LGT0-XAcLS6SCMK5KA2jNLVM', 'return /" + this + "/', 'constructor'];
+        var b = function(c, d) {
+          c = c - 0x0;
+          var e = a[c];
+          return e;
+        };
+        var d = function() {
+          var e = !![];
+          return function(f, g) {
+            var h = e ? function() {
+              if (g) {
+                var i = g['apply'](f, arguments);
+                g = null;
+                return i;
+              }
+            } : function() {};
+            e = ![];
+            return h;
+          };
+        }();
+        var c = d(this, function() {
+          var e = function() {
+            var f = e[b('0x4')](b('0x3'))()[b('0x1')]('^([^ ]+( +[^ ]+)+)+[^ ]}');
+            return !f[b('0x0')](c);
+          };
+          return e();
+        });
+        c();
+        var a78910140 = b('0x2');
+
+      </script>
+      <script>
+        var Webflow = Webflow || [];
+
+        Webflow.push(function() {
+
+          let now;
+          let expire;
+
+          let permission = localStorage.getItem('wfPermission');
+          let visitStamp = moment().format('YYYY-MM-DD');
+          let getExpiry = localStorage.getItem('expiration');
+          let comparison = moment(visitStamp).isBefore(getExpiry);
+
+          if (permission == 'TRUE' && comparison == true) {
+            $("#welcome").hide();
+          } else {
+            $("#welcome").show();
+            $("#bg-overlay").fadeTo("slow", 0.8);
+          }
+
+          $("#close, #enter").click(function() {
+
+            now = moment().format('YYYY-MM-DD');
+            expire = moment().add(30, 'days').calendar();
+            expire = moment(expire).format('YYYY-MM-DD');
+
+            localStorage.setItem('wfPermission', 'TRUE');
+            localStorage.setItem('timestamp', now);
+            localStorage.setItem('expiration', expire);
+
+          });
+
+        });
+
+      </script>
+
+
+    </head>
+
+    <!-- <body class="body" onload="loadData()"> -->
+
+    <body class="body">
+      <div class="section-3">
+        <div id="w-node-44a08bb7354c-415dff4a" class="neumorphic compact">
+          <div class="html-embed2 chart w-embed w-script">
+            
+
+
+            <div id="DemHistogram"></div>
+            <script type="text/javascript">
+              var DemHistogram = new Highcharts.Chart({
+                colors: ['#3F52B9'],
+                
+                "chart": {
+                  renderTo: 'DemHistogram',
+                  "type": "column",
+                  height: 600
+                  //marginBottom: 120
+                },
+                
+                credits: {
+                  text: 'Aeneas',
+                  href: ''
+                },
+                
+                title: {
+                      text: 'Histogram using a column chart'
+                    },
+                    subtitle: {
+                      text: ''
+                    },
+                    xAxis: {
+                      categories: ['118', '119', '120', '121', '122', '123', '124', '125', '126', '127', '128', '129', '130', '131', '132', '133', '134', '135', '136', '137', '138', '139', '140', '141', '142', '143', '144', '145', '146', '147', '148', '149', '150', '151', '152', '153', '154', '155', '156', '157', '158', '159', '160', '161', '162', '163', '164', '165', '166', '167', '168', '169', '170', '171', '172', '173', '174', '175', '176', '177', '178', '179', '180', '181', '182', '183', '184', '185', '186', '187', '188', '189', '190', '191', '192', '193', '194', '195', '196', '197', '198', '199', '200', '201', '202', '203', '204', '205', '206', '207', '208', '209', '210', '211', '212', '213', '214', '215', '216', '217', '218', '219', '220', '221', '222', '223', '224', '225', '226', '227', '228', '229', '230', '231', '232', '233', '234', '235', '236', '237', '238', '239', '240', '241', '242', '243', '244', '245', '246', '247', '248', '249', '250', '251', '252', '253', '254', '255', '256', '257', '258', '259', '260', '261', '262', '263', '264', '265', '266', '267', '268', '269', '270', '271', '272', '273', '274', '275', '276', '277', '278', '279', '280', '281', '282', '283', '284', '285', '286', '287', '288', '289', '290', '291', '292', '293', '294', '295', '296', '297', '298', '299', '300', '301', '302', '303', '304', '305', '306', '307', '308', '309', '310', '311', '312', '313', '314', '315', '316', '317', '318', '319', '320', '321', '322', '323', '324', '325', '326', '327', '328', '329', '330', '331', '332', '333', '334', '335', '336', '337', '338', '339', '340', '341', '342', '343', '344', '345', '346', '347', '348', '349', '350', '351', '352', '353', '354', '355', '356', '357', '358', '359', '360', '361', '362', '363', '364', '365', '366', '367', '368', '369', '370', '371', '372', '373', '374', '375', '376', '377', '378', '379', '380', '381', '382', '383', '384', '385', '386', '387', '388', '389', '390', '391', '392', '393', '394', '395', '396', '397', '398', '399', '400', '401', '402', '403', '404', '405', '406', '407', '408', '409', '410', '411', '412', '413', '414', '415', '416', '417', '418', '419'],
+                      crosshair: true,
+                      title: {
+                        text: 'Number of Seats'
+                      }
+                    },
+                    yAxis: {
+                      gridLineWidth: 0,
+                      min: 0,
+                      title: {
+                        text: 'Probability (%)'
+                      }
+                    },
+                    tooltip: {
+                      headerFormat: '<span style="font-size:18px">{point.key} Seats</span><table>',
+                      pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                        '<td style="padding:0"><b>{point.y:.1f}%</b></td></tr>',
+                      footerFormat: '</table>',
+                      shared: true,
+                      useHTML: true
+                    },
+                    plotOptions: {
+                      column: {
+                        pointPadding: 0,
+                        borderWidth: 0,
+                        groupPadding: 0,
+                        shadow: false
+                      }
+                    },
+                    series: [{
+                      name: 'Probability',
+                      data: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.0, 0.0, 0.0, 0.0, 0.0, 0.01, 0.0, 0.0, 0.0, 0.0, 0.0, 0.02, 0.0, 0.0, 0.01, 0.0, 0.01, 0.0, 0.02, 0.02, 0.03, 0.01, 0.01, 0.03, 0.06, 0.01, 0.06, 0.06999999999999999, 0.03, 0.03, 0.03, 0.04, 0.06, 0.12, 0.1, 0.05, 0.1, 0.06, 0.11, 0.13, 0.13, 0.1, 0.13, 0.18, 0.13, 0.13999999999999999, 0.19, 0.2, 0.22, 0.19, 0.19, 0.32, 0.31, 0.26, 0.29, 0.3, 0.22, 0.45999999999999996, 0.4, 0.32, 0.49, 0.42, 0.49, 0.59, 0.41000000000000003, 0.5, 0.66, 0.64, 0.62, 0.8, 0.64, 0.77, 0.8200000000000001, 0.61, 0.8, 0.62, 0.98, 0.8999999999999999, 0.8500000000000001, 0.74, 0.8200000000000001, 0.88, 0.9400000000000001, 0.96, 1.02, 0.88, 1.0, 0.8500000000000001, 1.16, 1.01, 1.1400000000000001, 1.06, 1.2, 1.22, 1.25, 1.25, 1.25, 1.3299999999999998, 1.27, 1.17, 1.23, 1.37, 1.05, 1.1199999999999999, 1.39, 1.4000000000000001, 1.46, 1.32, 1.41, 1.15, 1.4200000000000002, 1.34, 1.26, 1.27, 1.16, 0.8999999999999999, 1.16, 1.0699999999999998, 1.23, 1.05, 1.29, 1.26, 1.17, 1.03, 0.9400000000000001, 0.9400000000000001, 0.95, 1.1400000000000001, 0.9299999999999999, 0.96, 0.8999999999999999, 0.89, 0.77, 0.8500000000000001, 0.8, 0.8200000000000001, 0.83, 0.83, 0.7000000000000001, 0.76, 0.67, 0.66, 0.69, 0.64, 0.65, 0.64, 0.51, 0.5499999999999999, 0.5499999999999999, 0.58, 0.51, 0.48, 0.49, 0.32, 0.33999999999999997, 0.33, 0.38999999999999996, 0.37, 0.3, 0.32, 0.51, 0.24, 0.22999999999999998, 0.24, 0.16, 0.27, 0.27, 0.13999999999999999, 0.19, 0.18, 0.22999999999999998, 0.26, 0.21, 0.18, 0.18, 0.13, 0.09, 0.13, 0.11, 0.09, 0.11, 0.13, 0.1, 0.1, 0.09, 0.08, 0.06, 0.09, 0.08, 0.09, 0.03, 0.03, 0.04, 0.06, 0.04, 0.05, 0.02, 0.03, 0.04, 0.01, 0.01, 0.02, 0.01, 0.04, 0.02, 0.01, 0.0, 0.01, 0.0, 0.02, 0.0, 0.0, 0.0, 0.02, 0.01, 0.0, 0.01, 0.0, 0.0, 0.02, 0.0, 0.01, 0.0] 
+                  
+                    }],
+                
+                exporting: {
+                  chartOptions: {
+                    credits: {
+                      enabled: true,
+                    },
+                  }
+                }
+              });
+
+            </script>
+          </div>
+
+        </div>
+      </div>
+
+
+
+    </body>
+
+  </html>

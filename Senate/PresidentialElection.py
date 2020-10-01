@@ -286,6 +286,7 @@ def tippingPointStates(electoralCollegeOutcomes, simulationsdf, stateWinningProb
     
     return dfCounts
 
+
 # ---------------------------------- Main ---------------------------------- #
 n_steps      = 100
 nSimulations = 10000
@@ -303,22 +304,41 @@ demChanceOfWinning = sum([1 if x[0] >= 270 else 0 for x in electoralCollegeOutco
 repChanceOfWinning = sum([1 if x[1] >= 270 else 0 for x in electoralCollegeOutcomes]) / len(electoralCollegeOutcomes)
 
 tippingPointStatesdf  = tippingPointStates(electoralCollegeOutcomes, simulationsdf, demWinProb)
-words = [[x,y] if len(x.split()) == 1 else [x.split()[0] + ' ' + x.split()[1], y] for x,y in zip(tippingPointStatesdf.index[:10], tippingPointStatesdf['probabilityTip'][:10])]
-wordCorpus = [[x[0] for a in range(int(x[1]))] for x in words]
-wordCorpus = [a for b in wordCorpus for a in b]
-wordCorpusL = [wordCorpus[x] + '-' for x in range(len(wordCorpus))]
-
-wordsMap = str({k : collections.Counter(wordCorpus)[k] for k in [x[0] for x in words]})
+words                 = [[x,y] if len(x.split()) == 1 else [x.split()[0] + ' ' + x.split()[1], y] for x,y in zip(tippingPointStatesdf.index[:10], tippingPointStatesdf['probabilityTip'][:10])]
+wordCorpus            = [[x[0] for a in range(int(x[1]))] for x in words]
+wordCorpus            = [a for b in wordCorpus for a in b]
+wordCorpusL           = [wordCorpus[x] + '-' for x in range(len(wordCorpus))]
+wordsMap              = str({k : collections.Counter(wordCorpus)[k] for k in [x[0] for x in words]})
 
 wordCloudD = ''
 for i in wordCorpusL:
     wordCloudD += i
 wordCloudD = wordCloudD[:-1]
 
-ChartTest = PresidentialCharts.wordChart + PresidentialCharts.wordChartData.format(wordCloudD, wordsMap, max([collections.Counter(wordCorpus)[k] for k in [x[0] for x in words]])) + PresidentialCharts.wordChartBottom
+electoralDF      = pd.DataFrame(electoralCollegeOutcomes, columns = ['DEM', 'REP'])
+presDemSort      = sorted(electoralDF['DEM'].unique())
+presRepSort      = sorted(electoralDF['REP'].unique())
+totalSeats       = [x for x in range(min(min(presRepSort), min(presDemSort)), max(max(presRepSort), max(presDemSort)))]
+demProbabilities = {k : len(electoralDF[electoralDF.DEM == k]) / len(electoralDF) for k in totalSeats}
+repProbabilities = {k : len(electoralDF[electoralDF.REP == k]) / len(electoralDF) for k in totalSeats}
 
-fileNames   = ['ChartTest']
-htmlStrings = [ChartTest]
+lastUpdated      = PresidentialCharts.lastUpdated.format(datetime.datetime.now().strftime("%m/%d/%Y, %H:%M%p"))
+
+demWinPercentage = PresidentialCharts.demWinPct.format(demChanceOfWinning)
+repWinPercentage = PresidentialCharts.repWinPct.format(repChanceOfWinning)
+
+demExpectedEC    = PresidentialCharts.demMeanSeats.format(demMedianEC)
+repExpectedEC    = PresidentialCharts.repMeanSeats.format(repMedianEC)
+
+dem10thEC, dem90thEC = PresidentialCharts.demNthSeats.format(demLowerBoundEC), PresidentialCharts.demNthSeats.format(demUpperBoundEC)
+rep10thEC, rep90thEC = PresidentialCharts.repNthSeats.format(repLowerBoundEC), PresidentialCharts.repNthSeats.format(repUpperBoundEC)
+
+ChartTest        = PresidentialCharts.wordChart + PresidentialCharts.wordChartData.format(wordCloudD, wordsMap, max([collections.Counter(wordCorpus)[k] for k in [x[0] for x in words]])) + PresidentialCharts.wordChartBottom
+demHistogram     = PresidentialCharts.histogramChartTop + PresidentialCharts.histogramChartBottom_.format('DemHistogram', [str(k) for k in demProbabilities.keys()], [v * 100 for v in demProbabilities.values()], '#3F52B9')
+repHistogram     = PresidentialCharts.histogramChartTop + PresidentialCharts.histogramChartBottom_.format('RepHistogram', [str(k) for k in repProbabilities.keys()], [v * 100 for v in repProbabilities.values()], '#DE3947')
+
+fileNames   = ['lastUpdated', 'wordCloud', 'demHistogram', 'repHistogram', 'demExpectedEC', 'repExpectedEC', 'demWinPercentage', 'repWinPercentage']
+htmlStrings = [lastUpdated, ChartTest, demHistogram, repHistogram, demExpectedEC, repExpectedEC, demWinPercentage, repWinPercentage]
 
 #write to HTML Files
 for file, stringChart in zip(fileNames, htmlStrings):
