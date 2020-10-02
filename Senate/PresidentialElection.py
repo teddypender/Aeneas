@@ -286,7 +286,7 @@ def tippingPointStates(electoralCollegeOutcomes, simulationsdf, stateWinningProb
     
     return dfCounts
 
-def runModelTimeSeries(stateList, dfPolls, presidentHistory, dflikelihoodMean, dflikelihoodStDev, model, n_steps, runs, nSimulations = 10000, nDaysBack = 10):
+def runModelTimeSeries(stateList, dfPolls, presidentHistory, dflikelihoodMean, dflikelihoodStDev, model, n_steps, runs, nSimulations = 10000, nDaysBack = 60):
     results = []
     for i in range(0,nDaysBack):
         from_date = max(dfPolls['end_date']) - datetime.timedelta(i)
@@ -446,11 +446,11 @@ modelDates = list(1000 * (ModelTimeSeries['Modeldate'] - datetime.datetime(1970,
 demSeries  = list(ModelTimeSeries['probabilityBidenWin'][::-1].reset_index(drop = True))
 repSeries  = list(ModelTimeSeries['probabilityTrumpWin'][::-1].reset_index(drop = True))
 
-demTimSeriesProb = [[int(x * 100),y] for x,y in zip(modelDates,demSeries)]
-repTimSeriesProb = [[int(x * 100),y] for x,y in zip(modelDates,repSeries)]
+demTimSeriesProb = [[int(x),y * 100] for x,y in zip(modelDates,demSeries)]
+repTimSeriesProb = [[int(x),y * 100] for x,y in zip(modelDates,repSeries)]
 
 lineChartDataProbControl = PresidentialCharts.lineSeriesData.format('Biden', demTimSeriesProb, 'Trump', repTimSeriesProb)
-presidentProbabilChart   = PresidentialCharts.lineChartTop + PresidentialCharts.lineChartBottom_.format('probabilityWin', '#FFFFFF', lineChartDataProbControl, 'Probability of Presidential Election Winner', 100, 'Date.UTC({0}, {1}, {2})'.format(min(ModelTimeSeries['Modeldate'] + datetime.timedelta(8)).year, min(ModelTimeSeries['Modeldate'] + datetime.timedelta(8)).month - 1, min(ModelTimeSeries['Modeldate'] + datetime.timedelta(8)).day))
+presidentProbabilChart   = PresidentialCharts.lineChartTop + PresidentialCharts.lineChartBottom_.format('probabilityWin', '#FFFFFF', lineChartDataProbControl, 'Probability of Presidential Election Winner', 100, 'Date.UTC({0}, {1}, {2})'.format(min(ModelTimeSeries['Modeldate'] + datetime.timedelta(0)).year, min(ModelTimeSeries['Modeldate'] + datetime.timedelta(0)).month - 1, min(ModelTimeSeries['Modeldate'] + datetime.timedelta(0)).day))
 
 
 # --------- Write HTML Files --------- #
