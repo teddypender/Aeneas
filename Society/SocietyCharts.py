@@ -1057,31 +1057,31 @@ honeyCombChartBottom = """
                     dataClasses: [{{
                         from: 0,
                         to: 1.779873,
-                        color: '#FFEC90',
+                        color: '#C35F5F',
                         name: '<10th Percentile'
                     }}, {{
                         from: 1.779873,
                         to: 2.700960,
-                        color: '#FFE046',
+                        color: '#C6645E',
                         name: '10th - 30th Percentile'
                     }}, {{
                         from: 2.700960,
                         to: 3.634183,
-                        color: '#F9C73F',
+                        color: '#CB6F5B',
                         name: '30th - 50th Percentile'
                     }}, {{
                         from: 3.634183,
                         to: 4.854596,
-                        color: '#FF4E41',
+                        color: '#E09B51',
                         name: '50th - 70th Percentile'
                     }}, {{
                         from: 4.854596,
                         to: 7.262750,
-                        color: '#DA3330',
+                        color: '#E6AD45',
                         name: '70th - 90th Percentile'
                     }}, {{
                         from: 7.262750,
-                        color: '#A21212',
+                        color: '#EEC833',
                         name: '> 90th Percentile'
                     }}]
                 }},
