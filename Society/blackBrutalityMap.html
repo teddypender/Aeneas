@@ -1,0 +1,814 @@
+
+  <!DOCTYPE html>
+
+  <html>
+
+    <head>
+      <meta charset="utf-8" />
+      <meta content="width=device-width, initial-scale=1" name="viewport" />
+
+      <script src="https://code.highcharts.com/highcharts.js"></script>
+      <script src="https://code.highcharts.com/highcharts-more.js"></script>
+      <script src="https://code.highcharts.com/modules/heatmap.js"></script>
+      <script src="https://code.highcharts.com/modules/tilemap.js"></script>
+      <script src="https://code.highcharts.com/modules/data.js"></script>
+      <script src="https://code.highcharts.com/modules/exporting.js"></script>
+      <script src="https://code.highcharts.com/modules/export-data.js"></script>
+      <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=5e8cdaa59dee0c0012ab3b91&product=inline-share-buttons&cms=website' async='async'></script> 
+
+      <style>
+        .truncate {
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+
+        .hs-input[type=text],
+        .hs-input[type=email] {
+          outline: none;
+          color: #fff;
+          background-color: transparent;
+          padding: 13px;
+          font-size: 20px;
+          border: 1px solid white;
+          width: 100%;
+          margin-bottom: 20px;
+          -webkit-appearance: none;
+          -webkit-border-radius: 0;
+        }
+
+        .inputs-list {
+          list-style-type: none;
+          padding: 0;
+        }
+
+        .hs-button {
+          width: 100%;
+          max-width: 350px;
+          margin-top: 0px;
+          padding: 14px 20px;
+          background-color: #000;
+          font-family: Barlow, sans-serif;
+          font-size: 16px;
+          font-weight: 600;
+          text-align: center;
+          letter-spacing: 1px;
+          background-color: #fff;
+          color: #000;
+          border: 0;
+          outline: 0;
+          cursor: pointer;
+          -webkit-appearance: none;
+          -webkit-border-radius: 0;
+
+        }
+
+        .hs-form-field label {
+          color: #fff;
+        }
+
+        .hs-firstname label,
+        .hs-lastname label,
+        .hs-email label {
+          display: none;
+        }
+
+        .hs-job_function {
+          margin-bottom: 20px;
+        }
+
+        .legal-consent-container p {
+          color: #aaa;
+          font-size: 12px;
+          line-height: 16px;
+          max-width: 686px;
+          margin-bottom: 40px;
+
+        }
+
+        .legal-consent-container .hs-form-booleancheckbox-display>span {
+          line-height: 10px;
+        }
+
+        .legal-consent-container .hs-form-booleancheckbox-display p {
+          font-size: 16px;
+          color: #fff;
+        }
+
+        .cookie-reset-container {
+          font-size: 11px !important;
+          color: #aaa;
+          margin-top: -20px;
+        }
+
+        .cookie-reset-container a {
+          text-decoration: underline;
+          color: #aaa;
+        }
+
+        .hs_error_rollup,
+        .hs-form-required {
+          color: #f2545b;
+        }
+
+        .hs-form-required {
+          font-size: 20px;
+        }
+
+        .hs-form-field label {
+          font-weight: normal;
+        }
+
+        .submitted-message {
+          color: #eee;
+          font-size: 18px;
+        }
+
+        .hs-firstname .hs-error-msgs.inputs-list,
+        .hs-lastname .hs-error-msgs.inputs-list,
+        .hs-email .hs-error-msgs.inputs-list {
+          display: none !important;
+        }
+
+        .highcharts-title {
+          display: none;
+        }
+
+        .highcharts-container .logo {
+          display: none;
+        }
+        
+        .highcharts-figure, .highcharts-data-table table {
+            min-width: 360px; 
+            max-width: 700px;
+            margin: 1em auto;
+        }
+        
+        .highcharts-data-table table {
+        	font-family: Verdana, sans-serif;
+        	border-collapse: collapse;
+        	border: 1px solid #EBEBEB;
+        	margin: 10px auto;
+        	text-align: center;
+        	width: 100%;
+        	max-width: 500px;
+        }
+        .highcharts-data-table caption {
+            padding: 1em 0;
+            font-size: 1.2em;
+            color: #555;
+        }
+        .highcharts-data-table th {
+        	font-weight: 600;
+            padding: 0.5em;
+        }
+        .highcharts-data-table td, .highcharts-data-table th, .highcharts-data-table caption {
+            padding: 0.5em;
+        }
+        .highcharts-data-table thead tr, .highcharts-data-table tr:nth-child(even) {
+            background: #f8f8f8;
+        }
+        .highcharts-data-table tr:hover {
+            background: #f1f7ff;
+        }
+        
+    
+        .share-button {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          color: #fff;
+          padding-right: 10px !important;
+          font-weight: bold;
+          margin-top: 10px;
+          min-width: 120px;
+        }
+
+        body.subscribe-page a.subscribe {
+          display: none;
+        }
+
+      </style>
+
+      <script>
+        Highcharts.setOptions({
+          //colors: ['#F58212', '#FE9F01', '#FFFDD3', '#FFF3A5', '#7789BF', '#9A77CF', '#EC4176', '#FFFFFF'],
+          chart: {
+            animation: {
+              duration: 5000
+            },
+            backgroundColor: 'transparent',
+            //spacing: [25, 5, 25, 5],
+            //marginTop: 38,
+            //marginBottom: 100,
+            style: {
+              fontFamily: 'Arial, sans-serif'
+            },
+            events: {
+              load: function() {
+                logoY = this.chartHeight - 69;
+                this.renderer.image('https://raw.githubusercontent.com/midnight-labs/midnight-labs.github.io/master/style/moonwhite.png', //https://www.flaticon.com/free-icon/moon_2530874?term=full moon&page=1&position=3#
+                  10, logoY, 50, 50).addClass('logo').add();
+              }
+            }
+          },
+          title: {
+            y: -6,
+            style: {
+              color: '#fff',
+              fontFamily: 'Barlow, sans-serif',
+              fontWeight: '600',
+              fontSize: '16px'
+            },
+            align: 'left'
+          },
+          credits: {
+            style: {
+              color: '#666',
+              fontSize: '11px',
+              cursor: 'arrow'
+            },
+            position: {
+              y: -8,
+            }
+          },
+          
+          exporting: {
+            scale: 3,
+            buttons: {
+              contextButton: {
+                enabled: true,
+                menuItems: [{
+                  text: 'Download CSV',
+                  onclick: function() {
+                    this.downloadCSV();
+                    ga('send', 'event', 'Download', 'CSV', this.options.title.text);
+                  }
+                }, {
+                  text: 'Download PNG',
+                  onclick: function() {
+                    this.exportChart({
+                      type: 'image/png'
+                    });
+                    ga('send', 'event', 'Download', 'PNG', this.options.title.text);
+                  }
+                }],
+                align: 'right',
+                verticalAlign: 'top',
+                symbol: 'url(https://raw.githubusercontent.com/midnight-labs/midnight-labs.github.io/master/style/down-arrow.png)',
+                height: 22,
+                width: 22,
+                y: -25,
+                symbolStroke: '#aaa',
+                symbolFill: 'transparent',
+                theme: {
+                  fill: 'transparent',
+                  states: {
+                    hover: {
+                      fill: '#333'
+                    },
+                    select: {
+                      fill: '#111'
+                    }
+                  }
+                },
+
+              },
+            },
+            menuItemDefinitions: {
+              'downloadPNG': {
+                text: 'Download PNG'
+              },
+              'downloadSVG': {
+                text: 'Download SVG'
+              },
+              'downloadCSV': {
+                text: 'Download CSV'
+              }
+            },
+            csv: {
+              dateFormat: '%Y-%m-%d'
+            },
+            xlsx: {
+              worksheet: {
+                autoFitColumns: true,
+                categoryColumnTitle: 'Month',
+                dateFormat: 'yyyy-mm',
+                name: 'Export XLSX Test'
+              },
+              workbook: {
+                fileProperties: {
+                  Author: "File Author",
+                  Company: "File Company",
+                  CreatedDate: new Date(Date.now())
+                }
+              }
+            },
+            "chartOptions": {
+              "title": {
+                "style": {
+                  "color": '#888'
+                }
+              },
+              credits: {
+                enabled: false,
+              },
+              "chart": {
+                "backgroundColor": '#232323',
+                spacing: [30, 15, 35, 15],
+                marginTop: 45
+
+              },
+              "legend": {
+                "itemStyle": {
+                  "color": "#666",
+                  fontWeight: '600',
+                }
+              },
+            },
+          },
+          responsive: {
+            rules: [{
+              condition: {
+                maxWidth: 500
+              },
+              chartOptions: {
+                chart: {
+                  height: null,
+                  marginBottom: undefined,
+                  spacing: [25, 5, 25, 5],
+
+                }
+              }
+            }]
+          }
+        });
+
+
+      </script>
+    </head>
+
+
+    <body class="body">
+      <div class="section-3">
+        <div id="w-node-44a08bb7354c-415dff4a" class="neumorphic compact">
+          <div class="html-embed2 chart w-embed w-script">
+            
+
+
+            <div id="PoliceBrutalityMap"></div>
+            <script type="text/javascript">
+              var PoliceBrutalityMap = new Highcharts.Chart({
+
+                 "chart": {
+                  renderTo: 'PoliceBrutalityMap',
+                  "type": "tilemap",
+                   inverted: true,
+                   height: '70%'
+                  //height: 600
+
+              },
+                credits: {
+                  text: 'Aeneas',
+                  href: ''
+                },
+                title: {
+                  text: 'Police Brutality Map',
+                },
+                tooltip: {
+                  headerFormat: '',
+                  pointFormat: 'The population of <b> {point.name}</b> is <b>{point.value}</b>'
+                },
+                
+                point: {
+                    valueDescriptionFormat: '{index}. {xDescription}, {point.value}.'
+                },
+            
+                xAxis: {
+                    visible: false
+                },
+            
+                yAxis: {
+                    visible: false
+                },
+                
+                colorAxis: {
+                    dataClasses: [{
+                        from: 0,
+                        to: 1000000,
+                        color: '#F9EDB3',
+                        name: '< 1M'
+                    }, {
+                        from: 1000000,
+                        to: 5000000,
+                        color: '#FFC428',
+                        name: '1M - 5M'
+                    }, {
+                        from: 5000000,
+                        to: 20000000,
+                        color: '#FF7987',
+                        name: '5M - 20M'
+                    }, {
+                        from: 20000000,
+                        color: '#FF2371',
+                        name: '> 20M'
+                    }]
+                },
+                        
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.hc-a2}',
+                            color: '#000000',
+                            style: {
+                                textOutline: false
+                            }
+                        }
+                    }
+                },
+              
+                series: [
+{
+        name: '',
+        data: [{
+            'hc-a2': 'AL',
+            name: 'Alabama',
+            region: 'South',
+            x: 6,
+            y: 7,
+            value: 1.7351785877409334
+        }, {
+            'hc-a2': 'AK',
+            name: 'Alaska',
+            region: 'West',
+            x: 0,
+            y: 0,
+            value: 3.6341829085457276
+        }, {
+            'hc-a2': 'AZ',
+            name: 'Arizona',
+            region: 'West',
+            x: 5,
+            y: 3,
+            value: 2.9351219512195126
+        }, {
+            'hc-a2': 'AR',
+            name: 'Arkansas',
+            region: 'South',
+            x: 5,
+            y: 6,
+            value: 2.4847800471327575
+        }, {
+            'hc-a2': 'CA',
+            name: 'California',
+            region: 'West',
+            x: 5,
+            y: 2,
+            value: 3.6778221778221774
+        }, {
+            'hc-a2': 'CO',
+            name: 'Colorado',
+            region: 'West',
+            x: 4,
+            y: 3,
+            value: 3.757575757575758
+        }, {
+            'hc-a2': 'CT',
+            name: 'Connecticut',
+            region: 'Northeast',
+            x: 3,
+            y: 11,
+            value: 2.694949494949495
+        }, {
+            'hc-a2': 'DE',
+            name: 'Delaware',
+            region: 'South',
+            x: 4,
+            y: 9,
+            value: 3.616279069767442
+        }, {
+            'hc-a2': 'DC',
+            name: 'District of Columbia',
+            region: 'South',
+            x: 4,
+            y: 10,
+            value: 19.337748344370862
+        }, {
+            'hc-a2': 'FL',
+            name: 'Florida',
+            region: 'South',
+            x: 8,
+            y: 8,
+            value: 2.4235395600709255
+        }, {
+            'hc-a2': 'GA',
+            name: 'Georgia',
+            region: 'South',
+            x: 7,
+            y: 8,
+            value: 1.6486800507984543
+        }, {
+            'hc-a2': 'HI',
+            name: 'Hawaii',
+            region: 'West',
+            x: 8,
+            y: 0,
+            value: 2.725
+        }, {
+            'hc-a2': 'ID',
+            name: 'Idaho',
+            region: 'West',
+            x: 3,
+            y: 2,
+            value: 3.5964912280701755
+        }, {
+            'hc-a2': 'IL',
+            name: 'Illinois',
+            region: 'Midwest',
+            x: 3,
+            y: 6,
+            value: 8.830285714285715
+        }, {
+            'hc-a2': 'IN',
+            name: 'Indiana',
+            region: 'Midwest',
+            x: 3,
+            y: 7,
+            value: 4.949999999999999
+        }, {
+            'hc-a2': 'IA',
+            name: 'Iowa',
+            region: 'Midwest',
+            x: 3,
+            y: 5,
+            value: 4.924651924651925
+        }, {
+            'hc-a2': 'KS',
+            name: 'Kansas',
+            region: 'Midwest',
+            x: 5,
+            y: 5,
+            value: 2.9192307692307695
+        }, {
+            'hc-a2': 'KY',
+            name: 'Kentucky',
+            region: 'South',
+            x: 4,
+            y: 6,
+            value: 2.337631578947368
+        }, {
+            'hc-a2': 'LA',
+            name: 'Louisiana',
+            region: 'South',
+            x: 6,
+            y: 5,
+            value: 2.9490229396771452
+        }, {
+            'hc-a2': 'ME',
+            name: 'Maine',
+            region: 'Northeast',
+            x: 0,
+            y: 11,
+            value: 2.5944444444444446
+        }, {
+            'hc-a2': 'MD',
+            name: 'Maryland',
+            region: 'South',
+            x: 4,
+            y: 8,
+            value: 3.961665747380034
+        }, {
+            'hc-a2': 'MA',
+            name: 'Massachusetts',
+            region: 'Northeast',
+            x: 2,
+            y: 10,
+            value: 5.471938775510204
+        }, {
+            'hc-a2': 'MI',
+            name: 'Michigan',
+            region: 'Midwest',
+            x: 2,
+            y: 7,
+            value: 4.091555977229602
+        }, {
+            'hc-a2': 'MN',
+            name: 'Minnesota',
+            region: 'Midwest',
+            x: 2,
+            y: 4,
+            value: 4.392650462962964
+        }, {
+            'hc-a2': 'MS',
+            name: 'Mississippi',
+            region: 'South',
+            x: 6,
+            y: 6,
+            value: 1.1467206935544667
+        }, {
+            'hc-a2': 'MO',
+            name: 'Missouri',
+            region: 'Midwest',
+            x: 4,
+            y: 5,
+            value: 5.2402673350041775
+        }, {
+            'hc-a2': 'MT',
+            name: 'Montana',
+            region: 'West',
+            x: 2,
+            y: 2,
+            value: nan
+        }, {
+            'hc-a2': 'NE',
+            name: 'Nebraska',
+            region: 'Midwest',
+            x: 4,
+            y: 4,
+            value: 5.851851851851851
+        }, {
+            'hc-a2': 'NV',
+            name: 'Nevada',
+            region: 'West',
+            x: 4,
+            y: 2,
+            value: 1.9071812408402538
+        }, {
+            'hc-a2': 'NH',
+            name: 'New Hampshire',
+            region: 'Northeast',
+            x: 1,
+            y: 11,
+            value: nan
+        }, {
+            'hc-a2': 'NJ',
+            name: 'New Jersey',
+            region: 'Northeast',
+            x: 3,
+            y: 10,
+            value: 8.119612068965516
+        }, {
+            'hc-a2': 'NM',
+            name: 'New Mexico',
+            region: 'West',
+            x: 6,
+            y: 3,
+            value: 1.8469135802469134
+        }, {
+            'hc-a2': 'NY',
+            name: 'New York',
+            region: 'Northeast',
+            x: 2,
+            y: 9,
+            value: 5.137529137529138
+        }, {
+            'hc-a2': 'NC',
+            name: 'North Carolina',
+            region: 'South',
+            x: 5,
+            y: 9,
+            value: 2.0138780601902386
+        }, {
+            'hc-a2': 'ND',
+            name: 'North Dakota',
+            region: 'Midwest',
+            x: 2,
+            y: 3,
+            value: nan
+        }, {
+            'hc-a2': 'OH',
+            name: 'Ohio',
+            region: 'Midwest',
+            x: 3,
+            y: 8,
+            value: 4.574370251899241
+        }, {
+            'hc-a2': 'OK',
+            name: 'Oklahoma',
+            region: 'South',
+            x: 6,
+            y: 4,
+            value: 3.499194847020933
+        }, {
+            'hc-a2': 'OR',
+            name: 'Oregon',
+            region: 'West',
+            x: 4,
+            y: 1,
+            value: 4.064516129032258
+        }, {
+            'hc-a2': 'PA',
+            name: 'Pennsylvania',
+            region: 'Northeast',
+            x: 3,
+            y: 9,
+            value: 5.270137961726747
+        }, {
+            'hc-a2': 'RI',
+            name: 'Rhode Island',
+            region: 'Northeast',
+            x: 2,
+            y: 11,
+            value: 20.027777777777775
+        }, {
+            'hc-a2': 'SC',
+            name: 'South Carolina',
+            region: 'South',
+            x: 6,
+            y: 8,
+            value: 1.4038259407189402
+        }, {
+            'hc-a2': 'SD',
+            name: 'South Dakota',
+            region: 'Midwest',
+            x: 3,
+            y: 4,
+            value: nan
+        }, {
+            'hc-a2': 'TN',
+            name: 'Tennessee',
+            region: 'South',
+            x: 5,
+            y: 7,
+            value: 1.5545993497800727
+        }, {
+            'hc-a2': 'TX',
+            name: 'Texas',
+            region: 'South',
+            x: 7,
+            y: 4,
+            value: 2.2643085237042495
+        }, {
+            'hc-a2': 'UT',
+            name: 'Utah',
+            region: 'West',
+            x: 5,
+            y: 4,
+            value: 9.321428571428571
+        }, {
+            'hc-a2': 'VT',
+            name: 'Vermont',
+            region: 'Northeast',
+            x: 1,
+            y: 10,
+            value: nan
+        }, {
+            'hc-a2': 'VA',
+            name: 'Virginia',
+            region: 'South',
+            x: 5,
+            y: 8,
+            value: 3.3405205167173255
+        }, {
+            'hc-a2': 'WA',
+            name: 'Washington',
+            region: 'West',
+            x: 2,
+            y: 1,
+            value: 4.511111111111111
+        }, {
+            'hc-a2': 'WV',
+            name: 'West Virginia',
+            region: 'South',
+            x: 4,
+            y: 7,
+            value: 5.087983911513324
+        }, {
+            'hc-a2': 'WI',
+            name: 'Wisconsin',
+            region: 'Midwest',
+            x: 2,
+            y: 5,
+            value: 5.977455716586151
+        }, {
+            'hc-a2': 'WY',
+            name: 'Wyoming',
+            region: 'West',
+            x: 3,
+            y: 3,
+            value: nan
+        }]
+    }
+],
+                
+                
+                exporting: {
+                  chartOptions: {
+                    credits: {
+                      enabled: true,
+                    },
+                  }
+                }
+              });
+
+            </script>
+          </div>
+
+        </div>
+      </div>
+
+
+
+    </body>
+
+  </html>

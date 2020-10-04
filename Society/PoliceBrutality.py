@@ -7,7 +7,7 @@ Created on Thu Sep 17 17:51:34 2020
 """
 import numpy as np
 import pandas as pd
-from git import Repo
+# from git import Repo
 import requests
 from bs4 import BeautifulSoup
 import datetime as dt
@@ -18,7 +18,7 @@ urlPV          = r'https://mappingpoliceviolence.org/s/MPVDatasetDownload.xlsx'
 urlWiki        = r'https://en.wikipedia.org/wiki/Race_and_ethnicity_in_the_United_States'
 urlUSPop       = r'https://www.census.gov/popclock/print.php?component=pop_on_date&image=https://www.census.gov/images/census-logo-whiteBG.png' #r'https://www.census.gov/popclock/'
 urlUSStatePop  = r'https://en.wikipedia.org/wiki/List_of_states_and_territories_of_the_United_States_by_population'
-urlUSStateRace = r'https://worldpopulationreview.com/states/states-by-race'
+urlUSStateRace = r'https://www.governing.com/gov-data/census/state-minority-population-data-estimates.html' #r'https://worldpopulationreview.com/states/states-by-race'
 urlRacePop     = r'https://worldpopulationreview.com/79594026-c853-48bd-a21b-64d49a3273e3'
 
 # ----------------- Mapping ----------------- #
