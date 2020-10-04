@@ -10,9 +10,11 @@ import numpy as np
 from scipy.stats import beta, binom, norm, skewnorm
 import datetime
 from dateutil import parser
-import scipy.stats as stats
-import SenateForecastCharts
+# import scipy.stats as stats
+# import SenateForecastCharts
 import matplotlib.pyplot as plt
+import PresidentialCharts
+import collections
 
 fivethirtyeightzip   = 'https://projects.fivethirtyeight.com/polls-page/president_polls.csv'
 pollsterRatings      = 'https://raw.githubusercontent.com/fivethirtyeight/data/master/pollster-ratings/pollster-ratings.csv'
@@ -219,8 +221,8 @@ def simulateElectoralCollege(stateWinningProbdf, presidentHistory, weightsdf, st
         demHistory   = priorHistory[priorHistory.candidate_party == 'DEM']['pct'].iloc[0]
         repHistory   = priorHistory[priorHistory.candidate_party == 'REP']['pct'].iloc[0]
         
-        demSkew = 0 #((dem * 1) - (demHistory * 1))
-        repSkew = 0 if dem > rep else 1 #((rep * 1) - (repHistory * 1)) 
+        demSkew = -0.25 #((dem * 1) - (demHistory * 1))
+        repSkew = 0 if dem > rep else 0.75 #((rep * 1) - (repHistory * 1)) 
         
         # demscaled  = dem / (dem + rep) * 100
         # repscaled  = rep / (dem + rep) * 100
@@ -284,6 +286,25 @@ def tippingPointStates(electoralCollegeOutcomes, simulationsdf, stateWinningProb
     
     return dfCounts
 
+def runModelTimeSeries(stateList, dfPolls, presidentHistory, dflikelihoodMean, dflikelihoodStDev, model, n_steps, runs, nSimulations = 10000, nDaysBack = 60):
+    results = []
+    for i in range(0,nDaysBack):
+        from_date = max(dfPolls['end_date']) - datetime.timedelta(i)
+        print("Running Model as of {0}".format(from_date))
+        weightsdf          = stateDistributionWeights(stateList, dfPolls[dfPolls.end_date <= from_date], presidentHistory, dflikelihoodMean, dflikelihoodStDev, model, n_steps)
+        stateWinningProbdf = simulateElection(weightsdf, stateList, runs, n_steps, electoralCollege)
+        
+        electoralCollegeOutcomes, simulationsdf,demWinProb        = simulateElectoralCollege(stateWinningProbdf, presidentHistory, weightsdf, stateList, nSimulations, n_steps, electoralCollege)
+        # demLowerBoundEC, demMedianEC, demUpperBoundEC, demMeanEC  = pd.Series([x[0] for x in electoralCollegeOutcomes]).quantile(0.10), pd.Series([x[0] for x in electoralCollegeOutcomes]).quantile(0.50), pd.Series([x[0] for x in electoralCollegeOutcomes]).quantile(0.90), pd.Series([x[0] for x in electoralCollegeOutcomes]).mean()
+        # repLowerBoundEC, repMedianEC, repUpperBoundEC, repMeanEC  = pd.Series([x[1] for x in electoralCollegeOutcomes]).quantile(0.10), pd.Series([x[1] for x in electoralCollegeOutcomes]).quantile(0.50), pd.Series([x[1] for x in electoralCollegeOutcomes]).quantile(0.90), pd.Series([x[1] for x in electoralCollegeOutcomes]).mean()
+        
+        demChanceOfWinning = sum([1 if x[0] >= 270 else 0 for x in electoralCollegeOutcomes]) / len(electoralCollegeOutcomes)
+        repChanceOfWinning = sum([1 if x[1] >= 270 else 0 for x in electoralCollegeOutcomes]) / len(electoralCollegeOutcomes)
+        results.append([from_date, demChanceOfWinning, repChanceOfWinning])
+    
+    ModelTimeSeries = pd.DataFrame(results, columns = ['Modeldate', 'probabilityBidenWin', 'probabilityTrumpWin'])
+    return ModelTimeSeries
+
 # ---------------------------------- Main ---------------------------------- #
 n_steps      = 100
 nSimulations = 10000
@@ -300,8 +321,147 @@ repLowerBoundEC, repMedianEC, repUpperBoundEC, repMeanEC  = pd.Series([x[1] for 
 demChanceOfWinning = sum([1 if x[0] >= 270 else 0 for x in electoralCollegeOutcomes]) / len(electoralCollegeOutcomes)
 repChanceOfWinning = sum([1 if x[1] >= 270 else 0 for x in electoralCollegeOutcomes]) / len(electoralCollegeOutcomes)
 
+# ModelTimeSeries = runModelTimeSeries(stateList, dfPolls, presidentHistory, dflikelihoodMean, dflikelihoodStDev, model, n_steps, runs)
+
 tippingPointStatesdf  = tippingPointStates(electoralCollegeOutcomes, simulationsdf, demWinProb)
-# tippingPointStatesdf2 = tippingPointStates(electoralCollegeOutcomes, simulationsdf, stateWinningProbdf)
+words                 = [[x,y] if len(x.split()) == 1 else [x.split()[0] + ' ' + x.split()[1], y] for x,y in zip(tippingPointStatesdf.index[:10], tippingPointStatesdf['probabilityTip'][:10])]
+wordCorpus            = [[x[0] for a in range(int(x[1]))] for x in words]
+wordCorpus            = [a for b in wordCorpus for a in b]
+wordCorpusL           = [wordCorpus[x] + '-' for x in range(len(wordCorpus))]
+wordsMap              = str({k : collections.Counter(wordCorpus)[k] for k in [x[0] for x in words]})
+
+wordCloudD = ''
+for i in wordCorpusL:
+    wordCloudD += i
+wordCloudD = wordCloudD[:-1]
+
+electoralDF      = pd.DataFrame(electoralCollegeOutcomes, columns = ['DEM', 'REP'])
+presDemSort      = sorted(electoralDF['DEM'].unique())
+presRepSort      = sorted(electoralDF['REP'].unique())
+totalSeats       = [x for x in range(min(min(presRepSort), min(presDemSort)), max(max(presRepSort), max(presDemSort)))]
+demProbabilities = {k : len(electoralDF[electoralDF.DEM == k]) / len(electoralDF) for k in totalSeats}
+repProbabilities = {k : len(electoralDF[electoralDF.REP == k]) / len(electoralDF) for k in totalSeats}
+
+demWinPercentage = PresidentialCharts.demWinPct.format(demChanceOfWinning * 100)
+repWinPercentage = PresidentialCharts.repWinPct.format(repChanceOfWinning * 100)
+
+demExpectedEC    = PresidentialCharts.demMeanSeats.format(demMedianEC)
+repExpectedEC    = PresidentialCharts.repMeanSeats.format(repMedianEC)
+
+dem10thEC = PresidentialCharts.demNthSeats.format(demLowerBoundEC, demUpperBoundEC)
+rep10thEC = PresidentialCharts.repNthSeats.format(repLowerBoundEC, repUpperBoundEC)
+
+ChartTest        = PresidentialCharts.wordChart + PresidentialCharts.wordChartData.format(wordCloudD, wordsMap, max([collections.Counter(wordCorpus)[k] for k in [x[0] for x in words]])) + PresidentialCharts.wordChartBottom
+demHistogram     = PresidentialCharts.histogramChartTop + PresidentialCharts.histogramChartBottom_.format('DemHistogram', [str(k) for k in demProbabilities.keys()], [v * 100 for v in demProbabilities.values()], '#3F52B9')
+repHistogram     = PresidentialCharts.histogramChartTop + PresidentialCharts.histogramChartBottom_.format('RepHistogram', [str(k) for k in repProbabilities.keys()], [v * 100 for v in repProbabilities.values()], '#DE3947')
+bothHistogram    = PresidentialCharts.histogramChartTop + PresidentialCharts.histogramChartBottom_Stacked.format('BothHistogram', [str(k) for k in repProbabilities.keys()], [v * 100 for v in demProbabilities.values()], [v * 100 for v in repProbabilities.values()], '#3F52B9', '#DE3947')
+
+
+tippingPointStatesdfTable = tippingPointStatesdf.reset_index().rename({'index' : 'State', 'probabilityTip' : 'Tipping Point Probability'}, axis = 1).set_index(['State'])[['Tipping Point Probability']].iloc[0:11]
+tippingPointStatesdfTable = tippingPointStatesdfTable.round(2).to_html(index = True)
+firstEdit = """<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>"""
+firstReplace = """<table cellpadding="0" cellspacing="1" border="0" class="heat-map" id="heat-map-3">
+        <thead>
+          <tr>
+            <th class="first">"""
+            
+secondEdit = """</th>
+      <th>Tipping Point Probability"""
+secondReplace = """</th>
+            <th class="last">Tipping Point Probability"""
+            
+thirdEdit = """<thead>
+          <tr>
+            <th class="first"></th>
+            <th class="last">Tipping Point Probability</th>
+    </tr>
+    <tr>
+      <th>State</th>
+      <th></th>
+    </tr>"""
+
+thirdReplace = """<thead>
+          <tr>
+            <th class="first">State</th>
+            <th class="last">Tipping Point Probability (%)</th>
+    </tr>"""
+
+tippingPointStatesdfTable = tippingPointStatesdfTable.replace(firstEdit, firstReplace)
+tippingPointStatesdfTable = tippingPointStatesdfTable.replace(secondEdit, secondReplace)
+tippingPointStatesdfTable = tippingPointStatesdfTable.replace(thirdEdit, thirdReplace)
+
+tippingProbsTable = PresidentialCharts.heatMapTableTopTip + PresidentialCharts.heatMapTableBottom.format(tippingPointStatesdfTable)
+
+dfdemWinProb = demWinProb.sort_values('DemWin', ascending = False)
+dfdemWinProb['RepWin'] = 100 - dfdemWinProb['DemWin']
+
+demWinProbTable = dfdemWinProb.rename({'DemWin' : 'Biden Win Probability', 'RepWin' : 'Trump Win Probability'}, axis = 1).set_index(['State'])
+demWinProbTable = demWinProbTable.to_html(index = True)
+firstEdit = """<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>"""
+firstReplace = """<table cellpadding="0" cellspacing="1" border="0" class="heat-map" id="heat-map-3">
+        <thead>
+          <tr>
+            <th class="first">"""
+            
+secondEdit = """</th>
+      <th>Trump Win Probability"""
+secondReplace = """</th>
+            <th class="last">Trump Win Probability"""
+            
+thirdEdit = """<thead>
+          <tr>
+            <th class="first"></th>
+      <th>Biden Win Probability</th>
+            <th class="last">Trump Win Probability</th>
+    </tr>
+    <tr>
+      <th>State</th>
+      <th></th>
+      <th></th>
+    </tr>"""
+
+thirdReplace = """<thead>
+          <tr>
+            <th class="first">State</th>
+      <th>Biden Win Probability (%)</th>
+            <th class="last">Trump Win Probability (%)</th>
+    </tr>"""
+
+demWinProbTable = demWinProbTable.replace(firstEdit, firstReplace)
+demWinProbTable = demWinProbTable.replace(secondEdit, secondReplace)
+demWinProbTable = demWinProbTable.replace(thirdEdit, thirdReplace)
+
+demWinProbTableHTML = PresidentialCharts.heatMapTableTop + PresidentialCharts.heatMapTableBottom.format(demWinProbTable)
+
+
+# modelDates = list(1000 * (ModelTimeSeries['Modeldate'] - datetime.datetime(1970,1,1)).dt.total_seconds())[::-1]
+# demSeries  = list(ModelTimeSeries['probabilityBidenWin'][::-1].reset_index(drop = True))
+# repSeries  = list(ModelTimeSeries['probabilityTrumpWin'][::-1].reset_index(drop = True))
+
+# demTimSeriesProb = [[int(x),y * 100] for x,y in zip(modelDates,demSeries)]
+# repTimSeriesProb = [[int(x),y * 100] for x,y in zip(modelDates,repSeries)]
+
+# lineChartDataProbControl = PresidentialCharts.lineSeriesData.format('Biden', demTimSeriesProb, 'Trump', repTimSeriesProb)
+# presidentProbabilChart   = PresidentialCharts.lineChartTop + PresidentialCharts.lineChartBottom_.format('probabilityWin', '#FFFFFF', lineChartDataProbControl, 'Probability of Presidential Election Winner', 100, 'Date.UTC({0}, {1}, {2})'.format(min(ModelTimeSeries['Modeldate'] + datetime.timedelta(0)).year, min(ModelTimeSeries['Modeldate'] + datetime.timedelta(0)).month - 1, min(ModelTimeSeries['Modeldate'] + datetime.timedelta(0)).day))
+
+lastUpdated      = PresidentialCharts.lastUpdated.format(datetime.datetime.now().strftime("%m/%d/%Y, %H:%M%p"))
+
+
+# --------- Write HTML Files --------- #
+
+fileNames   = ['lastUpdated', 'wordCloud', 'demHistogram', 'repHistogram', 'demExpectedEC', 'repExpectedEC', 'demWinPercentage', 'repWinPercentage', 'dem10thEC', 'rep10thEC', 'tippingProbsTable', 'demWinProbTable', 'bothHistogram']#, 'presidentProbabilChart']
+htmlStrings = [lastUpdated, ChartTest, demHistogram, repHistogram, demExpectedEC, repExpectedEC, demWinPercentage, repWinPercentage, dem10thEC, rep10thEC, tippingProbsTable, demWinProbTableHTML, bothHistogram]#, presidentProbabilChart]
+
+#write to HTML Files
+for file, stringChart in zip(fileNames, htmlStrings):
+    with open(file + '.html', "w") as text_file:
+        text_file.write(stringChart)
 
 
 
