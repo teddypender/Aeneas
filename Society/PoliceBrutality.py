@@ -184,11 +184,11 @@ lineChartData = SocietyCharts.lineSeriesData.format('Black', blackKillingCumulat
 
 killingRateByRace       = SocietyCharts.lineChartTop + SocietyCharts.lineChartBottom_.format('killingRateByRace', '#FFFFFF', lineChartData, 'Rate of Killing by Race (Per Million)', max(killingsPerRaceTimeSeries['KillingsPerMillionCumulative'] * 1.1))
 
-blackMultiple           = SocietyCharts.multiple.format(raceMultiples[0], '180')
-hispanickMultiple       = SocietyCharts.multiple.format(raceMultiples[1], '180')
-nativeAmericanMultiple  = SocietyCharts.multiple.format(raceMultiples[2], '180')
-pacificIslanderMultiple = SocietyCharts.multiple.format(raceMultiples[3], '180')
-asianMultiple           = SocietyCharts.multiple.format(raceMultiples[4], '180')
+blackMultiple           = SocietyCharts.multiple.format(raceMultiples[0], '180', 'rgb(97, 64, 78)')
+hispanickMultiple       = SocietyCharts.multiple.format(raceMultiples[1], '90', 'rgb((195, 95, 95)')
+nativeAmericanMultiple  = SocietyCharts.multiple.format(raceMultiples[2], '90', 'rgb((195, 95, 95)')
+pacificIslanderMultiple = SocietyCharts.multiple.format(raceMultiples[3], '180', 'rgb(97, 64, 78)')
+asianMultiple           = SocietyCharts.multiple.format(raceMultiples[4], '90', 'rgb((195, 95, 95)')
 
 
 

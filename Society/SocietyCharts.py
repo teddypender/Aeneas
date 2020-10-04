@@ -16,7 +16,7 @@ multiple = """
                         font-family: 'Barlow';
                         font-size: {1}px;
                         background-color: transparent;
-                        color: rgb(97, 64, 78);
+                        color: {2};
                         transform: translate(0%, -100%);
                             }}
                 </style>
