@@ -14,15 +14,15 @@ multiple = """
                 <style>
                     body {{
                         font-family: 'Barlow';
-                        font-size: 90px;
+                        font-size: {1}px;
                         background-color: transparent;
-                        color: rgb(253, 85, 113);
+                        color: rgb(230, 177, 122);
                         transform: translate(0%, -100%);
                             }}
                 </style>
         </head>
         <body>
-            <p>{:.2f}x</p>
+            <p>{0:.2f}x</p>
         </body>
     </html>
 
