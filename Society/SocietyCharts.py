@@ -1038,7 +1038,7 @@ honeyCombChartBottom = """
                 }},
                 tooltip: {{
                   headerFormat: '',
-                  pointFormat: 'The population of <b> {{point.name}}</b> is <b>{{point.value}}</b>'
+                  pointFormat: 'The rate of Black killings in <b> {{point.name}}</b> by police is <b>{{point.value}}</b>'
                 }},
                 
                 point: {{
@@ -1056,23 +1056,33 @@ honeyCombChartBottom = """
                 colorAxis: {{
                     dataClasses: [{{
                         from: 0,
-                        to: 1000000,
-                        color: '#F9EDB3',
-                        name: '< 1M'
+                        to: 1.779873,
+                        color: '#FFEC90',
+                        name: '<10th Percentile'
                     }}, {{
-                        from: 1000000,
-                        to: 5000000,
-                        color: '#FFC428',
-                        name: '1M - 5M'
+                        from: 1.779873,
+                        to: 2.700960,
+                        color: '#FFE046',
+                        name: '10th - 30th Percentile'
                     }}, {{
-                        from: 5000000,
-                        to: 20000000,
-                        color: '#FF7987',
-                        name: '5M - 20M'
+                        from: 2.700960,
+                        to: 3.634183,
+                        color: '#F9C73F',
+                        name: '30th - 50th Percentile'
                     }}, {{
-                        from: 20000000,
-                        color: '#FF2371',
-                        name: '> 20M'
+                        from: 3.634183,
+                        to: 4.854596,
+                        color: '#FF4E41',
+                        name: '50th - 70th Percentile'
+                    }}, {{
+                        from: 4.854596,
+                        to: 7.262750,
+                        color: '#DA3330',
+                        name: '70th - 90th Percentile'
+                    }}, {{
+                        from: 7.262750,
+                        color: '#A21212',
+                        name: '> 90th Percentile'
                     }}]
                 }},
                         
