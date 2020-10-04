@@ -243,13 +243,7 @@ repNthSeats = """
         <head>
             <link href='https://fonts.googleapis.com/css?family=Barlow' rel='stylesheet'>
                 <style>
-                    body {{
-                        font-family: 'Barlow';
-                        font-size: 90px;
-                        background-color: transparent;
-                        color: rgb(222, 57, 71);
-                        transform: translate(0%, -100%);
-                            }}
+
                     p {{
                         font-family: 'Barlow';
                         font-size: 90px;
@@ -284,13 +278,7 @@ demNthSeats = """
         <head>
             <link href='https://fonts.googleapis.com/css?family=Barlow' rel='stylesheet'>
                 <style>
-                    body {{
-                        font-family: 'Barlow';
-                        font-size: 90px;
-                        background-color: transparent;
-                        color: rgb(63, 82, 185);
-                        transform: translate(0%, -100%);
-                            }}
+
                     p {{
                     font-family: 'Barlow';
                     font-size: 90px;
