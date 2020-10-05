@@ -157,7 +157,7 @@ killingsPerRaceState = pd.DataFrame(df.groupby(['State','Victim\'s race']).apply
 killingsPerRaceState['ratePerPctPopulation']        = [x / dfStateRacePct.set_index('State').to_dict()[r][s] if dfStateRacePct.set_index('State').to_dict()[r][s] != 0 else np.nan for x,r,s in zip(killingsPerRaceState['Count'],killingsPerRaceState['Victim\'s race'],killingsPerRaceState['State'])]
 killingsPerRaceState['ratePerPctPopulationVsWhite'] = [x / killingsPerRaceState[(killingsPerRaceState['Victim\'s race'] == 'White') & (killingsPerRaceState['State'] == s)]['ratePerPctPopulation'].iloc[0] if len(killingsPerRaceState[(killingsPerRaceState['Victim\'s race'] == 'White') & (killingsPerRaceState['State'] == s)]) > 0 else np.nan for x,s in zip(killingsPerRaceState['ratePerPctPopulation'] , killingsPerRaceState['State'])]
 
-blackKillingsPerRaceState = killingsPerRaceState[killingsPerRaceState['Victim\'s race'] == 'Black']
+blackKillingsPerRaceState = killingsPerRaceState[killingsPerRaceState['Victim\'s race'] == 'Black'].round(3)
 
 blackKillingCumulative           = [[int(x * 1000),y] for x,y in zip((blackPerMillionTimeSeries['Date of Incident (month/day/year)'] - dt.datetime(1970,1,1)).dt.total_seconds(),blackPerMillionTimeSeries['KillingsPerMillionCumulative'])]
 hispanicKillingCumulative        = [[int(x * 1000),y] for x,y in zip((hispanicPerMillionTimeSeries['Date of Incident (month/day/year)'] - dt.datetime(1970,1,1)).dt.total_seconds(),hispanicPerMillionTimeSeries['KillingsPerMillionCumulative'])]

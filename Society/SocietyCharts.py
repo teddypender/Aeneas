@@ -1038,7 +1038,7 @@ honeyCombChartBottom = """
                 }},
                 tooltip: {{
                   headerFormat: '',
-                  pointFormat: 'The rate of Black killings in <b> {{point.name}}</b> by police is <b>{{point.value}}</b>'
+                  pointFormat: 'Police in <b> {{point.name}}</b> have killed Black people at a of <b>{{point.value}} per White person killing.</b>'
                 }},
                 
                 point: {{
