@@ -12,6 +12,7 @@ import requests
 from bs4 import BeautifulSoup
 import datetime as dt
 import SocietyCharts
+import datetime
 
 # ----------------- URLs ----------------- #
 urlPV          = r'https://mappingpoliceviolence.org/s/MPVDatasetDownload.xlsx'
@@ -247,8 +248,13 @@ blackBbrutalityMapByState = SocietyCharts.honeyCombChartTop + SocietyCharts.hone
 
 
 
-fileNames   = ['PoliceBrutalityRateTimeSeries', 'blackRateMultiple', 'hispanicRateMultiple', 'nativeAmericanRateMultiple', 'pacificIslanderRateMultiple', 'asianRateMultiple', 'blackBrutalityMap']
-htmlStrings = [killingRateByRace, blackMultiple, hispanickMultiple, nativeAmericanMultiple, pacificIslanderMultiple, asianMultiple, blackBbrutalityMapByState]
+
+lastUpdated      = SocietyCharts.lastUpdated.format(datetime.datetime.now().strftime("%m/%d/%Y, %H:%M%p"))
+
+
+
+fileNames   = ['lastUpdated', 'PoliceBrutalityRateTimeSeries', 'blackRateMultiple', 'hispanicRateMultiple', 'nativeAmericanRateMultiple', 'pacificIslanderRateMultiple', 'asianRateMultiple', 'blackBrutalityMap']
+htmlStrings = [lastUpdated, killingRateByRace, blackMultiple, hispanickMultiple, nativeAmericanMultiple, pacificIslanderMultiple, asianMultiple, blackBbrutalityMapByState]
 #write to HTML Files
 for file, stringChart in zip(fileNames, htmlStrings):
     with open(file + '.html', "w") as text_file:

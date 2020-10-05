@@ -6,6 +6,29 @@ Created on Sat Sep 19 20:03:05 2020
 @author: theodorepender
 """
 
+lastUpdated = """
+<!DOCTYPE html>
+    <html>
+        <head>
+            <link href='https://fonts.googleapis.com/css?family=Barlow' rel='stylesheet'>
+                <style>
+                    body {{
+                        font-family: 'Barlow';
+                        font-size: 40px;
+                        background-color: transparent;
+                        color: rgb(255, 255, 255);
+                        transform: translate(0%, -100%);
+                            }}
+                </style>
+        </head>
+        <body>
+            <p>Last Updated at: {0}</p>
+        </body>
+    </html>
+
+
+"""
+
 multiple = """
 <!DOCTYPE html>
     <html>
