@@ -3,11 +3,11 @@ export default function define(runtime, observer) {
   const main = runtime.module();
   const fileAttachments = new Map([["weather.tsv",new URL("./files/4adc98b10d124a9baedf976477b8848feecba26cc94672f2b1dc4fbc94c71c67635eb65915c37ad2e4c3d606ddd00b9dc62fde6f4515e399574907f9c0bf6431",import.meta.url)]]);
   main.builtin("FileAttachment", runtime.fileAttachments(name => fileAttachments.get(name)));
-  /*main.variable(observer()).define(["md"], function(md){return(
+  main.variable(observer()).define(["md"], function(md){return(
 md`# Difference Chart
 
 The temperature in New York compared to San Francisco; days when New York was warmer are orange, and colder days are blue.`
-)});*/
+)});
   main.variable(observer("chart")).define("chart", ["DOM","d3","width","height","data","xAxis","yAxis","curve","x","y","colors"], function(DOM,d3,width,height,data,xAxis,yAxis,curve,x,y,colors)
 {
   const aboveUid = DOM.uid("above");
