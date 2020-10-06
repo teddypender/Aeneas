@@ -73,7 +73,9 @@ The temperature in New York compared to San Francisco; days when New York was wa
   return svg.node();
 }
 );
-  main.variable(observer("height")).define("height", function(){600));
+  main.variable(observer("height")).define("height", function(){return(
+600
+)});
   main.variable(observer("margin")).define("margin", function(){return(
 {top: 20, right: 20, bottom: 30, left: 30}
 )});
