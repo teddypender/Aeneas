@@ -275,7 +275,7 @@ Data Sources: [polls](https://projects.fivethirtyeight.com/trump-approval-data/a
     return (
       md `## Data`
     )
-  });
+  });*/
   main.variable(observer("polls")).define("polls", ["d3"], function(d3) {
     return (
       d3.csv("https://projects.fivethirtyeight.com/trump-approval-data/approval_polllist.csv")
@@ -335,6 +335,6 @@ Data Sources: [polls](https://projects.fivethirtyeight.com/trump-approval-data/a
     return (
       require("https://bundle.run/@vx/grid@0.0.162")
     )
-  }); */
+  }); 
   return main;
 }
