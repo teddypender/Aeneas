@@ -1,4 +1,4 @@
-// https://observablehq.com/@hshoff/a-rather-lazy-recreation-of-a-fivethirtyeight-chart-using-v@428
+
 export default function define(runtime, observer) {
   const main = runtime.module();
   /*main.variable(observer()).define(["md"], function(md){return(
@@ -19,12 +19,7 @@ md`
 md`
 Reference Chart: [https://projects.fivethirtyeight.com/trump-approval-ratings/](https://projects.fivethirtyeight.com/trump-approval-ratings/)<br/>
 Data Sources: [polls](https://projects.fivethirtyeight.com/trump-approval-data/approval_polllist.csv), [trend lines](https://projects.fivethirtyeight.com/trump-approval-data/approval_topline.csv)<br/>
-react + d3 = vx: [github.com/hshoff/vx](https://github.com/hshoff/vx)
 
-I stumbled on this chart in the [FiveThirtyEight](http://fivethirtyeight.com/) sidebar. And at the bottom of the article it says "Download the data", and thought "I should try to remake that". But not a pixel perfect remake...like a "this is an interview and you have 30 minutes to recreate this" kind of remake. The tooltip is left as an excersize for the reader and can be done with [\`@vx/tooltip\`](https://github.com/hshoff/vx/tree/master/packages/vx-tooltip).
-
-**[Note]** Observable doesn't support the JSX transform [yet](https://twitter.com/tmcw/status/996439254266888192), so you have to use the \`React.createElement(type, [props], [...children])\` api. Which happens to be a lot to type so I aliased the function to \`$()\` as a nod to my jQuery days.
-`
 )});*/
   main.variable(observer()).define(["Scale", "Shape", "Axis", "Curve", "React", "d3", "width", "polls", "trends", "Group", "Grid", "ReactDOM"], function(Scale, Shape, Axis, Curve, React, d3, width, polls, trends, Group, Grid, ReactDOM) {
     const {
