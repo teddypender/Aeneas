@@ -69,7 +69,7 @@ export default function define(runtime, observer) {
   return svg.node();
 }
 );
-  main.variable(observer("height")).define("height", function(){return(
+  main.variable().define("height", function(){return(
 600
 )});
   main.variable(observer("margin")).define("margin", function(){return(
