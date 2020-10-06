@@ -1,0 +1,14 @@
+{
+  "name": "@autopaideia/covid-19-curves-u-s",
+  "main": "6abf0ed1e76ab124@2127.js",
+  "version": "2127.0.0",
+  "homepage": "https://observablehq.com/@autopaideia/covid-19-curves-u-s",
+  "author": {
+    "name": "Nick Bosman",
+    "url": "https://observablehq.com/@autopaideia"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}
