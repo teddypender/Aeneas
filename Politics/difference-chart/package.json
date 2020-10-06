@@ -1,0 +1,14 @@
+{
+  "name": "@d3/difference-chart",
+  "main": "e68ad55af4b37234@124.js",
+  "version": "124.0.0",
+  "homepage": "https://observablehq.com/@d3/difference-chart",
+  "author": {
+    "name": "D3",
+    "url": "https://observablehq.com/@d3"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}
