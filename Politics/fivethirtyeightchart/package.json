@@ -1,0 +1,14 @@
+{
+  "name": "@hshoff/a-rather-lazy-recreation-of-a-fivethirtyeight-chart-using-v",
+  "main": "0204117505db77cd@428.js",
+  "version": "428.0.0",
+  "homepage": "https://observablehq.com/@hshoff/a-rather-lazy-recreation-of-a-fivethirtyeight-chart-using-v",
+  "author": {
+    "name": "Harrison Shoff",
+    "url": "https://observablehq.com/@hshoff"
+  },
+  "type": "module",
+  "peerDependencies": {
+    "@observablehq/runtime": "4"
+  }
+}
