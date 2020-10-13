@@ -177,6 +177,7 @@ if __name__ == "__main__":
     initialFeatureEngineering(primary_dictionary_output)
     
     df = pd.concat([primary_dictionary_output[series_name]for series_name in primary_dictionary_output.keys()], axis = 1)
+    df.ffill(inplace = True)
     df = df[~df.isin([np.nan, np.inf, -np.inf]).any(1)]
     
     labelTargets(df)
