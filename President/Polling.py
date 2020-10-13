@@ -155,7 +155,7 @@ class Poll:
         
         return normalpdf
 
-def statePoll(state, presidentdf, date = datetime.datetime(2020, 11, 4)):
+def statePoll(state, presidentdf, date = datetime.datetime(2020, 11, 4), weighting = True):
     
     statePollingDEM    = presidentdf[(presidentdf.state == state) & (presidentdf.candidate_party == 'DEM') & (presidentdf.end_date <= date)]
     statePollObjDEM    = [Poll(i) for i in [statePollingDEM.iloc[n] for n in range(len(statePollingDEM))]] 
@@ -163,10 +163,48 @@ def statePoll(state, presidentdf, date = datetime.datetime(2020, 11, 4)):
     statePollingREP    = presidentdf[(presidentdf.state == state) & (presidentdf.candidate_party == 'REP') & (presidentdf.end_date <= date)]
     statePollObjREP    = [Poll(i) for i in [statePollingREP.iloc[n] for n in range(len(statePollingREP))]]
     
+    statePollingOTH    = presidentdf[(presidentdf.state == state) & (~presidentdf.candidate_party.isin(['DEM','REP'])) & (presidentdf.end_date <= date)]
+    statePollObjOTH    = [Poll(i) for i in [statePollingOTH.iloc[n] for n in range(len(statePollingOTH))]]
+    
     dfPollsDEM = pd.DataFrame([poll.normalDistpdf() for poll in statePollObjDEM], index = [poll.end_date for poll in statePollObjDEM]).sort_index(ascending = True)
     dfPollsREP = pd.DataFrame([poll.normalDistpdf() for poll in statePollObjREP], index = [poll.end_date for poll in statePollObjREP]).sort_index(ascending = True)
+    dfPollsOTH = pd.DataFrame([poll.normalDistpdf() for poll in statePollObjOTH], index = [poll.end_date for poll in statePollObjOTH]).sort_index(ascending = True)
 
-    return dfPollsDEM, dfPollsREP, statePollObjDEM, statePollObjDEM, statePollObjREP
+    if len(dfPollsOTH) == 0:
+        dfPollsOTH = pd.DataFrame(columns = dfPollsDEM.columns, index = dfPollsDEM.columns).fillna(0)
+        
+    demWeights = dfPollsDEM.mean() / dfPollsDEM.mean().sum()
+    repWeights = dfPollsREP.mean() / dfPollsREP.mean().sum()
+    othWeights = dfPollsOTH.mean() / dfPollsOTH.mean().sum()
+    
+    demMean = pd.Series(dfPollsDEM.mean()).idxmax() / len(dfPollsDEM.columns)
+    repMean = pd.Series(dfPollsREP.mean()).idxmax() / len(dfPollsREP.columns)
+    othMean = pd.Series(dfPollsOTH.mean()).idxmax() / len(dfPollsOTH.columns)
+    
+    undecided = 1 - (demMean + repMean + othMean)
+    
+    if weighting == True:
+        for i in range(len(dfPollsDEM)):
+            dfPollsDEM.iloc[i] = dfPollsDEM.iloc[i].shift(int((undecided / 2.4) * 1000)).fillna(0)
+            dfPollsDEM.iloc[i] *= (1 / (i/2 + 1)) 
+        for i in range(len(dfPollsREP)):
+            dfPollsREP.iloc[i] = dfPollsREP.iloc[i].shift(int((undecided / 2.4) * 1000)).fillna(0)
+            dfPollsREP.iloc[i] *= (1 / (i/2 + 1))
+        for i in range(len(dfPollsOTH)):
+            dfPollsOTH.iloc[i] = dfPollsOTH.iloc[i].shift(int((undecided / 2.4) * 1000)).fillna(0)
+            dfPollsOTH.iloc[i] *= (1 / (i/2 + 1))
+
+            
+        demWeights = dfPollsDEM.mean() / dfPollsDEM.mean().sum()
+        repWeights = dfPollsREP.mean() / dfPollsREP.mean().sum()
+        othWeights = dfPollsOTH.mean() / dfPollsOTH.mean().sum()
+    
+        demMean = pd.Series(dfPollsDEM.mean()).idxmax() / len(dfPollsDEM.columns)
+        repMean = pd.Series(dfPollsREP.mean()).idxmax() / len(dfPollsREP.columns)
+        othMean = pd.Series(dfPollsOTH.mean()).idxmax() / len(dfPollsOTH.columns)
+    
+    
+    return dfPollsDEM, dfPollsREP, dfPollsOTH, demWeights, repWeights, othWeights, demMean, repMean, othMean, statePollObjDEM, statePollObjREP, statePollObjOTH
 
 def rollingTimeSeries(statePollObjDEM, statePollObjREP, q = 0.9, w = 21):
     
@@ -179,20 +217,46 @@ def rollingTimeSeries(statePollObjDEM, statePollObjREP, q = 0.9, w = 21):
     
     return repMean, repLower, repUpper, demMean, demLower, demUpper
     
-def simulateElection(dfPollsDEM, dfPollsREP, state):
-    demWeights = dfPollsDEM.mean() / dfPollsDEM.mean().sum()
-    repWeights = dfPollsREP.mean() / dfPollsREP.mean().sum()
-    demSimulation = np.random.choice(np.linspace(0, 1, 1000), p = demWeights, size = 10000)    
-    repSimulation = np.random.choice(np.linspace(0, 1, 1000), p = repWeights, size = 10000)   
+def simulateElection(dfPollsDEM, dfPollsREP, dfPollsOTH, demWeights, repWeights, othWeights, state, numSimulations = 100000):
+    
+    demSimulation = np.random.choice(np.linspace(0, 1, 1000), p = demWeights, size = 1000000)    
+    repSimulation = np.random.choice(np.linspace(0, 1, 1000), p = repWeights, size = 1000000)  
+    if sum(othWeights) != 1:
+        othSimulation = np.zeros(10000)  
+    else:
+        othSimulation = np.random.choice(np.linspace(0, 1, 1000), p = othWeights, size = 1000000)   
     
     demVotesMean, demVotes10, demVotes90 = np.mean(demSimulation), np.quantile(demSimulation, 0.1), np.quantile(demSimulation, 0.9)
     repVotesMean, repVotes10, repVotes90 = np.mean(repSimulation), np.quantile(repSimulation, 0.1), np.quantile(repSimulation, 0.9)
+    othVotesMean, othVotes10, othVotes90 = np.mean(othSimulation), np.quantile(othSimulation, 0.1), np.quantile(othSimulation, 0.9)
     
-    demWinList = [1 if x > y else 0 for x,y in zip(demSimulation, repSimulation)]
-    demWin = sum(demWinList) / len(demWinList) * 100
+    demWinList, repWinList, othWinList = [], [], []
+    for i in range(numSimulations):
+        demSimulation = np.random.choice(np.linspace(0, 1, 1000), p = demWeights, size = 1)[0]  
+        repSimulation = np.random.choice(np.linspace(0, 1, 1000), p = repWeights, size = 1)[0]  
+        if sum(othWeights) != 1:
+            othSimulation = 0 
+        else:
+            othSimulation = np.random.choice(np.linspace(0, 1, 1000), p = othWeights, size = 1)[0]
+        
+        if max(demSimulation, repSimulation, othSimulation) == demSimulation:
+            demWinList.append(1)
+        elif max(demSimulation, repSimulation, othSimulation) == repSimulation:
+            repWinList.append(1)
+        else:
+            othWinList.append(1)
+    
+
+    demWin = sum(demWinList) / numSimulations * 100
     print('Probability Democrats Win {0} = {1}%'.format(state, demWin))
+
+    repWin = sum(repWinList) / numSimulations * 100
+    print('Probability Republicans Win {0} = {1}%'.format(state, repWin))
     
-    return demWin, 100 - demWin, demVotesMean, demVotes10, demVotes90, repVotesMean, repVotes10, repVotes90
+    othWin = sum(othWinList) / numSimulations * 100
+    print('Probability Other Win {0} = {1}%'.format(state, othWin))
+    
+    return (demWin, repWin, othWin), (demVotesMean, demVotes10, demVotes90), (repVotesMean, repVotes10, repVotes90), (othVotesMean, othVotes10, othVotes90)
 
 if __name__ == '__main__': 
     print('main')
@@ -225,11 +289,14 @@ if __name__ == '__main__':
 
     # ----------- Create Poll Class ----------- #
     everythingList = []
-    for state in sorted([x for x in presidentdf.state.unique() if type(x) == str]):
-    # state = 'Florida'
-        dfPollsDEM, dfPollsREP, statePollObjDEM, statePollObjDEM, statePollObjREP = statePoll(state, presidentdf)
-        demWin, repWin, demVotesMean, demVotes10, demVotes90, repVotesMean, repVotes10, repVotes90 = simulateElection(dfPollsDEM, dfPollsREP, state)
-        everythingList.append([state, demWin, repWin, demVotesMean, demVotes10, demVotes90, repVotesMean, repVotes10, repVotes90])
+    # for state in sorted([x for x in presidentdf.state.unique() if type(x) == str]):
+    for state in ['Alaska','Arizona','Colorado','Florida','Georgia','Iowa','Michigan','Minnesota','Nebraska','Nebraska CD-1','Nebraska CD-2','Nevada','North Carolina','Ohio','Pennsylvania','South Carolina','Texas','Virginia','West Virginia','Wisconsin']:
+        print(state)
+        dfPollsDEM, dfPollsREP, dfPollsOTH, demWeights, repWeights, othWeights, demMean, repMean, othMean, statePollObjDEM, statePollObjREP, statePollObjOTH = statePoll(state, presidentdf)
+        winProbability, demVotes, repVotes, othVotes = simulateElection(dfPollsDEM, dfPollsREP, dfPollsOTH, demWeights, repWeights, othWeights, state, numSimulations=10000)
+       
+        
+       # everythingList.append([state, demWin, repWin, demVotesMean, demVotes10, demVotes90, repVotesMean, repVotes10, repVotes90])
 
 
 
