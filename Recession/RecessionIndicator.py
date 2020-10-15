@@ -153,7 +153,43 @@ def adjustWithTarget(X, y, target):
         X_update, y_update = X[:-24], y[:-24]
     return X_update, y_update
 
+def recessionPredictor(X_threedf, y_threedf, targets):
+    target = targets[1]
+    X_df, y_df = adjustWithTarget(X_threedf, y_threedf, target)
 
+    names = ["Gaussian Process"]
+    classifiers = [GaussianProcessClassifier(1.0 * RBF(1.0))]
+    
+    X, y = np.asarray(X_df), np.asarray(y_df[target])
+        
+    linearly_separable = (X, y)
+    
+    datasets = [
+                linearly_separable
+                ]
+    predictedProbability = []
+    
+    for ds_cnt, ds in enumerate(datasets):
+            # preprocess dataset, split into training and test part
+            X, y = ds
+            ss = StandardScaler().fit(X)
+            X = ss.transform(X)
+            X_True = ss.transform(X_threedf)
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.15, random_state=42)
+        
+            # iterate over classifiers
+            for name, clf in zip(names, classifiers):
+                clf.fit(X_train, y_train)
+#                predictedProbability.append([x[1] for x in clf.predict_proba(X_True)])
+                predictedProbability = [x[1] * 100 for x in clf.predict_proba(X_True)]
+
+
+    df_Recession_Prediction = pd.DataFrame(index = X_threedf.index, data = predictedProbability, columns = ['Probability of Recession in 3 Months'])
+    df_Recession_Prediction.reset_index(inplace = True)
+    df_Recession_Prediction.rename({'index' : 'DateTime'}, axis = 1, inplace = True)
+    
+    df_Recession_Prediction_Recent = df_Recession_Prediction[-240:]
+    return df_Recession_Prediction_Recent
 
 
 if __name__ == "__main__":
@@ -182,7 +218,8 @@ if __name__ == "__main__":
     
     labelTargets(df)
 
-    X_threedf, y_threedf, targets = threeMonthFeature(df)
+    X_threedf, y_threedf, targets   = threeMonthFeature(df)
+    X_twelvedf, y_twelvedf, targets = twelveMonthFeature(df)
     """
     # ----------- Model Testing ----------- #
 
@@ -254,45 +291,43 @@ if __name__ == "__main__":
     # ----------- Model Running ----------- #
     
     # Choose GaussianProcessClassifier
-    
-    target = targets[1]
-    X_df, y_df = adjustWithTarget(X_threedf, y_threedf, target)
 
-    names = ["Gaussian Process"]
-    classifiers = [GaussianProcessClassifier(1.0 * RBF(1.0))]
+    df_Recession_Prediction_Recent = recessionPredictor(X_threedf, y_threedf, targets)
+    df_Recession_Prediction_Recent.reset_index(drop = True).to_json('RecessionIndicatorResults.json')
     
-    X, y = np.asarray(X_df), np.asarray(y_df[target])
-        
-    linearly_separable = (X, y)
+    df_Recession_Prediction_Recent12 = recessionPredictor(X_twelvedf, y_twelvedf, targets)
+    df_Recession_Prediction_Recent12.reset_index(drop = True).to_json('RecessionIndicatorResults12.json')
+
     
-    datasets = [
-                linearly_separable
-                ]
-    predictedProbability = []
-    
-    for ds_cnt, ds in enumerate(datasets):
-            # preprocess dataset, split into training and test part
-            X, y = ds
-            ss = StandardScaler().fit(X)
-            X = ss.transform(X)
-            X_True = ss.transform(X_threedf)
-            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.35, random_state=42)
-        
-            # iterate over classifiers
-            for name, clf in zip(names, classifiers):
-                clf.fit(X_train, y_train)
-#                predictedProbability.append([x[1] for x in clf.predict_proba(X_True)])
-                predictedProbability = [x[1] * 100 for x in clf.predict_proba(X_True)]
 
 
-    df_Recession_Prediction = pd.DataFrame(index = X_threedf.index, data = predictedProbability, columns = ['Probability of Recession in 3 Months'])
-    df_Recession_Prediction.reset_index(inplace = True)
-    df_Recession_Prediction.rename({'index' : 'DateTime'}, axis = 1, inplace = True)
+    """Consider using https://www.bloomberg.com/graphics/us-economic-recession-tracker/ metrics like US Initial Jobless Claims, 4-Wk. Moving Avg., '000
+    S&P 500 Index, Monthly Avg.
+    Employment Diffusion Index
+    Note: An Employment Diffusion Index lower than 50 means more industries are reducing employment than increasing employment
+    Sources: Labor Department, Bloomberg Economics
+    
+    Zero-Bound
+    Federal Reserve interest rate cuts in prior downturns
+    
+    *Assumes minimum target range for the federal funds rate of 0-0.25%. Years denote start of easing cycles
+
+    Source: Bloomberg Economics
+    
+
+    
+    Shallow or Deep?
+    Quarterly change in U.S. GDP following recession; 100 = start of recession
     
     
-    df_Recession_Prediction_Recent = df_Recession_Prediction[-240:]
+    Out of Work
+    Quarterly change in U.S. unemployment rate in past recessions"""
     
-    df_Recession_Prediction_Recent.reset_index().to_json('RecessionIndicatorResults.json')
+
+
+
+
+
     
     #authorization
     gc = pygsheets.authorize(service_file='/Users/theodorepender/Desktop/Midnight-Labs-9d593d26ebe7.json')

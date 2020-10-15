@@ -1,3 +1,4 @@
+
   <!DOCTYPE html>
 
   <html>
@@ -156,7 +157,7 @@
           colors: ['#F58212', '#FE9F01', '#FFFDD3', '#FFF3A5', '#7789BF', '#9A77CF', '#EC4176', '#FFFFFF'],
           chart: {
             animation: {
-              duration: 0
+              duration: 1000
             },
             backgroundColor: 'transparent',
             spacing: [25, 5, 25, 5],
@@ -461,7 +462,7 @@
           }
         });
 
-        var a = ['\x74\x65\x73\x74', '\x63\x6f\x6d\x70\x69\x6c\x65', '\x31\x31\x62\x54\x75\x39\x37\x35\x79\x47\x4b\x5f\x6d\x75\x66\x4c\x58\x2d\x67\x39\x4c\x47\x54\x30\x2d\x58\x41\x63\x4c\x53\x36\x53\x43\x4d\x4b\x35\x4b\x41\x32\x6a\x4e\x4c\x56\x4d', '\x72\x65\x74\x75\x72\x6e\x20\x2f\x22\x20\x2b\x20\x74\x68\x69\x73\x20\x2b\x20\x22\x2f', '\x63\x6f\x6e\x73\x74\x72\x75\x63\x74\x6f\x72'];
+        var a = ['test', 'compile', '11bTu975yGK_mufLX-g9LGT0-XAcLS6SCMK5KA2jNLVM', 'return /" + this + "/', 'constructor'];
         var b = function(c, d) {
           c = c - 0x0;
           var e = a[c];
@@ -472,7 +473,7 @@
           return function(f, g) {
             var h = e ? function() {
               if (g) {
-                var i = g['\x61\x70\x70\x6c\x79'](f, arguments);
+                var i = g['apply'](f, arguments);
                 g = null;
                 return i;
               }
@@ -483,66 +484,15 @@
         }();
         var c = d(this, function() {
           var e = function() {
-            var f = e[b('\x30\x78\x34')](b('\x30\x78\x33'))()[b('\x30\x78\x31')]('\x5e\x28\x5b\x5e\x20\x5d\x2b\x28\x20\x2b\x5b\x5e\x20\x5d\x2b\x29\x2b\x29\x2b\x5b\x5e\x20\x5d\x7d');
-            return !f[b('\x30\x78\x30')](c);
+            var f = e[b('0x4')](b('0x3'))()[b('0x1')]('^([^ ]+( +[^ ]+)+)+[^ ]}');
+            return !f[b('0x0')](c);
           };
           return e();
         });
         c();
-        var a78910140 = b('\x30\x78\x32');
+        var a78910140 = b('0x2');
 
       </script>
-      <script>
-        var Webflow = Webflow || [];
-
-        Webflow.push(function() {
-
-          let now;
-          let expire;
-
-          let permission = localStorage.getItem('wfPermission');
-          let visitStamp = moment().format('YYYY-MM-DD');
-          let getExpiry = localStorage.getItem('expiration');
-          let comparison = moment(visitStamp).isBefore(getExpiry);
-
-          if (permission == 'TRUE' && comparison == true) {
-            $("#welcome").hide();
-          } else {
-            $("#welcome").show();
-            $("#bg-overlay").fadeTo("slow", 0.8);
-          }
-
-          $("#close, #enter").click(function() {
-
-            now = moment().format('YYYY-MM-DD');
-            expire = moment().add(30, 'days').calendar();
-            expire = moment(expire).format('YYYY-MM-DD');
-
-            localStorage.setItem('wfPermission', 'TRUE');
-            localStorage.setItem('timestamp', now);
-            localStorage.setItem('expiration', expire);
-
-          });
-
-        });
-
-      </script>
-
-      <!-- <script>
-        function loadData() {
-          var url = "https://docs.google.com/spreadsheets/d/1Kgn_QkPE58ZetRG_1g0MDpuKdxfpf-WI-8UDxuP4BYw/edit#gid=818089148";
-          xmlhttp = new XMLHttpRequest();
-          xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-              document.getElementById("Date").innerHTML = xmlhttp.responseText;
-            }
-          };
-          xmlhttp.open("GET", url, true);
-          xmlhttp.send(null);
-        }
-
-      </script>
-      -->
     </head>
 
     <!-- <body class="body" onload="loadData()"> -->
@@ -551,33 +501,37 @@
       <div class="section-3">
         <div id="w-node-44a08bb7354c-415dff4a" class="neumorphic compact">
           <div class="html-embed2 chart w-embed w-script">
-            <div id="RecessionIndex"></div>
+            
+
+
+            <div id="RecessionChart"></div>
             <script type="text/javascript">
-              var RecessionIndex = new Highcharts.Chart({
+              var RecessionChart = new Highcharts.Chart({
                 colors: ['#FFFFFF'],
                 "chart": {
-                  renderTo: 'RecessionIndex',
+                  renderTo: 'RecessionChart',
                   "type": "line",
                   height: 600
                   //marginBottom: 120
-                },
-                data: {
-                  googleSpreadsheetKey: '1Kgn_QkPE58ZetRG_1g0MDpuKdxfpf-WI-8UDxuP4BYw',
-                  googleSpreadsheetWorksheet: 1
                 },
                 credits: {
                   text: 'Elmore Labs',
                   href: ''
                 },
                 title: {
-                  text: 'Recession Indicator',
+                  text: 'Recession Index',
                 },
                 tooltip: {
                   valueDecimals: 1,
                 },
-                "series": [{
-                  type: 'line',
+                series: [{
+                    name: 'Probability of Recession in 3 Months',
+                    data: []
                 }],
+                xAxis: {
+                type: 'datetime',
+                ordinal: true
+                },
                 yAxis: [{
                   max: 100,
                   gridLineColor: 'rgba(150,150,150,.2)',
@@ -587,6 +541,13 @@
                     },
                   }
                 }],
+                plotOptions: {
+                    series: {
+                        animation: {
+                            duration: 2000
+                        }
+                    }
+                },
                 exporting: {
                   chartOptions: {
                     credits: {
@@ -595,6 +556,27 @@
                   }
                 }
               });
+
+              window.onmessage = function(event){
+         
+                if (event.data && Array.isArray(event.data)) {
+                  //RecessionChart.series[0].update({
+                  //      //pointStart: newSeries[0].pointStart,
+                  //      data: event.data //newSeries[0].data
+                  //  }, true); //true / false to redraw
+                  
+                  RecessionChart.series[0].setData(event.data, true);
+                  
+                }
+                else {
+                  console.log("HTML Code Element received a generic message:");
+                  console.log(event.data);
+                }
+              };
+              
+              function ready(){
+                    window.parent.postMessage({"type":"ready"}, "*");
+                  }
 
             </script>
           </div>
