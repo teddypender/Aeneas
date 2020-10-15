@@ -292,6 +292,8 @@ if __name__ == "__main__":
     
     df_Recession_Prediction_Recent = df_Recession_Prediction[-240:]
     
+    df_Recession_Prediction_Recent.reset_index().to_json('RecessionIndicatorResults.json')
+    
     #authorization
     gc = pygsheets.authorize(service_file='/Users/theodorepender/Desktop/Midnight-Labs-9d593d26ebe7.json')
     
