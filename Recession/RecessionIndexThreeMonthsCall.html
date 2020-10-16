@@ -504,14 +504,14 @@
             
 
 
-            <div id="RecessionChart"></div>
+            <div id="RecessionChart12"></div>
             <script type="text/javascript">
-              var RecessionChart = new Highcharts.Chart({
+              var RecessionChart12 = new Highcharts.Chart({
                 colors: ['#FFFFFF'],
                 "chart": {
-                  renderTo: 'RecessionChart',
+                  renderTo: 'RecessionChart12',
                   "type": "line",
-                  height: 600
+                  height: 400
                   //marginBottom: 120
                 },
                 credits: {
@@ -525,7 +525,7 @@
                   valueDecimals: 1,
                 },
                 series: [{
-                    name: 'Probability of Recession in 3 Months',
+                    name: 'Probability of Recession in 12 Months',
                     data: []
                 }],
                 xAxis: {
@@ -560,12 +560,12 @@
               window.onmessage = function(event){
          
                 if (event.data && Array.isArray(event.data)) {
-                  //RecessionChart.series[0].update({
+                  //RecessionChart12.series[0].update({
                   //      //pointStart: newSeries[0].pointStart,
                   //      data: event.data //newSeries[0].data
                   //  }, true); //true / false to redraw
                   
-                  RecessionChart.series[0].setData(event.data, true);
+                  RecessionChart12.series[0].setData(event.data, true);
                   
                 }
                 else {

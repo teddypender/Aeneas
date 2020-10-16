@@ -13,6 +13,7 @@ import datetime
 from fredapi import Fred
 import yfinance as yf
 import pygsheets
+# from pybea.client import BureauEconomicAnalysisClient
 
 #import numpy as np
 from sklearn.model_selection import train_test_split
@@ -20,6 +21,35 @@ from sklearn.preprocessing import StandardScaler
 #from sklearn.neural_network import MLPClassifier
 from sklearn.gaussian_process import GaussianProcessClassifier
 from sklearn.gaussian_process.kernels import RBF
+
+
+
+
+
+# """
+# TEST
+# """
+
+# UserID = 'EE138CF5-041E-44BC-8A2B-E1E931FAA977'
+# # Initalize the new Client.
+# bea_client = BureauEconomicAnalysisClient(api_key=UserID)
+
+# # Grab the Dataset List.
+# dataset_list = bea_client.get_dataset_list()
+# # print(dataset_list)
+
+# # Grab GDP for the Finance & Insurance Industry (58), for the years 2018 & 2019 and an annual basis ('A')
+# gdp_by_industry = bea_client.gdp_by_industry(
+#     #year=['2019'],
+#     industry='II', # 'II' is 'All Industry'
+#     frequency='Q'
+# )
+# dfTest = pd.DataFrame(gdp_by_industry['BEAAPI']['Results'][0]['Data'])
+
+# # dfAll = dfTest[dfTest['IndustrYDescription'] == 'All industries']
+
+# dfNote = pd.DataFrame(gdp_by_industry['BEAAPI']['Results'][0]['Notes'])
+# # NoteRef 1 is value add by industry in billions of dollars and 5 is Value added by Industry as a Percentage of Gross Domestic Product [Percent]
 
 
 
@@ -153,7 +183,7 @@ def adjustWithTarget(X, y, target):
         X_update, y_update = X[:-24], y[:-24]
     return X_update, y_update
 
-def recessionPredictor(X_threedf, y_threedf, targets):
+def recessionPredictor(X_threedf, y_threedf, targets, col):
     target = targets[1]
     X_df, y_df = adjustWithTarget(X_threedf, y_threedf, target)
 
@@ -180,11 +210,12 @@ def recessionPredictor(X_threedf, y_threedf, targets):
             # iterate over classifiers
             for name, clf in zip(names, classifiers):
                 clf.fit(X_train, y_train)
+                print('Score: {0}'.format(clf.score(X_test, y_test)))
 #                predictedProbability.append([x[1] for x in clf.predict_proba(X_True)])
                 predictedProbability = [x[1] * 100 for x in clf.predict_proba(X_True)]
 
 
-    df_Recession_Prediction = pd.DataFrame(index = X_threedf.index, data = predictedProbability, columns = ['Probability of Recession in 3 Months'])
+    df_Recession_Prediction = pd.DataFrame(index = X_threedf.index, data = predictedProbability, columns = [col])
     df_Recession_Prediction.reset_index(inplace = True)
     df_Recession_Prediction.rename({'index' : 'DateTime'}, axis = 1, inplace = True)
     
@@ -201,7 +232,9 @@ if __name__ == "__main__":
                         '10Y_Treasury_Rate'         : 'GS10',
                         '5Y_Treasury_Rate'          : 'GS5',
                         '3_Month_T-Bill_Rate'       : 'TB3MS',
-                        'IPI'                       : 'INDPRO'}
+                        'IPI'                       : 'INDPRO',
+                        'GDP'                       : 'GDP',
+                        'Initial_Claims'            : 'ICSA'}
     yahoo_series_ids = {'S&P_500_Index'             : '^GSPC'}
     primary_dictionary_output = {}
     secondary_df_output = pd.DataFrame()
@@ -292,10 +325,10 @@ if __name__ == "__main__":
     
     # Choose GaussianProcessClassifier
 
-    df_Recession_Prediction_Recent = recessionPredictor(X_threedf, y_threedf, targets)
+    df_Recession_Prediction_Recent = recessionPredictor(X_threedf, y_threedf, targets, 'Probability of Recession in 3 Months')
     df_Recession_Prediction_Recent.reset_index(drop = True).to_json('RecessionIndicatorResults.json')
     
-    df_Recession_Prediction_Recent12 = recessionPredictor(X_twelvedf, y_twelvedf, targets)
+    df_Recession_Prediction_Recent12 = recessionPredictor(X_twelvedf, y_twelvedf, targets, 'Probability of Recession in 12 Months')
     df_Recession_Prediction_Recent12.reset_index(drop = True).to_json('RecessionIndicatorResults12.json')
 
     
@@ -318,11 +351,12 @@ if __name__ == "__main__":
     
     Shallow or Deep?
     Quarterly change in U.S. GDP following recession; 100 = start of recession
-    
+    Apr 1960, Dec 1969, Nov 1973, Jan 1980, Jul 1981, Jul 1990, Mar 2001, Dec 2007
     
     Out of Work
-    Quarterly change in U.S. unemployment rate in past recessions"""
-    
+    Quarterly change in U.S. unemployment rate in past recessions
+    Apr 1960, Dec 1969, Nov 1973, Jan 1980, Jul 1981, Jul 1990, Mar 2001, Dec 2007
+    """
 
 
 
