@@ -347,8 +347,8 @@ if __name__ == "__main__":
     df_Recession_Prediction_Recent['DateTime'] = [int((x- datetime.datetime(1970,1,1)).total_seconds() * 1000)for x in df_Recession_Prediction_Recent['DateTime']]
     df_Recession_Prediction_Recent12['DateTime'] = [int((x- datetime.datetime(1970,1,1)).total_seconds() * 1000)for x in df_Recession_Prediction_Recent12['DateTime']]
 
-    r3 = df_Recession_Prediction_Recent.to_dict()
-    r12 = df_Recession_Prediction_Recent12.to_dict()
+    r3 = df_Recession_Prediction_Recent.reset_index(drop = True).to_dict()
+    r12 = df_Recession_Prediction_Recent12.reset_index(drop = True).to_dict()
     
     rall = {k : v for k,v in zip(['3 Months', '12 Months'], [r3, r12])}
 

@@ -5352,6 +5352,7 @@
         },
         yAxis: {
           gridLineColor: 'rgba(150,150,150,.2)',
+          max: 100,
           title: {
             text: ''
           },
@@ -5593,22 +5594,22 @@
 
     <div id="w-node-d340ee94ac51-415dff4a" class="neumorphic compact">
 
-      <h2 class="chart-header bottom-border">ZHVI - U.S. Housing Indicators<br /></h2>
+      <h2 class="chart-header bottom-border">Recession Indicator<br /></h2>
       <div data-duration-in="300" data-duration-out="100" class="w-tabs">
         <div class="w-tab-menu"><a data-w-tab="Tab 1" class="tab-2 w-inline-block w-tab-link w--current">
-            <div>Top Tier Property Value Change</div>
+            <div>Probability of Recession in 3 Months</div>
           </a><a data-w-tab="Tab 2" class="tab-2 w-inline-block w-tab-link">
-            <div class="text-block-11">Bottom Tier Property Value Change</div>
+            <div class="text-block-11">Probability of Recession in 12 Months</div>
           </a></div>
         <div class="w-tab-content">
           <div data-w-tab="Tab 1" class="w-tab-pane w--tab-active">
             <div class="html-embed chart w-embed w-script">
-              <div id="HousingEconomyTier"></div>
+              <div id="Recession3Months"></div>
               <script type="text/javascript">
-                var HousingEconomyTier = new Highcharts.Chart({
+                var Recession3Months = new Highcharts.Chart({
                   colors: ['#EC4176'],
                   chart: {
-                    renderTo: 'HousingEconomyTier',
+                    renderTo: 'Recession3Months',
                     type: 'line',
                     marginBottom: 100,
                   },
@@ -5617,16 +5618,20 @@
                   //  googleSpreadsheetWorksheet: 11
                   //},
                   series: [{
-                    name: 'Probability of Recession in 12 Months',
+                    name: 'Probability of Recession in 3 Months',
                     data: []
                     }],
                   credits: {
-                    text: 'Zillow',
+                    text: 'Elmore',
                     href: ''
                   },
                   title: {
                     text: 'Top Tier Value Change',
                   },
+                  //xAxis: {
+                  //  type: 'datetime',
+                  //  ordinal: true
+                  //  },
                   yAxis: {
                     labels: {
                       formatter: function() {
@@ -5639,48 +5644,40 @@
                   }
                 });
                 
-                 window.onmessage = function(event){
-         
-                    if (event.data && Array.isArray(event.data)) {
-                      
-                      HousingEconomyTier.series[0].setData(event.data, true);
-                      
-                    }
-                    else {
-                      console.log("HTML Code Element received a generic message:");
-                      console.log(event.data);
-                    }
-                  };
-                  
-                function ready(){
-                      window.parent.postMessage({"type":"ready"}, "*");
-                    }
 
               </script>
             </div>
           </div>
           <div data-w-tab="Tab 2" class="w-tab-pane">
             <div class="html-embed chart w-embed w-script">
-              <div id="HousingEconomyTier2"></div>
+              <div id="Recession12Months"></div>
               <script type="text/javascript">
-                var HousingEconomyTier2 = new Highcharts.Chart({
+                var Recession12Months = new Highcharts.Chart({
                   colors: ['#EA6248'],
                   chart: {
-                    renderTo: 'HousingEconomyTier2',
+                    renderTo: 'Recession12Months',
                     type: 'line',
-                    marginBottom: 220,
+                    marginBottom: 100,
                   },
-                  data: {
-                    googleSpreadsheetKey: '1Bs0xB_pUrA3nyloh7mj-NOAe51nKodrEFPff4ijB_OU',
-                    googleSpreadsheetWorksheet: 12
-                  },
+                  //data: {
+                  //  googleSpreadsheetKey: '1Bs0xB_pUrA3nyloh7mj-NOAe51nKodrEFPff4ijB_OU',
+                  //  googleSpreadsheetWorksheet: 12
+                  //},
+                  series: [{
+                    name: 'Probability of Recession in 12 Months',
+                    data: []
+                    }],
                   credits: {
-                    text: 'Zillow',
+                    text: 'Elmore',
                     href: ''
                   },
                   title: {
                     text: 'Bottom Tier Value Change',
                   },
+                  //xAxis: {
+                  //  type: 'datetime',
+                  //  ordinal: true
+                  //  },
                   yAxis: {
                     labels: {
                       formatter: function() {
@@ -5693,11 +5690,47 @@
                   }
                 });
                 
-
+               /* 
+                window.onmessage = function(event){
+         
+                    if (event.data && Array.isArray(event.data)) {
+                      
+                      Recession12Months.series[0].setData(event.data, true);
+                      
+                    }
+                    else {
+                      console.log("HTML Code Element received a generic message:");
+                      console.log(event.data);
+                    }
+                  };
+                  
+                function ready(){
+                      window.parent.postMessage({"type":"ready"}, "*");
+                    }
+                */
               </script>
             </div>
           </div>
         </div>
+        <script>
+        window.onmessage = function(event){
+         
+                    if (event.data && Array.isArray(event.data)) {
+                      
+                      Recession3Months.series[0].setData(event.data[0], true);
+                      Recession12Months.series[0].setData(event.data[1], true);
+
+                    }
+                    else {
+                      console.log("HTML Code Element received a generic message:");
+                      console.log(event.data);
+                    }
+                  };
+                  
+                function ready(){
+                      window.parent.postMessage({"type":"ready"}, "*");
+                    }
+        </script>
       </div>
       <p class="paragraph-3 summary">Description (6).<br /></p>
     </div>
