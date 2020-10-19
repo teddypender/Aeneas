@@ -13,6 +13,7 @@ import datetime
 from fredapi import Fred
 import yfinance as yf
 import pygsheets
+import json
 # from pybea.client import BureauEconomicAnalysisClient
 
 #import numpy as np
@@ -338,14 +339,22 @@ if __name__ == "__main__":
     # Choose GaussianProcessClassifier
 
     df_Recession_Prediction_Recent = recessionPredictor(X_threedf, y_threedf, targets, 'Probability of Recession in 3 Months')
-    df_Recession_Prediction_Recent.reset_index(drop = True).to_json('RecessionIndicatorResults.json')
+    # df_Recession_Prediction_Recent.reset_index(drop = True).to_json('RecessionIndicatorResults.json')
     
     df_Recession_Prediction_Recent12 = recessionPredictor(X_twelvedf, y_twelvedf, targets, 'Probability of Recession in 12 Months')
-    df_Recession_Prediction_Recent12.reset_index(drop = True).to_json('RecessionIndicatorResults12.json')
-
+    # df_Recession_Prediction_Recent12.reset_index(drop = True).to_json('RecessionIndicatorResults12.json')
     
+    df_Recession_Prediction_Recent['DateTime'] = [int((x- datetime.datetime(1970,1,1)).total_seconds() * 1000)for x in df_Recession_Prediction_Recent['DateTime']]
+    df_Recession_Prediction_Recent12['DateTime'] = [int((x- datetime.datetime(1970,1,1)).total_seconds() * 1000)for x in df_Recession_Prediction_Recent12['DateTime']]
 
+    r3 = df_Recession_Prediction_Recent.to_dict()
+    r12 = df_Recession_Prediction_Recent12.to_dict()
+    
+    rall = {k : v for k,v in zip(['3 Months', '12 Months'], [r3, r12])}
 
+    with open("RecessionIndicator.json", "w") as outfile:  
+        json.dump(rall, outfile) 
+    
     """Consider using https://www.bloomberg.com/graphics/us-economic-recession-tracker/ metrics like US Initial Jobless Claims, 4-Wk. Moving Avg., '000
     S&P 500 Index, Monthly Avg.
     Employment Diffusion Index
