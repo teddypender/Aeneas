@@ -222,6 +222,17 @@ def recessionPredictor(X_threedf, y_threedf, targets, col):
     df_Recession_Prediction_Recent = df_Recession_Prediction[-240:]
     return df_Recession_Prediction_Recent
 
+def gdpRecessionTime(gdpDataFrame, dates, length = 14):
+    dfList = []
+    for dt in dates:
+        df = gdpDataFrame[gdpDataFrame.index >= dt][0:length + 1][['GDP']] 
+        df['GDPDelta'] = df['GDP'] / df['GDP'].iloc[0] * 100
+        df['Quarter']  = ['Recession Start' if x == 0 else '+{0}Q'.format(str(x)) for x, i in enumerate(df['GDPDelta'])]
+        df = df[['Quarter','GDPDelta']]
+        dfList.append(df)
+        
+    return dfList
+
 
 if __name__ == "__main__":
     
@@ -234,7 +245,8 @@ if __name__ == "__main__":
                         '3_Month_T-Bill_Rate'       : 'TB3MS',
                         'IPI'                       : 'INDPRO',
                         'GDP'                       : 'GDP',
-                        'Initial_Claims'            : 'ICSA'}
+                        #'Initial_Claims'            : 'ICSA'
+                        }
     yahoo_series_ids = {'S&P_500_Index'             : '^GSPC'}
     primary_dictionary_output = {}
     secondary_df_output = pd.DataFrame()
@@ -358,35 +370,45 @@ if __name__ == "__main__":
     Apr 1960, Dec 1969, Nov 1973, Jan 1980, Jul 1981, Jul 1990, Mar 2001, Dec 2007
     """
 
-
-
-
-
+    # GDP Chart: 'Recession Start' '+Q1', '+Q2', ... '+Q14'
+    gdpDataFrame = primary_dictionary_output['GDP']
+    dates = [datetime.datetime(1960, 4, 1), datetime.datetime(1969, 1, 1), datetime.datetime(1973, 9, 1), 
+             datetime.datetime(1980, 1, 1), datetime.datetime(1981, 7, 1), datetime.datetime(2019, 10, 1), 
+             datetime.datetime(1990, 7, 1), datetime.datetime(2001, 4, 1),datetime.datetime(2008, 4, 1)]
+    dfList = gdpRecessionTime(gdpDataFrame, dates)
     
+    
+    plt.figure(figsize = (10,6))
+    plt.plot(dfList[-1]['Quarter'], dfList[-1]['GDPDelta'], label = '2008-April')
+    plt.plot(dfList[-2]['Quarter'], dfList[-2]['GDPDelta'], label = '2001-April')
+    plt.plot(dfList[-3]['Quarter'], dfList[-3]['GDPDelta'], label = '1990-July')
+    plt.plot(dfList[-4]['Quarter'], dfList[-4]['GDPDelta'], label = '2020-January')
+    plt.ylim(88,105)
+    plt.legend()
     #authorization
-    gc = pygsheets.authorize(service_file='/Users/theodorepender/Desktop/Midnight-Labs-9d593d26ebe7.json')
+    # gc = pygsheets.authorize(service_file='/Users/theodorepender/Desktop/Midnight-Labs-9d593d26ebe7.json')
     
-    #open the google spreadsheet (where 'Recession-Indicator' is the name of my sheet)
-    sh = gc.open('Recession-Indicator')
+    # #open the google spreadsheet (where 'Recession-Indicator' is the name of my sheet)
+    # sh = gc.open('Recession-Indicator')
     
-    #add worksheets
-    #sh.add_worksheet('Sheet3')
+    # #add worksheets
+    # #sh.add_worksheet('Sheet3')
     
-    #get last update time
-    last_update = gc.drive.get_update_time('1Kgn_QkPE58ZetRG_1g0MDpuKdxfpf-WI-8UDxuP4BYw')[0:10].split('-')
-    last_update = pd.datetime(int(last_update[0]),int(last_update[1]), int(last_update[2]))
+    # #get last update time
+    # last_update = gc.drive.get_update_time('1Kgn_QkPE58ZetRG_1g0MDpuKdxfpf-WI-8UDxuP4BYw')[0:10].split('-')
+    # last_update = pd.datetime(int(last_update[0]),int(last_update[1]), int(last_update[2]))
     
-    date_time = last_update.strftime("%A, %B %dth")
+    # date_time = last_update.strftime("%A, %B %dth")
     
-    #select the sheet 
-    wks = sh[0]
-    wks_recent = sh[1]
-    wks_update = sh[2]
+    # #select the sheet 
+    # wks = sh[0]
+    # wks_recent = sh[1]
+    # wks_update = sh[2]
     
-    #update the sheets with the dataframes. 
-    wks.set_dataframe(df_Recession_Prediction,(1,1))
-    wks_recent.set_dataframe(df_Recession_Prediction_Recent,(1,1))
-    wks_update.update_value('A1', date_time)
+    # #update the sheets with the dataframes. 
+    # wks.set_dataframe(df_Recession_Prediction,(1,1))
+    # wks_recent.set_dataframe(df_Recession_Prediction_Recent,(1,1))
+    # wks_update.update_value('A1', date_time)
     
 
 
