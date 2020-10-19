@@ -104,7 +104,9 @@ def initialFeatureEngineering(primary_dictionary_output):
         # Calculate percentage change in three and twelve months of each data point
         series_3M, series_12M = pd.Series(v[k]), pd.Series(v[k])
         v[k + '_3M']  = ((1 - series_3M.pct_change(3)) ** 4) - 1 
+        v[k + '_6M']  = series_12M.pct_change(6) * 100
         v[k + '_12M'] = series_12M.pct_change(12) * 100
+        v[k + '_24M'] = series_12M.pct_change(24) * 100
         
         # Cosnider the spread of treasury 10Y with 5Y and 3Y respectively
         
@@ -161,10 +163,21 @@ def threeMonthFeature(df):
     targets = ['Recession', 'Recession_in_3mo', 'Recession_in_6mo', 'Recession_in_12mo', 'Recession_in_24mo']    
     return df[columns], df[targets], targets
 
+def sixMonthFeature(df):
+    columns = [x for x in df.columns if x[-2:] == '6M']
+    targets = ['Recession', 'Recession_in_3mo', 'Recession_in_6mo', 'Recession_in_12mo', 'Recession_in_24mo']
+    return df[columns], df[targets], targets
+
 def twelveMonthFeature(df):
     columns = [x for x in df.columns if x[-3:] == '12M']
     targets = ['Recession', 'Recession_in_3mo', 'Recession_in_6mo', 'Recession_in_12mo', 'Recession_in_24mo']
     return df[columns], df[targets], targets
+
+def twentyfourMonthFeature(df):
+    columns = [x for x in df.columns if x[-3:] == '24M']
+    targets = ['Recession', 'Recession_in_3mo', 'Recession_in_6mo', 'Recession_in_12mo', 'Recession_in_24mo']
+    return df[columns], df[targets], targets
+
 
 def allFeatures(df):
     columns = [x for x in df.columns if x[-2:] == '3M'] + [x for x in df.columns if x[-3:] == '12M']
@@ -264,8 +277,11 @@ if __name__ == "__main__":
     
     labelTargets(df)
 
-    X_threedf, y_threedf, targets   = threeMonthFeature(df)
-    X_twelvedf, y_twelvedf, targets = twelveMonthFeature(df)
+    X_threedf, y_threedf, targets           = threeMonthFeature(df)
+    X_sixdf, y_sixdf, targets               = sixMonthFeature(df)
+    X_twelvedf, y_twelvedf, targets         = twelveMonthFeature(df)
+    X_twentyfourdf, y_twentyfourdf, targets = twentyfourMonthFeature(df)
+    
     """
     # ----------- Model Testing ----------- #
 
@@ -338,19 +354,22 @@ if __name__ == "__main__":
     
     # Choose GaussianProcessClassifier
 
-    df_Recession_Prediction_Recent = recessionPredictor(X_threedf, y_threedf, targets, 'Probability of Recession in 3 Months')
-    # df_Recession_Prediction_Recent.reset_index(drop = True).to_json('RecessionIndicatorResults.json')
-    
+    df_Recession_Prediction_Recent3  = recessionPredictor(X_threedf, y_threedf, targets, 'Probability of Recession in 3 Months')
+    df_Recession_Prediction_Recent6  = recessionPredictor(X_sixdf, y_sixdf, targets, 'Probability of Recession in 6 Months')
     df_Recession_Prediction_Recent12 = recessionPredictor(X_twelvedf, y_twelvedf, targets, 'Probability of Recession in 12 Months')
-    # df_Recession_Prediction_Recent12.reset_index(drop = True).to_json('RecessionIndicatorResults12.json')
+    df_Recession_Prediction_Recent24 = recessionPredictor(X_twentyfourdf, y_twentyfourdf, targets, 'Probability of Recession in 24 Months')
     
-    df_Recession_Prediction_Recent['DateTime'] = [int((x- datetime.datetime(1970,1,1)).total_seconds() * 1000)for x in df_Recession_Prediction_Recent['DateTime']]
+    df_Recession_Prediction_Recent3['DateTime']  = [int((x- datetime.datetime(1970,1,1)).total_seconds() * 1000)for x in df_Recession_Prediction_Recent3['DateTime']]
+    df_Recession_Prediction_Recent6['DateTime']  = [int((x- datetime.datetime(1970,1,1)).total_seconds() * 1000)for x in df_Recession_Prediction_Recent6['DateTime']]
     df_Recession_Prediction_Recent12['DateTime'] = [int((x- datetime.datetime(1970,1,1)).total_seconds() * 1000)for x in df_Recession_Prediction_Recent12['DateTime']]
+    df_Recession_Prediction_Recent24['DateTime'] = [int((x- datetime.datetime(1970,1,1)).total_seconds() * 1000)for x in df_Recession_Prediction_Recent24['DateTime']]
 
-    r3 = df_Recession_Prediction_Recent.reset_index(drop = True).to_dict()
+    r3  = df_Recession_Prediction_Recent3.reset_index(drop = True).to_dict()
+    r6  = df_Recession_Prediction_Recent6.reset_index(drop = True).to_dict()
     r12 = df_Recession_Prediction_Recent12.reset_index(drop = True).to_dict()
+    r24 = df_Recession_Prediction_Recent24.reset_index(drop = True).to_dict()
     
-    rall = {k : v for k,v in zip(['3 Months', '12 Months'], [r3, r12])}
+    rall = {k : v for k,v in zip(['3 Months', '6 Months', '12 Months', '24 Months'], [r3, r6, r12, r24])}
 
     with open("RecessionIndicator.json", "w") as outfile:  
         json.dump(rall, outfile) 
@@ -387,13 +406,16 @@ if __name__ == "__main__":
     dfList = gdpRecessionTime(gdpDataFrame, dates)
     
     
-    plt.figure(figsize = (10,6))
-    plt.plot(dfList[-1]['Quarter'], dfList[-1]['GDPDelta'], label = '2008-April')
-    plt.plot(dfList[-2]['Quarter'], dfList[-2]['GDPDelta'], label = '2001-April')
-    plt.plot(dfList[-3]['Quarter'], dfList[-3]['GDPDelta'], label = '1990-July')
-    plt.plot(dfList[-4]['Quarter'], dfList[-4]['GDPDelta'], label = '2020-January')
-    plt.ylim(88,105)
-    plt.legend()
+    # plt.figure(figsize = (10,6))
+    # plt.plot(dfList[-1]['Quarter'], dfList[-1]['GDPDelta'], label = '2008-April')
+    # plt.plot(dfList[-2]['Quarter'], dfList[-2]['GDPDelta'], label = '2001-April')
+    # plt.plot(dfList[-3]['Quarter'], dfList[-3]['GDPDelta'], label = '1990-July')
+    # plt.plot(dfList[-4]['Quarter'], dfList[-4]['GDPDelta'], label = '2020-January')
+    # plt.ylim(88,105)
+    # plt.legend()
+    
+    
+    
     #authorization
     # gc = pygsheets.authorize(service_file='/Users/theodorepender/Desktop/Midnight-Labs-9d593d26ebe7.json')
     
