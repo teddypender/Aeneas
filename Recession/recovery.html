@@ -5600,27 +5600,19 @@
             <div>3 Months</div>
           </a><a data-w-tab="Tab 2" class="tab-2 w-inline-block w-tab-link">
             <div class="text-block-11">6 Months</div>
-          </a><a data-w-tab="Tab 3" class="tab-2 w-inline-block w-tab-link">
-            <div class="text-block-11">12 Months</div>
-          </a><a data-w-tab="Tab 4" class="tab-2 w-inline-block w-tab-link">
-            <div class="text-block-11">24 Months</div>
           </a></div>
         <div class="w-tab-content">
           <div data-w-tab="Tab 1" class="w-tab-pane w--tab-active">
             <div class="html-embed chart w-embed w-script">
-              <div id="Recession3Months"></div>
+              <div id="ShallowOrDeep"></div>
               <script type="text/javascript">
-                var Recession3Months = new Highcharts.Chart({
+                var ShallowOrDeep = new Highcharts.Chart({
                   colors: ['#EC4176'],
                   chart: {
-                    renderTo: 'Recession3Months',
+                    renderTo: 'ShallowOrDeep',
                     type: 'line',
                     marginBottom: 100,
                   },
-                  //data: {
-                  //  googleSpreadsheetKey: '1Bs0xB_pUrA3nyloh7mj-NOAe51nKodrEFPff4ijB_OU',
-                  //  googleSpreadsheetWorksheet: 11
-                  //},
                   series: [{
                     name: 'Probability of Recession in 3 Months',
                     data: []
@@ -5630,7 +5622,7 @@
                     href: ''
                   },
                   title: {
-                    text: 'Top Tier Value Change',
+                    text: '',
                   },
                   //xAxis: {
                   //  type: 'datetime',
@@ -5654,19 +5646,15 @@
           </div>
           <div data-w-tab="Tab 2" class="w-tab-pane">
             <div class="html-embed chart w-embed w-script">
-              <div id="Recession6Months"></div>
+              <div id="OutofWork"></div>
               <script type="text/javascript">
-                var Recession6Months = new Highcharts.Chart({
+                var OutofWork = new Highcharts.Chart({
                   colors: ['#EA6248'],
                   chart: {
-                    renderTo: 'Recession6Months',
+                    renderTo: 'OutofWork',
                     type: 'line',
                     marginBottom: 100,
                   },
-                  //data: {
-                  //  googleSpreadsheetKey: '1Bs0xB_pUrA3nyloh7mj-NOAe51nKodrEFPff4ijB_OU',
-                  //  googleSpreadsheetWorksheet: 12
-                  //},
                   series: [{
                     name: 'Probability of Recession in 6 Months',
                     data: []
@@ -5676,7 +5664,7 @@
                     href: ''
                   },
                   title: {
-                    text: 'Bottom Tier Value Change',
+                    text: '',
                   },
                   //xAxis: {
                   //  type: 'datetime',
@@ -5694,150 +5682,6 @@
                   }
                 });
                 
-               /* 
-                window.onmessage = function(event){
-         
-                    if (event.data && Array.isArray(event.data)) {
-                      
-                      Recession6Months.series[0].setData(event.data, true);
-                      
-                    }
-                    else {
-                      console.log("HTML Code Element received a generic message:");
-                      console.log(event.data);
-                    }
-                  };
-                  
-                function ready(){
-                      window.parent.postMessage({"type":"ready"}, "*");
-                    }
-                */
-              </script>
-            </div>
-          </div>
-          <div data-w-tab="Tab 3" class="w-tab-pane">
-            <div class="html-embed chart w-embed w-script">
-              <div id="Recession12Months"></div>
-              <script type="text/javascript">
-                var Recession12Months = new Highcharts.Chart({
-                  colors: ['#EA6248'],
-                  chart: {
-                    renderTo: 'Recession12Months',
-                    type: 'line',
-                    marginBottom: 100,
-                  },
-                  //data: {
-                  //  googleSpreadsheetKey: '1Bs0xB_pUrA3nyloh7mj-NOAe51nKodrEFPff4ijB_OU',
-                  //  googleSpreadsheetWorksheet: 12
-                  //},
-                  series: [{
-                    name: 'Probability of Recession in 12 Months',
-                    data: []
-                    }],
-                  credits: {
-                    text: 'Elmore',
-                    href: ''
-                  },
-                  title: {
-                    text: 'Bottom Tier Value Change',
-                  },
-                  //xAxis: {
-                  //  type: 'datetime',
-                  //  ordinal: true
-                  //  },
-                  yAxis: {
-                    labels: {
-                      formatter: function() {
-                        return this.value + "%";
-                      },
-                    }
-                  },
-                  tooltip: {
-                    valueSuffix: ""
-                  }
-                });
-                
-               /* 
-                window.onmessage = function(event){
-         
-                    if (event.data && Array.isArray(event.data)) {
-                      
-                      Recession12Months.series[0].setData(event.data, true);
-                      
-                    }
-                    else {
-                      console.log("HTML Code Element received a generic message:");
-                      console.log(event.data);
-                    }
-                  };
-                  
-                function ready(){
-                      window.parent.postMessage({"type":"ready"}, "*");
-                    }
-                */
-              </script>
-            </div>
-          </div>
-          <div data-w-tab="Tab 4" class="w-tab-pane">
-            <div class="html-embed chart w-embed w-script">
-              <div id="Recession24Months"></div>
-              <script type="text/javascript">
-                var Recession24Months = new Highcharts.Chart({
-                  colors: ['#EA6248'],
-                  chart: {
-                    renderTo: 'Recession24Months',
-                    type: 'line',
-                    marginBottom: 100,
-                  },
-                  //data: {
-                  //  googleSpreadsheetKey: '1Bs0xB_pUrA3nyloh7mj-NOAe51nKodrEFPff4ijB_OU',
-                  //  googleSpreadsheetWorksheet: 12
-                  //},
-                  series: [{
-                    name: 'Probability of Recession in 24 Months',
-                    data: []
-                    }],
-                  credits: {
-                    text: 'Elmore',
-                    href: ''
-                  },
-                  title: {
-                    text: 'Bottom Tier Value Change',
-                  },
-                  //xAxis: {
-                  //  type: 'datetime',
-                  //  ordinal: true
-                  //  },
-                  yAxis: {
-                    labels: {
-                      formatter: function() {
-                        return this.value + "%";
-                      },
-                    }
-                  },
-                  tooltip: {
-                    valueSuffix: ""
-                  }
-                });
-                
-               /* 
-                window.onmessage = function(event){
-         
-                    if (event.data && Array.isArray(event.data)) {
-                      
-                      Recession24Months.series[0].setData(event.data, true);
-                      
-                    }
-                    else {
-                      console.log("HTML Code Element received a generic message:");
-                      console.log(event.data);
-                    }
-                  };
-                  
-                function ready(){
-                      window.parent.postMessage({"type":"ready"}, "*");
-                    }
-                */
               </script>
             </div>
           </div>
@@ -5847,14 +5691,10 @@
          
                     if (event.data && Array.isArray(event.data)) {
                       
-                      Recession3Months.series[0].setData(event.data[0], true);
-                      Recession6Months.series[0].setData(event.data[1], true);
-                      Recession12Months.series[0].setData(event.data[2], true);
-                      Recession24Months.series[0].setData(event.data[3], true);
-                      //console.log("Number 2");
-                      //console.log(event.data[2]);
-                      //console.log("Number 3");
-                      //console.log(event.data[3]);
+                      ShallowOrDeep.series[0].setData(event.data[0], true);
+                      ShallowOrDeep.series[0].setData(event.data[1], true);
+                      OutofWork.series[0].setData(event.data[2], true);
+                      
                     }
                     else {
                       console.log("HTML Code Element received a generic message:");
