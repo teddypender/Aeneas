@@ -5614,14 +5614,26 @@
               <div id="OutofWork"></div>
               <script type="text/javascript">
                 var OutofWork = new Highcharts.Chart({
-                  colors: ['#EA6248'],
+                  //colors: ['#EA6248'],
                   chart: {
                     renderTo: 'OutofWork',
                     type: 'line',
                     marginBottom: 100,
                   },
                   series: [{
-                    name: 'Probability of Recession in 6 Months',
+                    name: 'Test',
+                    data: []
+                    },
+                    {
+                    name: 'Test',
+                    data: []
+                    },
+                    {
+                    name: 'Test',
+                    data: []
+                    },
+                    {
+                    name: 'Test',
                     data: []
                     }],
                   credits: {
@@ -5659,6 +5671,10 @@
                       for (var i = 0; i < Object.keys(event.data[0]).length; i++){
                           ShallowOrDeep.series[i].setData(event.data[0][i], true);
                           ShallowOrDeep.series[i].update({name:event.data[1][i]}, true);
+                          
+                          OutofWork.series[i].setData(event.data[0][i], true);
+                          OutofWork.series[i].update({name:event.data[1][i]}, true);
+
                       }
                       //ShallowOrDeep.series[0].setData(event.data[1], true);
                       //OutofWork.series[0].setData(event.data[2], true);
