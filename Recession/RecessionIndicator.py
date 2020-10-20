@@ -400,10 +400,17 @@ if __name__ == "__main__":
 
     # GDP Chart: 'Recession Start' '+Q1', '+Q2', ... '+Q14'
     gdpDataFrame = primary_dictionary_output['GDP']
-    dates = [datetime.datetime(1960, 4, 1), datetime.datetime(1969, 1, 1), datetime.datetime(1973, 9, 1), 
-             datetime.datetime(1980, 1, 1), datetime.datetime(1981, 7, 1), datetime.datetime(2019, 10, 1), 
-             datetime.datetime(1990, 7, 1), datetime.datetime(2001, 4, 1),datetime.datetime(2008, 4, 1)]
-    dfList = gdpRecessionTime(gdpDataFrame, dates)
+    dates   = [#datetime.datetime(1960, 4, 1), datetime.datetime(1969, 1, 1), datetime.datetime(1973, 9, 1), 
+              #datetime.datetime(1980, 1, 1), datetime.datetime(1981, 7, 1), 
+              datetime.datetime(1990, 7, 1), datetime.datetime(2001, 4, 1),datetime.datetime(2008, 4, 1),
+              datetime.datetime(2019, 10, 1)]
+    dfList  = gdpRecessionTime(gdpDataFrame, dates)
+    dfListF = [x.reset_index(drop = True).to_dict() for x in dfList] 
+    # dfListd = {k : v for k,v in zip(['Apr 1960', 'Dec 1969', 'Nov 1973', 'Jan 1980','Jul 1981', 'Jul 1990', 'Mar 2001', 'Dec 2007', 'Jan 2020'], dfListF)}
+    dfListd = {k : v for k,v in zip(['Jul 1990', 'Mar 2001', 'Dec 2007', 'Jan 2020'], dfListF)}
+    
+    with open("Recovery.json", "w") as outfile:  
+        json.dump(dfListd, outfile) 
     
     
     # plt.figure(figsize = (10,6))

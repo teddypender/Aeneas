@@ -2512,9 +2512,10 @@
         .neumorphic {
           position: relative;
           min-height: 300px;
-          margin-right: 10px;
+          margin-right: 20px;
           margin-bottom: 20px;
-          margin-left: 10px;
+          margin-top: 20px;
+          margin-left: 20px;
           padding: 35px 5% 40px;
           border-radius: 20px;
           box-shadow: -4px -5px 20px 0 hsla(0, 0%, 100%, .06), 4px 4px 20px 0 rgba(0, 0, 0, .4);
@@ -5352,7 +5353,7 @@
         },
         yAxis: {
           gridLineColor: 'rgba(150,150,150,.2)',
-          max: 100,
+          //max: 100,
           title: {
             text: ''
           },
@@ -5364,53 +5365,6 @@
           }
         },
         xAxis: {
-            min: Date.UTC(2000, 7, 1),
-            plotBands: [{
-                color: 'grey', // Color value
-                from: Date.UTC(1957, 7, 1), // Start of the plot band
-                to: Date.UTC(1958, 3, 1) // End of the plot band
-              },
-              {
-                color: 'grey', // Color value
-                from: Date.UTC(1960, 3, 1), // Start of the plot band
-                to: Date.UTC(1961, 1, 1) // End of the plot band
-              },
-              {
-                color: 'grey', // Color value
-                from: Date.UTC(1969, 11, 1), // Start of the plot band
-                to: Date.UTC(1970, 10, 1) // End of the plot band
-              },
-              {
-                color: 'grey', // Color value
-                from: Date.UTC(1973, 10, 1), // Start of the plot band
-                to: Date.UTC(1975, 2, 1) // End of the plot band
-              },
-              {
-                color: 'grey', // Color value
-                from: Date.UTC(1980, 0, 1), // Start of the plot band
-                to: Date.UTC(1980, 6, 1) // End of the plot band
-              },
-              {
-                color: 'grey', // Color value
-                from: Date.UTC(1981, 6, 1), // Start of the plot band
-                to: Date.UTC(1982, 10, 1) // End of the plot band
-              },
-              {
-                color: 'grey', // Color value
-                from: Date.UTC(1990, 6, 1), // Start of the plot band
-                to: Date.UTC(1991, 2, 1) // End of the plot band
-              },
-              {
-                color: 'grey', // Color value
-                from: Date.UTC(2001, 2, 1), // Start of the plot band
-                to: Date.UTC(2001, 10, 1) // End of the plot band
-              },
-              {
-                color: 'grey', // Color value
-                from: Date.UTC(2007, 11, 1), // Start of the plot band
-                to: Date.UTC(2009, 5, 1) // End of the plot band
-              }
-            ],
             crosshair: {
               width: 1.5,
               color: 'rgba(255,255,255,.4)',
@@ -5597,9 +5551,9 @@
       <h2 class="chart-header bottom-border">Recession Indicator<br /></h2>
       <div data-duration-in="300" data-duration-out="100" class="w-tabs">
         <div class="w-tab-menu"><a data-w-tab="Tab 1" class="tab-2 w-inline-block w-tab-link w--current">
-            <div>3 Months</div>
+            <div>Shallow or Deep?</div>
           </a><a data-w-tab="Tab 2" class="tab-2 w-inline-block w-tab-link">
-            <div class="text-block-11">6 Months</div>
+            <div class="text-block-11">Out of Work</div>
           </a></div>
         <div class="w-tab-content">
           <div data-w-tab="Tab 1" class="w-tab-pane w--tab-active">
@@ -5607,14 +5561,25 @@
               <div id="ShallowOrDeep"></div>
               <script type="text/javascript">
                 var ShallowOrDeep = new Highcharts.Chart({
-                  colors: ['#EC4176'],
+                  //colors: ['#EC4176'],
                   chart: {
                     renderTo: 'ShallowOrDeep',
                     type: 'line',
                     marginBottom: 100,
                   },
                   series: [{
-                    name: 'Probability of Recession in 3 Months',
+                    name: 'Test',
+                    data: []
+                    },
+                    {
+                    name: 'Test',
+                    data: []
+                    },{
+                    name: 'Test',
+                    data: []
+                    },
+                    {
+                    name: 'Test',
                     data: []
                     }],
                   credits: {
@@ -5690,10 +5655,13 @@
         window.onmessage = function(event){
          
                     if (event.data && Array.isArray(event.data)) {
-                      
-                      ShallowOrDeep.series[0].setData(event.data[0], true);
-                      ShallowOrDeep.series[0].setData(event.data[1], true);
-                      OutofWork.series[0].setData(event.data[2], true);
+                      console.log(Object.keys(event.data[0]).length);
+                      for (var i = 0; i < Object.keys(event.data[0]).length; i++){
+                          ShallowOrDeep.series[i].setData(event.data[0][i], true);
+                          ShallowOrDeep.series[i].update({name:event.data[1][i]}, true);
+                      }
+                      //ShallowOrDeep.series[0].setData(event.data[1], true);
+                      //OutofWork.series[0].setData(event.data[2], true);
                       
                     }
                     else {
