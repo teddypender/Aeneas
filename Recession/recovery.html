@@ -2514,7 +2514,7 @@
           min-height: 300px;
           margin-right: 20px;
           margin-bottom: 20px;
-          margin-top: 20px;
+         // margin-top: 20px;
           margin-left: 20px;
           padding: 35px 5% 40px;
           border-radius: 20px;
@@ -5548,7 +5548,7 @@
 
     <div id="w-node-d340ee94ac51-415dff4a" class="neumorphic compact">
 
-      <h2 class="chart-header bottom-border">Recession Indicator<br /></h2>
+      <h2 class="chart-header bottom-border">Recovery Tracking<br /></h2>
       <div data-duration-in="300" data-duration-out="100" class="w-tabs">
         <div class="w-tab-menu"><a data-w-tab="Tab 1" class="tab-2 w-inline-block w-tab-link w--current">
             <div>Shallow or Deep?</div>
@@ -5589,7 +5589,12 @@
                   title: {
                     text: '',
                   },
-                  //xAxis: {
+                  xAxis: { 
+                      type : "category",
+                      labels:{
+                        step: 2 // this will show every second label
+                    }
+                  },
                   //  type: 'datetime',
                   //  ordinal: true
                   //  },
@@ -5643,10 +5648,13 @@
                   title: {
                     text: '',
                   },
-                  //xAxis: {
-                  //  type: 'datetime',
-                  //  ordinal: true
-                  //  },
+                  xAxis: { 
+                  type : "category",
+                  labels:{
+                    step: 8 // this will show every second label
+                    }      
+                  },
+                 
                   yAxis: {
                     labels: {
                       formatter: function() {
@@ -5667,13 +5675,16 @@
         window.onmessage = function(event){
          
                     if (event.data && Array.isArray(event.data)) {
-                      console.log(Object.keys(event.data[0]).length);
-                      for (var i = 0; i < Object.keys(event.data[0]).length; i++){
-                          ShallowOrDeep.series[i].setData(event.data[0][i], true);
-                          ShallowOrDeep.series[i].update({name:event.data[1][i]}, true);
+                      console.log(event.data);
+                      console.log(event.data[0]);
+                      console.log(event.data[0][0]);
+
+                      for (var i = 0; i < Object.keys(event.data[0][0]).length; i++){
+                          ShallowOrDeep.series[i].setData(event.data[0][0][i], true);
+                          ShallowOrDeep.series[i].update({name:event.data[1][0][i]}, true);
                           
-                          OutofWork.series[i].setData(event.data[0][i], true);
-                          OutofWork.series[i].update({name:event.data[1][i]}, true);
+                          OutofWork.series[i].setData(event.data[0][1][i], true);
+                          OutofWork.series[i].update({name:event.data[1][1][i]}, true);
 
                       }
                       //ShallowOrDeep.series[0].setData(event.data[1], true);

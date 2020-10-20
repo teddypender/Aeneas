@@ -247,6 +247,17 @@ def gdpRecessionTime(gdpDataFrame, dates, length = 14):
         
     return dfList
 
+def employmentRecessionTime(gdpDataFrame, dates, length = 80):
+    dfList = []
+    for dt in dates:
+        df = gdpDataFrame[gdpDataFrame.index >= dt][0:length + 1][['Civilian_Unemployment_Rate']] 
+        df['EmploymentDelta'] = df['Civilian_Unemployment_Rate'] - df['Civilian_Unemployment_Rate'].iloc[0]
+        df['Quarter']  = ['Recession Start' if x == 0 else '+{0}M'.format(str(x)) for x, i in enumerate(df['EmploymentDelta'])]
+        df = df[['Quarter','EmploymentDelta']]
+        dfList.append(df)
+        
+    return dfList
+
 
 if __name__ == "__main__":
     
@@ -409,8 +420,24 @@ if __name__ == "__main__":
     # dfListd = {k : v for k,v in zip(['Apr 1960', 'Dec 1969', 'Nov 1973', 'Jan 1980','Jul 1981', 'Jul 1990', 'Mar 2001', 'Dec 2007', 'Jan 2020'], dfListF)}
     dfListd = {k : v for k,v in zip(['Jul 1990', 'Mar 2001', 'Dec 2007', 'Jan 2020'], dfListF)}
     
+    # with open("Recovery.json", "w") as outfile:  
+    #     json.dump(dfListd, outfile) 
+        
+    unemploymentDataFrame = primary_dictionary_output['Civilian_Unemployment_Rate']
+    dates   = [#datetime.datetime(1960, 4, 1), datetime.datetime(1969, 1, 1), datetime.datetime(1973, 9, 1), 
+              #datetime.datetime(1980, 1, 1), datetime.datetime(1981, 7, 1), 
+              datetime.datetime(1990, 7, 1), datetime.datetime(2001, 4, 1),datetime.datetime(2008, 4, 1),
+              datetime.datetime(2019, 10, 1)]
+    dfList  = employmentRecessionTime(unemploymentDataFrame, dates)
+    dfListEF = [x.reset_index(drop = True).to_dict() for x in dfList] 
+    # dfListd = {k : v for k,v in zip(['Apr 1960', 'Dec 1969', 'Nov 1973', 'Jan 1980','Jul 1981', 'Jul 1990', 'Mar 2001', 'Dec 2007', 'Jan 2020'], dfListF)}
+    dfListEd = {k : v for k,v in zip(['Jul 1990', 'Mar 2001', 'Dec 2007', 'Jan 2020'], dfListEF)}
+    
+    
+    JSONRecovery = {k : v for k,v in zip(['GDP', 'Employment'], [dfListd, dfListEd])}
+    
     with open("Recovery.json", "w") as outfile:  
-        json.dump(dfListd, outfile) 
+        json.dump(JSONRecovery, outfile) 
     
     
     # plt.figure(figsize = (10,6))
