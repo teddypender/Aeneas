@@ -203,7 +203,7 @@ def recessionPredictor(X_threedf, y_threedf, t, col):
     X_df, y_df = adjustWithTarget(X_threedf, y_threedf, target)
 
     names = ["Gaussian Process"]
-    ker = 1.0 * RBF(2.0)
+    ker = 1.0 * RBF(1.0)
     classifiers = [GaussianProcessClassifier(kernel = ker)]
     # classifiers = [GaussianProcessClassifier()]
     
