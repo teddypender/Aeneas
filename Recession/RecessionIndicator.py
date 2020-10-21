@@ -222,7 +222,7 @@ def recessionPredictor(X_threedf, y_threedf, t, col):
             ss = StandardScaler().fit(X)
             X = ss.transform(X)
             X_True = ss.transform(X_threedf)
-            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.30, random_state=42)
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.15, random_state=42)
         
             # iterate over classifiers
             for name, clf in zip(names, classifiers):
@@ -271,16 +271,18 @@ if __name__ == "__main__":
                         '10Y_Treasury_Rate'         : 'GS10',
                         '5Y_Treasury_Rate'          : 'GS5',
                         '3_Month_T-Bill_Rate'       : 'TB3MS',
-                        'IPI'                       : 'INDPRO',
-                        'GDP'                       : 'GDP',
+                        'IPI'                       : 'INDPRO'
+                        # 'GDP'                       : 'GDP',
                         #'Initial_Claims'            : 'ICSA'
                         }
+    fred_series_job_ids = {'GDP' : 'GDP'}
     yahoo_series_ids = {'S&P_500_Index'             : '^GSPC'}
     primary_dictionary_output = {}
-    secondary_df_output = pd.DataFrame()
+    secondary_dictionary_output = {}
     
     
     getFredData(fred_series_ids, primary_dictionary_output)
+    getFredData(fred_series_job_ids, secondary_dictionary_output)
     getYahooData(yahoo_series_ids, primary_dictionary_output)
     
     initialFeatureEngineering(primary_dictionary_output)
@@ -413,7 +415,7 @@ if __name__ == "__main__":
     """
 
     # GDP Chart: 'Recession Start' '+Q1', '+Q2', ... '+Q14'
-    gdpDataFrame = primary_dictionary_output['GDP']
+    gdpDataFrame = secondary_dictionary_output['GDP']
     dates   = [#datetime.datetime(1960, 4, 1), datetime.datetime(1969, 1, 1), datetime.datetime(1973, 9, 1), 
               #datetime.datetime(1980, 1, 1), datetime.datetime(1981, 7, 1), 
               datetime.datetime(1990, 7, 1), datetime.datetime(2001, 4, 1),datetime.datetime(2008, 4, 1),
