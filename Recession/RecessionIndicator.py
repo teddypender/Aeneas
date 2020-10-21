@@ -203,7 +203,9 @@ def recessionPredictor(X_threedf, y_threedf, t, col):
     X_df, y_df = adjustWithTarget(X_threedf, y_threedf, target)
 
     names = ["Gaussian Process"]
-    classifiers = [GaussianProcessClassifier(1.0 * RBF(1.0))]
+    ker = 1.0 * RBF(2.0)
+    classifiers = [GaussianProcessClassifier(kernel = ker)]
+    # classifiers = [GaussianProcessClassifier()]
     
     X, y = np.asarray(X_df), np.asarray(y_df[target])
         
@@ -284,7 +286,7 @@ if __name__ == "__main__":
     initialFeatureEngineering(primary_dictionary_output)
     
     df = pd.concat([primary_dictionary_output[series_name]for series_name in primary_dictionary_output.keys()], axis = 1)
-    df.ffill(inplace = True)
+    # df.ffill(inplace = True)
     df = df[~df.isin([np.nan, np.inf, -np.inf]).any(1)]
     
     labelTargets(df)
