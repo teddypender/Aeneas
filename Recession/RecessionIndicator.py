@@ -179,10 +179,11 @@ def twentyfourMonthFeature(df):
     return df[columns], df[targets], targets
 
 
-def allFeatures(df):
-    columns = [x for x in df.columns if x[-2:] == '3M'] + [x for x in df.columns if x[-3:] == '12M']
-    targets = ['Recession', 'Recession_in_3mo', 'Recession_in_6mo', 'Recession_in_12mo', 'Recession_in_24mo']
+def allMonthFeature(df):
+    columns = [x for x in df.columns if x[-2:] in ['3M', '6M'] or x[-3:] in ['12M', '24M']]
+    targets = ['Recession', 'Recession_in_3mo', 'Recession_in_6mo', 'Recession_in_12mo', 'Recession_in_24mo']    
     return df[columns], df[targets], targets
+
 
 def adjustWithTarget(X, y, target):
     if target == 'Recession':
@@ -197,8 +198,8 @@ def adjustWithTarget(X, y, target):
         X_update, y_update = X[:-24], y[:-24]
     return X_update, y_update
 
-def recessionPredictor(X_threedf, y_threedf, targets, col):
-    target = targets[1]
+def recessionPredictor(X_threedf, y_threedf, t, col):
+    target = t
     X_df, y_df = adjustWithTarget(X_threedf, y_threedf, target)
 
     names = ["Gaussian Process"]
@@ -219,7 +220,7 @@ def recessionPredictor(X_threedf, y_threedf, targets, col):
             ss = StandardScaler().fit(X)
             X = ss.transform(X)
             X_True = ss.transform(X_threedf)
-            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.15, random_state=42)
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.30, random_state=42)
         
             # iterate over classifiers
             for name, clf in zip(names, classifiers):
@@ -288,10 +289,10 @@ if __name__ == "__main__":
     
     labelTargets(df)
 
-    X_threedf, y_threedf, targets           = threeMonthFeature(df)
-    X_sixdf, y_sixdf, targets               = sixMonthFeature(df)
-    X_twelvedf, y_twelvedf, targets         = twelveMonthFeature(df)
-    X_twentyfourdf, y_twentyfourdf, targets = twentyfourMonthFeature(df)
+    X_threedf, y_threedf, targets           = allMonthFeature(df)
+    X_sixdf, y_sixdf, targets               = allMonthFeature(df)
+    X_twelvedf, y_twelvedf, targets         = allMonthFeature(df)
+    X_twentyfourdf, y_twentyfourdf, targets = allMonthFeature(df)
     
     """
     # ----------- Model Testing ----------- #
@@ -365,10 +366,10 @@ if __name__ == "__main__":
     
     # Choose GaussianProcessClassifier
 
-    df_Recession_Prediction_Recent3  = recessionPredictor(X_threedf, y_threedf, targets, 'Probability of Recession in 3 Months')
-    df_Recession_Prediction_Recent6  = recessionPredictor(X_sixdf, y_sixdf, targets, 'Probability of Recession in 6 Months')
-    df_Recession_Prediction_Recent12 = recessionPredictor(X_twelvedf, y_twelvedf, targets, 'Probability of Recession in 12 Months')
-    df_Recession_Prediction_Recent24 = recessionPredictor(X_twentyfourdf, y_twentyfourdf, targets, 'Probability of Recession in 24 Months')
+    df_Recession_Prediction_Recent3  = recessionPredictor(X_threedf, y_threedf, targets[1], 'Probability of Recession in 3 Months')
+    df_Recession_Prediction_Recent6  = recessionPredictor(X_sixdf, y_sixdf, targets[2], 'Probability of Recession in 6 Months')
+    df_Recession_Prediction_Recent12 = recessionPredictor(X_twelvedf, y_twelvedf, targets[3], 'Probability of Recession in 12 Months')
+    df_Recession_Prediction_Recent24 = recessionPredictor(X_twentyfourdf, y_twentyfourdf, targets[4], 'Probability of Recession in 24 Months')
     
     df_Recession_Prediction_Recent3['DateTime']  = [int((x- datetime.datetime(1970,1,1)).total_seconds() * 1000)for x in df_Recession_Prediction_Recent3['DateTime']]
     df_Recession_Prediction_Recent6['DateTime']  = [int((x- datetime.datetime(1970,1,1)).total_seconds() * 1000)for x in df_Recession_Prediction_Recent6['DateTime']]
